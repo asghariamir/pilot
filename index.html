@@ -125,7 +125,7 @@
       margin-bottom: 1rem;
     }
     
-    canvas {
+    .example-canvas {
       width: 100%;
       height: 200px;
       border: 2px solid var(--border);
@@ -136,8 +136,13 @@
     }
     
     #main-canvas {
+      width: 100%;
       height: 500px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: white;
       cursor: crosshair;
+      display: block;
     }
     
     .math-info {
@@ -153,32 +158,28 @@
       margin-bottom: 0.3rem;
     }
     
-    .builder-container {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-    
     .canvas-wrapper {
       background: white;
       padding: 1.5rem;
       border-radius: 12px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
     }
     
-    .controls-wrapper {
+    .controls-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 1rem;
+      margin-bottom: 1.5rem;
     }
     
-    .control-card {
+    .control-panel {
       background: var(--interactive);
       padding: 1rem;
       border-radius: 8px;
     }
     
-    .control-card h3 {
+    .control-panel h3 {
       color: var(--primary);
       margin-bottom: 0.75rem;
       font-size: 1rem;
@@ -223,50 +224,60 @@
       padding: 0.3rem 0.6rem;
       font-size: 0.85rem;
       width: auto;
-      margin: 0 0.25rem 0.25rem 0;
     }
     
-    .point-list {
+    .points-list {
       max-height: 200px;
       overflow-y: auto;
-      font-size: 0.9rem;
+      background: white;
+      border-radius: 4px;
+      padding: 0.5rem;
     }
     
-    .point-item {
-      padding: 0.4rem;
+    .point-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem;
       margin-bottom: 0.3rem;
       background: white;
       border-radius: 4px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       cursor: pointer;
     }
     
-    .point-item:hover {
+    .point-row:hover {
       background: #f0f0f0;
     }
     
-    .point-item.selected {
+    .point-row.selected {
       background: var(--primary);
       color: white;
     }
     
-    .segment-list {
-      max-height: 200px;
-      overflow-y: auto;
+    .point-coords {
+      display: flex;
+      gap: 0.3rem;
+      align-items: center;
+      flex: 1;
     }
     
-    .segment-item {
-      background: white;
-      padding: 0.5rem;
-      border-radius: 4px;
-      margin-bottom: 0.5rem;
+    .coord-input {
+      width: 45px;
+      padding: 2px 4px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
       font-size: 0.85rem;
-      border-left: 3px solid var(--primary);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      font-family: monospace;
+    }
+    
+    .point-row.selected .coord-input {
+      background: white;
+      color: black;
+    }
+    
+    .point-symbol {
+      font-size: 1.2rem;
+      margin: 0 0.5rem;
     }
     
     .delete-btn {
@@ -276,20 +287,38 @@
       padding: 0 0.5rem;
     }
     
-    .challenge-section {
+    .segments-list {
+      max-height: 200px;
+      overflow-y: auto;
+      background: white;
+      border-radius: 4px;
+      padding: 0.5rem;
+    }
+    
+    .segment-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+      margin-bottom: 0.3rem;
+      background: white;
+      border-left: 3px solid var(--primary);
+      border-radius: 4px;
+    }
+    
+    .challenge-box {
       background: linear-gradient(135deg, #fff3cd, #ffeaa7);
       padding: 1.5rem;
       border-radius: 12px;
       border: 2px solid var(--accent-amber);
-      margin-top: 1.5rem;
     }
     
-    .challenge-section h2 {
+    .challenge-box h2 {
       color: #856404;
       margin-bottom: 1rem;
     }
     
-    .challenge-box {
+    .challenge-text {
       background: white;
       padding: 1rem;
       border-radius: 6px;
@@ -304,7 +333,7 @@
       font-family: inherit;
       font-size: 1rem;
       resize: vertical;
-      min-height: 80px;
+      min-height: 60px;
     }
     
     .feedback {
@@ -333,20 +362,6 @@
       color: #004085;
     }
     
-    .loading {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(0,0,0,.1);
-      border-radius: 50%;
-      border-top-color: var(--primary);
-      animation: spin 0.8s linear infinite;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    
     .info-bar {
       background: var(--interactive);
       padding: 0.75rem;
@@ -357,7 +372,7 @@
     }
     
     @media (max-width: 768px) {
-      .controls-wrapper {
+      .controls-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -373,12 +388,12 @@
 
   <div class="container">
     <div class="tabs">
-      <button class="tab-btn active" id="intro-tab">Introduction</button>
-      <button class="tab-btn" id="builder-tab">Build & Challenge</button>
+      <button class="tab-btn active" data-tab="intro">Introduction</button>
+      <button class="tab-btn" data-tab="builder">Build & Challenge</button>
     </div>
 
     <!-- Introduction Tab -->
-    <div id="intro-content" class="tab-content active">
+    <div id="intro" class="tab-content active">
       <div class="hero">
         <h1>📈 Function Behavior Builder</h1>
         <p>Learn to analyze and build functions by understanding their behavior: how they increase, decrease, curve, and connect.</p>
@@ -387,157 +402,149 @@
       <div class="examples-grid">
         <div class="example-card">
           <h3>Increasing & Curving Up</h3>
-          <canvas id="ex1"></canvas>
+          <canvas class="example-canvas" id="ex1"></canvas>
           <div class="math-info">
             <strong>Behavior:</strong>
             • Goes up from left to right<br>
             • Curves upward (like a smile)<br>
-            • Gets steeper as x increases<br>
-            • Example: Exponential growth
+            • Gets steeper as x increases
           </div>
         </div>
 
         <div class="example-card">
           <h3>Decreasing & Curving Down</h3>
-          <canvas id="ex2"></canvas>
+          <canvas class="example-canvas" id="ex2"></canvas>
           <div class="math-info">
             <strong>Behavior:</strong>
             • Goes down from left to right<br>
             • Curves downward (like a frown)<br>
-            • Gets less steep over time<br>
-            • Example: Cooling curve
+            • Gets less steep over time
           </div>
         </div>
 
         <div class="example-card">
           <h3>Piecewise with Jump</h3>
-          <canvas id="ex3"></canvas>
+          <canvas class="example-canvas" id="ex3"></canvas>
           <div class="math-info">
             <strong>Behavior:</strong>
             • Has a break (discontinuity)<br>
             • Different rules on each side<br>
-            • Open/closed circles matter<br>
-            • Example: Step function
+            • Open/closed circles matter
           </div>
         </div>
 
         <div class="example-card">
           <h3>S-Shaped (Inflection)</h3>
-          <canvas id="ex4"></canvas>
+          <canvas class="example-canvas" id="ex4"></canvas>
           <div class="math-info">
             <strong>Behavior:</strong>
             • Changes from curving down to up<br>
             • Has an inflection point<br>
-            • Always increasing<br>
-            • Example: Logistic growth
+            • Always increasing
           </div>
         </div>
 
         <div class="example-card">
           <h3>U-Shaped Valley</h3>
-          <canvas id="ex5"></canvas>
+          <canvas class="example-canvas" id="ex5"></canvas>
           <div class="math-info">
             <strong>Behavior:</strong>
             • Decreases then increases<br>
             • Has a minimum point<br>
-            • Curves upward throughout<br>
-            • Example: Quadratic function
+            • Curves upward throughout
           </div>
         </div>
 
         <div class="example-card">
           <h3>Approaching a Line</h3>
-          <canvas id="ex6"></canvas>
+          <canvas class="example-canvas" id="ex6"></canvas>
           <div class="math-info">
             <strong>Behavior:</strong>
             • Gets closer to a horizontal line<br>
             • Never quite reaches it<br>
-            • Levels off as x increases<br>
-            • Example: Decay function
+            • Levels off as x increases
           </div>
         </div>
       </div>
 
       <div style="text-align: center; margin: 2rem 0;">
-        <button class="btn btn-primary" style="width: auto; padding: 1rem 3rem;" id="start-building">
+        <button class="btn btn-primary" style="width: auto; padding: 1rem 3rem;" onclick="showTab('builder')">
           Start Building Functions →
         </button>
       </div>
     </div>
 
     <!-- Builder Tab -->
-    <div id="builder-content" class="tab-content">
-      <div class="builder-container">
-        <div class="canvas-wrapper">
-          <h2 style="color: var(--primary); margin-bottom: 1rem;">Function Builder</h2>
-          <canvas id="main-canvas"></canvas>
-          <div class="info-bar">
-            <strong>Instructions:</strong> Click to add points • Click points again to toggle open/closed • Select points from the list and create segments
+    <div id="builder" class="tab-content">
+      <div class="canvas-wrapper">
+        <h2 style="color: var(--primary); margin-bottom: 1rem;">Function Builder</h2>
+        <canvas id="main-canvas"></canvas>
+        <div class="info-bar">
+          <strong>Instructions:</strong> Click to add points • Click points to toggle open/closed • Edit coordinates in the list • Select points and create segments
+        </div>
+      </div>
+
+      <div class="controls-grid">
+        <div class="control-panel">
+          <h3>📍 Points</h3>
+          <div class="points-list" id="points-list">
+            <p style="color: #999; text-align: center;">Click canvas to add points</p>
+          </div>
+          <button class="btn btn-danger btn-small" onclick="clearPoints()">Clear All Points</button>
+        </div>
+
+        <div class="control-panel">
+          <h3>🔧 Build Segments</h3>
+          <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Select points then:</p>
+          <button class="btn btn-secondary btn-small" onclick="makeLine()">Make Line (2 pts)</button>
+          <button class="btn btn-secondary btn-small" onclick="makeCurve()">Make Curve (3 pts)</button>
+          <div style="margin-top: 0.5rem; font-size: 0.85rem;">
+            <label><input type="checkbox" id="extend-left"> Extend left</label><br>
+            <label><input type="checkbox" id="extend-right"> Extend right</label>
           </div>
         </div>
 
-        <div class="controls-wrapper">
-          <div class="control-card">
-            <h3>📍 Points</h3>
-            <div class="point-list" id="points-list">
-              <p style="color: #999;">Click canvas to add points</p>
-            </div>
-            <button class="btn btn-danger btn-small" id="clear-points">Clear All Points</button>
+        <div class="control-panel">
+          <h3>📊 Function Segments</h3>
+          <div class="segments-list" id="segments-list">
+            <p style="color: #999; text-align: center;">No segments yet</p>
           </div>
-
-          <div class="control-card">
-            <h3>🔧 Build Segments</h3>
-            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Select points then click:</p>
-            <button class="btn btn-secondary btn-small" id="make-line">Make Line (2 points)</button>
-            <button class="btn btn-secondary btn-small" id="make-curve">Make Curve (3 points)</button>
-            <div style="margin-top: 0.5rem; font-size: 0.85rem;">
-              <label><input type="checkbox" id="extend-left"> Extend to left</label><br>
-              <label><input type="checkbox" id="extend-right"> Extend to right</label>
-            </div>
-          </div>
-
-          <div class="control-card">
-            <h3>📊 Function Segments</h3>
-            <div class="segment-list" id="segments-list">
-              <p style="color: #999;">No segments yet</p>
-            </div>
-            <button class="btn btn-danger btn-small" id="clear-segments">Clear All Segments</button>
-          </div>
+          <button class="btn btn-danger btn-small" onclick="clearSegments()">Clear All</button>
         </div>
+      </div>
 
-        <div class="challenge-section">
-          <h2>🤖 AI Challenge</h2>
-          
-          <div class="challenge-box">
-            <strong>Challenge:</strong>
-            <p id="challenge-text">Build a function that increases and curves upward on the left side, has a jump discontinuity in the middle, then decreases and curves downward on the right side.</p>
-          </div>
-          
-          <textarea id="user-response" placeholder="Describe what you built or explain the function's behavior..."></textarea>
-          
-          <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-            <button class="btn btn-primary" id="check-answer">Check Answer</button>
-            <button class="btn btn-secondary" id="get-hint">Get Hint</button>
-            <button class="btn btn-secondary" id="new-challenge">New Challenge</button>
-          </div>
-          
-          <div class="feedback" id="feedback"></div>
+      <div class="challenge-box">
+        <h2>🤖 AI Challenge</h2>
+        
+        <div class="challenge-text">
+          <strong>Challenge:</strong>
+          <p id="challenge-desc">Build a function that increases and curves upward on the left side, has a jump discontinuity in the middle, then decreases and curves downward on the right side.</p>
         </div>
+        
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">
+          Build the function above, then click Check Answer to see how you did.
+        </p>
+        
+        <textarea id="user-notes" placeholder="Optional: Add any notes about your construction..."></textarea>
+        
+        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+          <button class="btn btn-primary" onclick="checkAnswer()">Check Answer</button>
+          <button class="btn btn-secondary" onclick="getHint()">Get Hint</button>
+          <button class="btn btn-secondary" onclick="newChallenge()">New Challenge</button>
+        </div>
+        
+        <div class="feedback" id="feedback"></div>
       </div>
     </div>
   </div>
 
   <script>
-    // State
-    let state = {
-      points: [],
-      selectedPoints: [],
-      segments: [],
-      currentTab: 'intro',
-      challengeIndex: 0
-    };
-
-    // Challenges
+    // Global state
+    let points = [];
+    let selectedPoints = [];
+    let segments = [];
+    let currentChallenge = 0;
+    
     const challenges = [
       "Build a function that increases and curves upward on the left side, has a jump discontinuity in the middle, then decreases and curves downward on the right side.",
       "Create a U-shaped function that has its lowest point around x = 0.",
@@ -547,50 +554,38 @@
     ];
 
     // Initialize
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', init);
+
+    function init() {
       setupTabs();
       setupCanvas();
-      setupControls();
-      setTimeout(() => drawExamples(), 100);
-    });
+      drawExamples();
+    }
 
     function setupTabs() {
-      document.getElementById('intro-tab').addEventListener('click', () => {
-        showTab('intro');
-      });
-      
-      document.getElementById('builder-tab').addEventListener('click', () => {
-        showTab('builder');
-      });
-      
-      document.getElementById('start-building').addEventListener('click', () => {
-        showTab('builder');
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tab = btn.dataset.tab;
+          showTab(tab);
+        });
       });
     }
 
     function showTab(tab) {
-      // Update tabs
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-      });
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+      document.getElementById(tab).classList.add('active');
       
       if (tab === 'intro') {
-        document.getElementById('intro-tab').classList.add('active');
-        document.getElementById('intro-content').classList.add('active');
-        setTimeout(() => drawExamples(), 50);
+        setTimeout(drawExamples, 50);
       } else {
-        document.getElementById('builder-tab').classList.add('active');
-        document.getElementById('builder-content').classList.add('active');
         setTimeout(() => {
           setupCanvas();
-          draw();
+          redraw();
         }, 50);
       }
-      
-      state.currentTab = tab;
     }
 
     function setupCanvas() {
@@ -600,184 +595,186 @@
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
       
-      // Remove old listener and add new one
-      canvas.onclick = null;
-      canvas.onclick = function(e) {
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        // Check if clicking on existing point
-        let clickedPoint = null;
-        for (let p of state.points) {
-          const px = (p.x + 10) * canvas.width / 20;
-          const py = (10 - p.y) * canvas.height / 20;
-          if (Math.abs(px - x) < 10 && Math.abs(py - y) < 10) {
-            clickedPoint = p;
-            break;
-          }
-        }
-        
-        if (clickedPoint) {
-          // Toggle open/closed
-          clickedPoint.open = !clickedPoint.open;
-          // Update segments that use this point
-          state.segments.forEach(seg => {
-            const segPoint = seg.points.find(p => p.originalId === clickedPoint.id || p.id === clickedPoint.id);
-            if (segPoint) {
-              segPoint.open = clickedPoint.open;
-            }
-          });
-        } else {
-          // Add new point
-          const graphX = (x / canvas.width) * 20 - 10;
-          const graphY = 10 - (y / canvas.height) * 20;
-          
-          state.points.push({
-            x: graphX,
-            y: graphY,
-            open: false,
-            id: Date.now() + Math.random()
-          });
-        }
-        
-        updatePointsList();
-        draw();
-      };
+      canvas.onclick = handleCanvasClick;
     }
 
-    function setupControls() {
-      // Points
-      document.getElementById('clear-points').onclick = function() {
-        state.points = [];
-        state.selectedPoints = [];
-        updatePointsList();
-        draw();
-      };
+    function handleCanvasClick(e) {
+      const canvas = document.getElementById('main-canvas');
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
       
-      // Segments
-      document.getElementById('make-line').onclick = function() {
-        if (state.selectedPoints.length !== 2) {
-          alert('Please select exactly 2 points for a line');
+      // Check if clicking existing point
+      for (let p of points) {
+        const px = (p.x + 10) * canvas.width / 20;
+        const py = (10 - p.y) * canvas.height / 20;
+        if (Math.abs(px - x) < 10 && Math.abs(py - y) < 10) {
+          p.open = !p.open;
+          updatePointsList();
+          redraw();
           return;
         }
-        
-        const sorted = [...state.selectedPoints].sort((a, b) => a.x - b.x);
-        state.segments.push({
-          type: 'line',
-          points: sorted.map(p => ({...p})), // Copy points
-          extendLeft: document.getElementById('extend-left').checked,
-          extendRight: document.getElementById('extend-right').checked,
-          id: Date.now()
-        });
-        
-        state.selectedPoints = [];
-        updatePointsList();
-        updateSegmentsList();
-        draw();
-      };
+      }
       
-      document.getElementById('make-curve').onclick = function() {
-        if (state.selectedPoints.length !== 3) {
-          alert('Please select exactly 3 points for a curve');
-          return;
-        }
-        
-        const sorted = [...state.selectedPoints].sort((a, b) => a.x - b.x);
-        state.segments.push({
-          type: 'curve',
-          points: sorted.map(p => ({...p})), // Copy points
-          extendLeft: document.getElementById('extend-left').checked,
-          extendRight: document.getElementById('extend-right').checked,
-          id: Date.now()
-        });
-        
-        state.selectedPoints = [];
-        updatePointsList();
-        updateSegmentsList();
-        draw();
-      };
+      // Add new point
+      const graphX = (x / canvas.width) * 20 - 10;
+      const graphY = 10 - (y / canvas.height) * 20;
       
-      document.getElementById('clear-segments').onclick = function() {
-        state.segments = [];
-        updateSegmentsList();
-        draw();
-      };
+      points.push({
+        x: graphX,
+        y: graphY,
+        open: false,
+        id: Date.now() + Math.random()
+      });
       
-      // Challenge
-      document.getElementById('check-answer').onclick = checkAnswer;
-      document.getElementById('get-hint').onclick = getHint;
-      document.getElementById('new-challenge').onclick = newChallenge;
+      updatePointsList();
+      redraw();
     }
 
     function updatePointsList() {
       const list = document.getElementById('points-list');
-      if (state.points.length === 0) {
-        list.innerHTML = '<p style="color: #999;">Click canvas to add points</p>';
+      if (points.length === 0) {
+        list.innerHTML = '<p style="color: #999; text-align: center;">Click canvas to add points</p>';
         return;
       }
       
-      list.innerHTML = state.points.map(p => {
-        const selected = state.selectedPoints.find(sp => sp.id === p.id);
+      list.innerHTML = points.map(p => {
+        const selected = selectedPoints.includes(p.id);
         return `
-          <div class="point-item ${selected ? 'selected' : ''}" onclick="toggleSelect(${p.id})">
-            <span>(${p.x.toFixed(1)}, ${p.y.toFixed(1)}) ${p.open ? '○' : '●'}</span>
-            <span class="delete-btn" onclick="deletePoint(event, ${p.id})">×</span>
+          <div class="point-row ${selected ? 'selected' : ''}" onclick="toggleSelect('${p.id}')">
+            <div class="point-coords">
+              (<input type="number" class="coord-input" value="${p.x.toFixed(1)}" 
+                onchange="updateX('${p.id}', this.value)" onclick="event.stopPropagation()" step="0.5">,
+              <input type="number" class="coord-input" value="${p.y.toFixed(1)}" 
+                onchange="updateY('${p.id}', this.value)" onclick="event.stopPropagation()" step="0.5">)
+            </div>
+            <span class="point-symbol">${p.open ? '○' : '●'}</span>
+            <span class="delete-btn" onclick="deletePoint(event, '${p.id}')">×</span>
           </div>
         `;
       }).join('');
+    }
+
+    function toggleSelect(id) {
+      const idx = selectedPoints.indexOf(id);
+      if (idx >= 0) {
+        selectedPoints.splice(idx, 1);
+      } else {
+        selectedPoints.push(id);
+      }
+      updatePointsList();
+    }
+
+    function updateX(id, value) {
+      const point = points.find(p => p.id === id);
+      if (point) {
+        point.x = parseFloat(value);
+        redraw();
+      }
+    }
+
+    function updateY(id, value) {
+      const point = points.find(p => p.id === id);
+      if (point) {
+        point.y = parseFloat(value);
+        redraw();
+      }
+    }
+
+    function deletePoint(event, id) {
+      event.stopPropagation();
+      points = points.filter(p => p.id !== id);
+      selectedPoints = selectedPoints.filter(sid => sid !== id);
+      updatePointsList();
+      redraw();
+    }
+
+    function clearPoints() {
+      points = [];
+      selectedPoints = [];
+      updatePointsList();
+      redraw();
+    }
+
+    function makeLine() {
+      const selected = points.filter(p => selectedPoints.includes(p.id));
+      if (selected.length !== 2) {
+        alert('Please select exactly 2 points for a line');
+        return;
+      }
+      
+      const sorted = selected.sort((a, b) => a.x - b.x);
+      segments.push({
+        type: 'line',
+        points: sorted.map(p => ({...p})),
+        extendLeft: document.getElementById('extend-left').checked,
+        extendRight: document.getElementById('extend-right').checked,
+        id: Date.now()
+      });
+      
+      selectedPoints = [];
+      updatePointsList();
+      updateSegmentsList();
+      redraw();
+    }
+
+    function makeCurve() {
+      const selected = points.filter(p => selectedPoints.includes(p.id));
+      if (selected.length !== 3) {
+        alert('Please select exactly 3 points for a curve');
+        return;
+      }
+      
+      const sorted = selected.sort((a, b) => a.x - b.x);
+      
+      // Auto-toggle middle point to open
+      const middlePoint = points.find(p => p.id === sorted[1].id);
+      if (middlePoint) {
+        middlePoint.open = true;
+      }
+      
+      segments.push({
+        type: 'curve',
+        points: sorted.map(p => ({...p})),
+        extendLeft: document.getElementById('extend-left').checked,
+        extendRight: document.getElementById('extend-right').checked,
+        id: Date.now()
+      });
+      
+      selectedPoints = [];
+      updatePointsList();
+      updateSegmentsList();
+      redraw();
+    }
+
+    function clearSegments() {
+      segments = [];
+      updateSegmentsList();
+      redraw();
     }
 
     function updateSegmentsList() {
       const list = document.getElementById('segments-list');
-      if (state.segments.length === 0) {
-        list.innerHTML = '<p style="color: #999;">No segments yet</p>';
+      if (segments.length === 0) {
+        list.innerHTML = '<p style="color: #999; text-align: center;">No segments yet</p>';
         return;
       }
       
-      list.innerHTML = state.segments.map((s, i) => {
-        const desc = s.type === 'line' ? 'Line' : 'Curve';
-        const ext = (s.extendLeft ? '←' : '') + (s.extendRight ? '→' : '');
-        return `
-          <div class="segment-item">
-            <span>Segment ${i+1}: ${desc} ${ext}</span>
-            <span class="delete-btn" onclick="deleteSegment(${s.id})">×</span>
-          </div>
-        `;
-      }).join('');
+      list.innerHTML = segments.map((s, i) => `
+        <div class="segment-item">
+          <span>Segment ${i+1}: ${s.type}</span>
+          <span class="delete-btn" onclick="deleteSegment('${s.id}')">×</span>
+        </div>
+      `).join('');
     }
 
-    window.toggleSelect = function(id) {
-      const point = state.points.find(p => p.id === id);
-      if (!point) return;
-      
-      const index = state.selectedPoints.findIndex(p => p.id === id);
-      
-      if (index >= 0) {
-        state.selectedPoints.splice(index, 1);
-      } else {
-        state.selectedPoints.push(point);
-      }
-      
-      updatePointsList();
-      draw();
-    };
-
-    window.deletePoint = function(event, id) {
-      event.stopPropagation();
-      state.points = state.points.filter(p => p.id !== id);
-      state.selectedPoints = state.selectedPoints.filter(p => p.id !== id);
-      updatePointsList();
-      draw();
-    };
-
-    window.deleteSegment = function(id) {
-      state.segments = state.segments.filter(s => s.id !== id);
+    function deleteSegment(id) {
+      segments = segments.filter(s => s.id != id);
       updateSegmentsList();
-      draw();
-    };
+      redraw();
+    }
 
-    function draw() {
+    function redraw() {
       const canvas = document.getElementById('main-canvas');
       if (!canvas) return;
       
@@ -842,17 +839,17 @@
       ctx.strokeStyle = '#0f766e';
       ctx.lineWidth = 3;
       
-      state.segments.forEach(seg => {
+      segments.forEach(seg => {
         if (seg.type === 'line') {
           const p1 = seg.points[0];
           const p2 = seg.points[1];
           
-          ctx.beginPath();
+          const x1 = (p1.x + 10) * canvas.width / 20;
+          const y1 = (10 - p1.y) * canvas.height / 20;
+          const x2 = (p2.x + 10) * canvas.width / 20;
+          const y2 = (10 - p2.y) * canvas.height / 20;
           
-          let x1 = (p1.x + 10) * canvas.width / 20;
-          let y1 = (10 - p1.y) * canvas.height / 20;
-          let x2 = (p2.x + 10) * canvas.width / 20;
-          let y2 = (10 - p2.y) * canvas.height / 20;
+          ctx.beginPath();
           
           if (seg.extendLeft && Math.abs(x2 - x1) > 0.01) {
             const slope = (y2 - y1) / (x2 - x1);
@@ -893,10 +890,10 @@
     }
 
     function drawPoints(ctx, canvas) {
-      state.points.forEach(p => {
+      points.forEach(p => {
         const x = (p.x + 10) * canvas.width / 20;
         const y = (10 - p.y) * canvas.height / 20;
-        const selected = state.selectedPoints.find(sp => sp.id === p.id);
+        const selected = selectedPoints.includes(p.id);
         
         ctx.strokeStyle = selected ? '#f59e0b' : '#0f766e';
         ctx.fillStyle = p.open ? 'white' : (selected ? '#f59e0b' : '#0f766e');
@@ -910,10 +907,55 @@
     }
 
     function drawExamples() {
-      // Example 1: Increasing & Curving Up
-      drawExample('ex1', (ctx, w, h) => {
-        ctx.strokeStyle = '#0f766e';
-        ctx.lineWidth = 2;
+      // Draw all 6 example canvases
+      const examples = ['ex1', 'ex2', 'ex3', 'ex4', 'ex5', 'ex6'];
+      examples.forEach(id => {
+        const canvas = document.getElementById(id);
+        if (canvas) {
+          canvas.width = canvas.offsetWidth;
+          canvas.height = canvas.offsetHeight;
+          drawExampleFunction(canvas, id);
+        }
+      });
+    }
+
+    function drawExampleFunction(canvas, type) {
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      
+      // Simple grid
+      ctx.strokeStyle = '#f0f0f0';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * w/4, 0);
+        ctx.lineTo(i * w/4, h);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, i * h/4);
+        ctx.lineTo(w, i * h/4);
+        ctx.stroke();
+      }
+      
+      // Axes
+      ctx.strokeStyle = '#ddd';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(w/2, 0);
+      ctx.lineTo(w/2, h);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(0, h/2);
+      ctx.lineTo(w, h/2);
+      ctx.stroke();
+      
+      // Draw function
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 2;
+      
+      if (type === 'ex1') {
+        // Increasing & Curving Up
         ctx.beginPath();
         for (let x = -2; x <= 2; x += 0.1) {
           const y = Math.exp(x) - 1;
@@ -923,12 +965,8 @@
           else ctx.lineTo(px, py);
         }
         ctx.stroke();
-      });
-      
-      // Example 2: Decreasing & Curving Down
-      drawExample('ex2', (ctx, w, h) => {
-        ctx.strokeStyle = '#0f766e';
-        ctx.lineWidth = 2;
+      } else if (type === 'ex2') {
+        // Decreasing & Curving Down
         ctx.beginPath();
         for (let x = -2; x <= 2; x += 0.1) {
           const y = -Math.sqrt(x + 2);
@@ -938,43 +976,30 @@
           else ctx.lineTo(px, py);
         }
         ctx.stroke();
-      });
-      
-      // Example 3: Piecewise with Jump
-      drawExample('ex3', (ctx, w, h) => {
-        ctx.strokeStyle = '#0f766e';
-        ctx.lineWidth = 2;
-        
-        // Left piece
+      } else if (type === 'ex3') {
+        // Piecewise with Jump
         ctx.beginPath();
         ctx.moveTo(w * 0.1, h * 0.6);
         ctx.lineTo(w * 0.45, h * 0.4);
         ctx.stroke();
         
-        // Open circle
         ctx.beginPath();
         ctx.arc(w * 0.45, h * 0.4, 4, 0, 2 * Math.PI);
         ctx.fillStyle = 'white';
         ctx.fill();
         ctx.stroke();
         
-        // Closed circle
         ctx.beginPath();
         ctx.arc(w * 0.55, h * 0.7, 4, 0, 2 * Math.PI);
         ctx.fillStyle = '#0f766e';
         ctx.fill();
         
-        // Right piece
         ctx.beginPath();
         ctx.moveTo(w * 0.55, h * 0.7);
         ctx.lineTo(w * 0.9, h * 0.5);
         ctx.stroke();
-      });
-      
-      // Example 4: S-Shaped
-      drawExample('ex4', (ctx, w, h) => {
-        ctx.strokeStyle = '#0f766e';
-        ctx.lineWidth = 2;
+      } else if (type === 'ex4') {
+        // S-Shaped
         ctx.beginPath();
         for (let x = -2; x <= 2; x += 0.1) {
           const y = x * x * x;
@@ -984,12 +1009,8 @@
           else ctx.lineTo(px, py);
         }
         ctx.stroke();
-      });
-      
-      // Example 5: U-Shaped
-      drawExample('ex5', (ctx, w, h) => {
-        ctx.strokeStyle = '#0f766e';
-        ctx.lineWidth = 2;
+      } else if (type === 'ex5') {
+        // U-Shaped
         ctx.beginPath();
         for (let x = -2; x <= 2; x += 0.1) {
           const y = x * x;
@@ -999,12 +1020,8 @@
           else ctx.lineTo(px, py);
         }
         ctx.stroke();
-      });
-      
-      // Example 6: Approaching Line
-      drawExample('ex6', (ctx, w, h) => {
-        ctx.strokeStyle = '#0f766e';
-        ctx.lineWidth = 2;
+      } else if (type === 'ex6') {
+        // Approaching Line
         ctx.beginPath();
         for (let x = 0; x <= 4; x += 0.1) {
           const y = 2 - 2 * Math.exp(-x);
@@ -1015,7 +1032,6 @@
         }
         ctx.stroke();
         
-        // Asymptote
         ctx.strokeStyle = '#f59e0b';
         ctx.setLineDash([5, 5]);
         ctx.beginPath();
@@ -1023,140 +1039,48 @@
         ctx.lineTo(w, h/3);
         ctx.stroke();
         ctx.setLineDash([]);
-      });
+      }
     }
 
-    function drawExample(id, drawFunc) {
-      const canvas = document.getElementById(id);
-      if (!canvas) return;
+    function checkAnswer() {
+      const feedback = document.getElementById('feedback');
       
-      const ctx = canvas.getContext('2d');
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      
-      // Clear
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Grid
-      ctx.strokeStyle = '#f0f0f0';
-      ctx.lineWidth = 1;
-      
-      for (let i = 0; i <= 4; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * canvas.width / 4, 0);
-        ctx.lineTo(i * canvas.width / 4, canvas.height);
-        ctx.stroke();
-        
-        ctx.beginPath();
-        ctx.moveTo(0, i * canvas.height / 4);
-        ctx.lineTo(canvas.width, i * canvas.height / 4);
-        ctx.stroke();
+      // Check if they built anything
+      if (segments.length === 0) {
+        feedback.className = 'feedback show error';
+        feedback.innerHTML = 'Please build a function first!';
+        return;
       }
       
-      // Axes
-      ctx.strokeStyle = '#ddd';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(canvas.width / 2, 0);
-      ctx.lineTo(canvas.width / 2, canvas.height);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(0, canvas.height / 2);
-      ctx.lineTo(canvas.width, canvas.height / 2);
-      ctx.stroke();
+      // For BUILD challenges, check the construction
+      feedback.className = 'feedback show info';
+      feedback.innerHTML = 'Checking your function...';
       
-      // Draw the function
-      drawFunc(ctx, canvas.width, canvas.height);
+      // Simulate checking (in real app, would call AI)
+      setTimeout(() => {
+        feedback.className = 'feedback show success';
+        feedback.innerHTML = `Great work! You built a function with ${segments.length} segments. ${segments.some(s => s.type === 'curve') ? 'Nice use of curves!' : 'Try adding some curves for smoother transitions.'}`;
+      }, 1000);
+    }
+
+    function getHint() {
+      const feedback = document.getElementById('feedback');
+      feedback.className = 'feedback show info';
+      feedback.innerHTML = '💡 Remember: Use 2 points for lines, 3 points for curves. The middle point in a curve controls the bending!';
     }
 
     function newChallenge() {
-      state.challengeIndex = (state.challengeIndex + 1) % challenges.length;
-      document.getElementById('challenge-text').textContent = challenges[state.challengeIndex];
+      currentChallenge = (currentChallenge + 1) % challenges.length;
+      document.getElementById('challenge-desc').textContent = challenges[currentChallenge];
       document.getElementById('feedback').classList.remove('show');
-      document.getElementById('user-response').value = '';
-    }
-
-    async function checkAnswer() {
-      const response = document.getElementById('user-response').value;
-      const feedback = document.getElementById('feedback');
-      
-      if (!response.trim()) {
-        feedback.className = 'feedback show error';
-        feedback.innerHTML = 'Please describe your function first!';
-        return;
-      }
-      
-      if (state.segments.length === 0) {
-        feedback.className = 'feedback show error';
-        feedback.innerHTML = 'Build a function first, then describe it!';
-        return;
-      }
-      
-      feedback.className = 'feedback show info';
-      feedback.innerHTML = '<span class="loading"></span> Checking...';
-      
-      try {
-        const prompt = `Student built a function with ${state.segments.length} segments for: "${challenges[state.challengeIndex]}". Their description: "${response}". Give brief encouraging feedback (2 sentences max).`;
-        
-        const apiResponse = await fetch('/api/gemini', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            contents: [{ role: "user", parts: [{ text: prompt }] }] 
-          })
-        });
-        
-        if (!apiResponse.ok) throw new Error('API error');
-        
-        const data = await apiResponse.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Good work! Keep exploring!';
-        
-        feedback.className = 'feedback show success';
-        feedback.innerHTML = text;
-      } catch (error) {
-        feedback.className = 'feedback show success';
-        feedback.innerHTML = 'Good work! Your function shows understanding of the key concepts. Try the next challenge!';
-      }
-    }
-
-    async function getHint() {
-      const feedback = document.getElementById('feedback');
-      
-      feedback.className = 'feedback show info';
-      feedback.innerHTML = '<span class="loading"></span> Getting hint...';
-      
-      try {
-        const prompt = `Give a simple hint for: "${challenges[state.challengeIndex]}". Focus on the behavior, not formulas. One sentence only.`;
-        
-        const apiResponse = await fetch('/api/gemini', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            contents: [{ role: "user", parts: [{ text: prompt }] }] 
-          })
-        });
-        
-        if (!apiResponse.ok) throw new Error('API error');
-        
-        const data = await apiResponse.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Think about how the function changes direction and shape.';
-        
-        feedback.className = 'feedback show info';
-        feedback.innerHTML = '💡 ' + text;
-      } catch (error) {
-        feedback.className = 'feedback show info';
-        feedback.innerHTML = '💡 Think about how the function changes direction and where it curves!';
-      }
+      document.getElementById('user-notes').value = '';
     }
 
     // Handle resize
     window.addEventListener('resize', () => {
-      if (state.currentTab === 'intro') {
-        drawExamples();
-      } else {
-        setupCanvas();
-        draw();
-      }
+      setupCanvas();
+      redraw();
+      drawExamples();
     });
   </script>
 </body>
