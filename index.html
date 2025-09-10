@@ -621,6 +621,13 @@
         if (clickedPoint) {
           // Toggle open/closed
           clickedPoint.open = !clickedPoint.open;
+          // Update segments that use this point
+          state.segments.forEach(seg => {
+            const segPoint = seg.points.find(p => p.originalId === clickedPoint.id || p.id === clickedPoint.id);
+            if (segPoint) {
+              segPoint.open = clickedPoint.open;
+            }
+          });
         } else {
           // Add new point
           const graphX = (x / canvas.width) * 20 - 10;
