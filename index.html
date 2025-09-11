@@ -1,507 +1,499 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Function Behavior Builder | Mathswell</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Function Behavior Cards | Mathswell</title>
   <link rel="icon" href="/logo-mathswell-square-mirror.ico" type="image/x-icon">
   <link rel="icon" href="/logo-mathswell-square-mirror.svg" type="image/svg+xml">
   <style>
-    :root{
-      --primary:#0f766e; 
-      --primary-light:#10b981; 
-      --primary-dark:#0a5a52;
-      --background:#f7faf9; 
-      --interactive:#e6fffb;
-      --text-primary:#212121; 
-      --text-muted:#4b5563; 
-      --accent-amber:#f59e0b; 
-      --accent-red:#dc2626;
-      --accent-blue:#2563eb;
-      --surface:#ffffff; 
-      --border:#e0e7e4;
-      --success:#10b981;
-      --warning:#f59e0b;
-      --error:#dc2626;
-    }
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{
-      font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
-      background:linear-gradient(135deg,var(--background) 0%,#f0f9f8 100%);
-      color:var(--text-primary);
-      line-height:1.6;
-      min-height:100vh;
-    }
-    .mathswell-nav{
-      display:flex;
-      justify-content:center;
-      margin:1rem 0;
-      padding:0.5rem;
-      animation:slideDown 0.5s ease;
-    }
-    @keyframes slideDown{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
-    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-    .mw-link{
-      display:inline-flex;
-      align-items:center;
-      gap:.5rem;
-      text-decoration:none;
-      font-weight:700;
-      color:var(--primary);
-      padding:.5rem 1rem;
-      border-radius:999px;
-      background:#fff;
-      box-shadow:0 2px 8px rgba(15,118,110,0.1);
-      transition:all 0.3s ease;
-    }
-    .mw-link:hover{
-      transform:translateY(-2px);
-      box-shadow:0 4px 12px rgba(15,118,110,0.2);
-    }
-    .container{
-      max-width:1200px;
-      margin:0 auto;
-      padding:0 1rem;
-      animation:fadeIn 0.6s ease;
-    }
-    .tabs{
-      display:flex;
-      gap:.5rem;
-      margin-bottom:2rem;
-      border-bottom:2px solid var(--border);
-      background:white;
-      border-radius:12px 12px 0 0;
-      padding:0.5rem;
-      box-shadow:0 2px 4px rgba(0,0,0,0.05);
-    }
-    .tab-btn{
-      padding:.75rem 1.5rem;
-      background:transparent;
-      border:none;
-      color:var(--text-muted);
-      font-size:1rem;
-      font-weight:600;
-      cursor:pointer;
-      transition:all 0.3s ease;
-      border-radius:8px;
-      position:relative;
-    }
-    .tab-btn:hover{
-      background:var(--interactive);
-      color:var(--primary);
-    }
-    .tab-btn.active{
-      color:var(--primary);
-      background:linear-gradient(135deg,var(--interactive),#fff);
-      box-shadow:0 2px 8px rgba(15,118,110,0.15);
-    }
-    .tab-btn.active::after{
-      content:'';
-      position:absolute;
-      bottom:-10px;
-      left:50%;
-      transform:translateX(-50%);
-      width:40px;
-      height:3px;
-      background:var(--primary);
-      border-radius:2px;
-    }
-    .tab-content{
-      display:none;
-      animation:fadeIn 0.4s ease;
-    }
-    .tab-content.active{display:block}
-    .hero{
-      background:linear-gradient(135deg,#fff,var(--interactive));
-      padding:2.5rem;
-      border-radius:16px;
-      margin-bottom:2rem;
-      box-shadow:0 8px 24px rgba(0,0,0,0.08);
-      border:1px solid rgba(15,118,110,0.1);
-    }
-    .hero h1{
-      color:var(--primary);
-      margin-bottom:1rem;
-      font-size:2rem;
-      font-weight:700;
-    }
-    .hero p{
-      color:var(--text-muted);
-      font-size:1.1rem;
-    }
-    .examples-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-      gap:1.5rem;
-      margin-bottom:2rem;
-    }
-    .example-card{
-      background:#fff;
-      padding:1.5rem;
-      border-radius:12px;
-      box-shadow:0 4px 16px rgba(0,0,0,0.08);
-      transition:all 0.3s ease;
-      border:1px solid var(--border);
-    }
-    .example-card:hover{
-      transform:translateY(-4px);
-      box-shadow:0 8px 24px rgba(0,0,0,0.12);
-      border-color:var(--primary-light);
-    }
-    .example-card h3{
-      color:var(--primary);
-      margin-bottom:1rem;
-      font-size:1.1rem;
-      display:flex;
-      align-items:center;
-      gap:0.5rem;
-    }
-    .example-canvas{
-      width:100%;
-      height:200px;
-      border:2px solid var(--border);
-      border-radius:8px;
-      background:#fff;
-      margin-bottom:1rem;
-      display:block;
-    }
-    .math-info{
-      background:var(--interactive);
-      padding:0.75rem;
-      border-radius:6px;
-      font-size:0.9rem;
-      line-height:1.5;
-    }
-    .math-info strong{
-      color:var(--primary-dark);
-    }
-    #main-canvas,#ai-canvas{
-      width:100%;
-      height:500px;
-      border:2px solid var(--border);
-      border-radius:12px;
-      background:#fff;
-      display:block;
-      box-shadow:inset 0 2px 4px rgba(0,0,0,0.05);
-    }
-    #main-canvas{cursor:crosshair}
-    .canvas-wrapper{
-      background:#fff;
-      padding:1.5rem;
-      border-radius:16px;
-      box-shadow:0 4px 20px rgba(0,0,0,0.08);
-      margin-bottom:1.5rem;
-      border:1px solid var(--border);
-    }
-    .canvas-wrapper h2{
-      color:var(--primary);
-      margin-bottom:1rem;
-      font-size:1.5rem;
-      display:flex;
-      align-items:center;
-      gap:0.5rem;
-    }
-    .controls-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-      gap:1rem;
-      margin-bottom:1.5rem;
-    }
-    .control-panel{
-      background:linear-gradient(135deg,var(--interactive),#f8fffe);
-      padding:1.25rem;
-      border-radius:10px;
-      border:1px solid rgba(15,118,110,0.1);
-      transition:all 0.3s ease;
-    }
-    .control-panel:hover{
-      box-shadow:0 4px 12px rgba(15,118,110,0.1);
-    }
-    .control-panel h3{
-      color:var(--primary);
-      margin-bottom:.75rem;
-      font-size:1.1rem;
-      display:flex;
-      align-items:center;
-      gap:0.5rem;
-    }
-    .btn{
-      padding:.6rem 1.2rem;
-      border:none;
-      border-radius:8px;
-      font-weight:600;
-      cursor:pointer;
-      transition:all 0.3s ease;
-      width:100%;
-      margin-bottom:.5rem;
-      font-size:0.95rem;
-      box-shadow:0 2px 4px rgba(0,0,0,0.1);
-    }
-    .btn:hover{
-      transform:translateY(-2px);
-      box-shadow:0 4px 8px rgba(0,0,0,0.15);
-    }
-    .btn:active{
-      transform:translateY(0);
-    }
-    .btn-primary{
-      background:linear-gradient(135deg,var(--primary),var(--primary-light));
-      color:#fff;
-    }
-    .btn-primary:hover{
-      background:linear-gradient(135deg,var(--primary-dark),var(--primary));
-    }
-    .btn-secondary{
-      background:#fff;
-      color:var(--primary);
-      border:2px solid var(--primary);
-    }
-    .btn-secondary:hover{
-      background:var(--interactive);
-      border-color:var(--primary-light);
-    }
-    .btn-danger{
-      background:linear-gradient(135deg,var(--error),#ef4444);
-      color:#fff;
-    }
-    .btn-small{
-      padding:.4rem .8rem;
-      font-size:.85rem;
-      width:auto;
-    }
-    .points-list,.segments-list{
-      max-height:220px;
-      overflow-y:auto;
-      background:#fff;
-      border-radius:6px;
-      padding:.5rem;
-      border:1px solid var(--border);
-    }
-    .point-row{
-      display:flex;
-      align-items:center;
-      gap:.5rem;
-      padding:.4rem;
-      margin-bottom:.3rem;
-      background:#fff;
-      border-radius:6px;
-      cursor:pointer;
-      transition:all 0.2s ease;
-      border:1px solid transparent;
-    }
-    .point-row:hover{
-      background:var(--interactive);
-      border-color:var(--primary-light);
-    }
-    .point-row.selected{
-      background:linear-gradient(135deg,var(--primary),var(--primary-light));
-      color:#fff;
-      box-shadow:0 2px 8px rgba(15,118,110,0.3);
-    }
-    .point-coords{
-      display:flex;
-      gap:.3rem;
-      align-items:center;
-      flex:1;
-      font-family:'Consolas','Monaco',monospace;
-    }
-    .coord-input{
-      width:65px;
-      padding:3px 6px;
-      border:1px solid #ddd;
-      border-radius:4px;
-      font-size:.85rem;
-      font-family:'Consolas','Monaco',monospace;
-      background:#fff;
-    }
-    .point-row.selected .coord-input{
-      background:rgba(255,255,255,0.95);
-      color:#000;
-      border-color:#fff;
-    }
-    .point-symbol{
-      font-size:1.3rem;
-      margin:0 .25rem;
-      cursor:pointer;
-      transition:transform 0.2s ease;
-    }
-    .point-symbol:hover{
-      transform:scale(1.2);
-    }
-    .delete-btn{
-      color:var(--accent-red);
-      cursor:pointer;
-      font-weight:bold;
-      padding:0 .5rem;
-      font-size:1.2rem;
-      transition:all 0.2s ease;
-    }
-    .delete-btn:hover{
-      transform:scale(1.2);
-      color:var(--error);
-    }
-    .segment-item{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:.6rem;
-      margin-bottom:.4rem;
-      background:#fff;
-      border-radius:6px;
-      transition:all 0.2s ease;
-      cursor:pointer;
-    }
-    .segment-item:hover{
-      background:var(--interactive);
-    }
-    .challenge-box{
-      background:linear-gradient(135deg,#fffbeb,#fef3c7);
-      padding:2rem;
-      border-radius:16px;
-      border:2px solid var(--accent-amber);
-      box-shadow:0 4px 16px rgba(245,158,11,0.15);
-    }
-    .challenge-box h2{
-      color:#92400e;
-      margin-bottom:1rem;
-      font-size:1.5rem;
-      display:flex;
-      align-items:center;
-      gap:0.5rem;
-    }
-    .challenge-text{
-      background:#fff;
-      padding:1.25rem;
-      border-radius:8px;
-      margin-bottom:1rem;
-      border:1px solid rgba(245,158,11,0.2);
-    }
-    .challenge-text strong{
-      color:#92400e;
-      display:block;
-      margin-bottom:0.5rem;
-    }
-    .feedback{
-      padding:1rem 1.25rem;
-      border-radius:8px;
-      margin-top:.5rem;
-      display:none;
-      animation:slideIn 0.3s ease;
-      border-left:4px solid;
-    }
-    @keyframes slideIn{from{transform:translateX(-10px);opacity:0}to{transform:translateX(0);opacity:1}}
-    .feedback.show{display:block}
-    .feedback.success{
-      background:linear-gradient(135deg,#d4edda,#c3e6cb);
-      color:#155724;
-      border-left-color:var(--success);
-    }
-    .feedback.error{
-      background:linear-gradient(135deg,#f8d7da,#f5c6cb);
-      color:#721c24;
-      border-left-color:var(--error);
-    }
-    .feedback.info{
-      background:linear-gradient(135deg,#cce5ff,#b8daff);
-      color:#004085;
-      border-left-color:var(--accent-blue);
-    }
-    .feedback.warning{
-      background:linear-gradient(135deg,#fff3cd,#ffeaa7);
-      color:#856404;
-      border-left-color:var(--warning);
-    }
-    .info-bar{
-      background:linear-gradient(135deg,var(--interactive),#e0f7f5);
-      padding:1rem;
-      border-radius:8px;
-      margin-top:1rem;
-      font-size:.9rem;
-      color:var(--text-muted);
-      border:1px solid rgba(15,118,110,0.1);
-    }
-    .info-bar strong{
-      color:var(--primary-dark);
-    }
-    .behaviour-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:.75rem 1rem;
-      margin-bottom:1rem;
-    }
-    .behaviour-grid label{
-      display:flex;
-      align-items:center;
-      gap:0.5rem;
-      padding:0.5rem;
-      border-radius:6px;
-      transition:all 0.2s ease;
-      cursor:pointer;
-    }
-    .behaviour-grid label:hover{
-      background:var(--interactive);
-    }
-    .behaviour-grid input[type="checkbox"]{
-      width:18px;
-      height:18px;
-      accent-color:var(--primary);
-      cursor:pointer;
-    }
-    .row{
-      display:flex;
-      gap:.5rem;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .row>*{flex:1;min-width:140px}
-    .inline{
-      display:inline-flex;
-      gap:.5rem;
-      align-items:center;
-    }
-    .muted{
-      color:var(--text-muted);
-      font-size:.9rem;
-    }
-    select{
-      padding:0.5rem;
-      border:2px solid var(--border);
-      border-radius:6px;
-      font:inherit;
-      background:#fff;
-      cursor:pointer;
-      transition:border-color 0.3s ease;
-    }
-    select:focus{
-      outline:none;
-      border-color:var(--primary);
-    }
-    input[type="number"]{
-      padding:0.4rem 0.6rem;
-      border:2px solid var(--border);
-      border-radius:6px;
-      font:inherit;
-      transition:border-color 0.3s ease;
-    }
-    input[type="number"]:focus{
-      outline:none;
-      border-color:var(--primary);
-    }
-    .nav-hint{
-      text-align:center;
-      margin:2.5rem 0;
-    }
-    .nav-hint button{
-      padding:1rem 3rem;
-      font-size:1.1rem;
-      box-shadow:0 4px 12px rgba(15,118,110,0.2);
-    }
-    @media (max-width:768px){
-      .controls-grid{grid-template-columns:1fr}
-      .examples-grid{grid-template-columns:1fr}
-      .behaviour-grid{grid-template-columns:1fr}
-      .tabs{flex-wrap:wrap}
-      .hero h1{font-size:1.5rem}
+    :root {
+      --primary: #0f766e;
+      --primary-light: #10b981;
+      --primary-dark: #0a5a52;
+      --background: #f7faf9;
+      --interactive: #e6fffb;
+      --text-primary: #212121;
+      --text-muted: #4b5563;
+      --accent-amber: #f59e0b;
+      --accent-red: #dc2626;
+      --accent-blue: #2563eb;
+      --surface: #ffffff;
+      --border: #e0e7e4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #dc2626;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, var(--background) 0%, #f0f9f8 100%);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .mathswell-nav {
+      display: flex;
+      justify-content: center;
+      margin: 1.5rem 0;
+      padding: 0.5rem;
+    }
+
+    .mw-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-weight: 700;
+      color: var(--primary);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(15, 118, 110, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .mw-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      background: white;
+      border-radius: 12px;
+      padding: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      justify-content: center;
+    }
+
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      flex: 1;
+      max-width: 200px;
+    }
+
+    .tab-btn:hover {
+      background: var(--interactive);
+      color: var(--primary);
+    }
+
+    .tab-btn.active {
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      box-shadow: 0 2px 8px rgba(15, 118, 110, 0.15);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #fff, var(--interactive));
+      padding: 2.5rem;
+      border-radius: 16px;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      text-align: center;
+    }
+
+    .hero h1 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .example-card {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .example-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      border-color: var(--primary-light);
+    }
+
+    .example-card h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    .example-canvas {
+      width: 100%;
+      height: 120px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    /* Card system styles */
+    .card-bank {
+      background: linear-gradient(135deg, var(--interactive), #f8fffe);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-bank h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      min-height: 80px;
+      justify-content: center;
+    }
+
+    /* Word cards for Tab 2 */
+    .word-card {
+      padding: 0.75rem 1.25rem;
+      background: white;
+      border: 2px solid var(--primary);
+      border-radius: 999px;
+      cursor: move;
+      transition: all 0.3s ease;
+      user-select: none;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .word-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+      background: var(--interactive);
+    }
+
+    .word-card.dragging {
+      opacity: 0.5;
+    }
+
+    /* Clickable image cards for Tab 3 */
+    .clickable-card {
+      width: 110px;
+      height: 90px;
+      background: white;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .clickable-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+    }
+
+    .clickable-card.dragging {
+      opacity: 0.5;
+    }
+
+    .clickable-card canvas {
+      width: 100%;
+      height: 60px;
+      pointer-events: none;
+    }
+
+    .option-indicator {
+      position: absolute;
+      bottom: 2px;
+      display: flex;
+      gap: 2px;
+    }
+
+    .option-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #ddd;
+    }
+
+    .option-dot.active {
+      background: var(--primary);
+    }
+
+    .sequence-area {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      margin-bottom: 2rem;
+      min-height: 200px;
+    }
+
+    .sequence-area h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .sequence-container {
+      display: flex;
+      gap: 0.75rem;
+      padding: 1.5rem;
+      background: var(--interactive);
+      border-radius: 8px;
+      min-height: 100px;
+      align-items: center;
+      flex-wrap: wrap;
+      border: 2px dashed var(--primary);
+      justify-content: center;
+    }
+
+    .sequence-container.drag-over {
+      background: #d1f4f0;
+      border-color: var(--primary-light);
+    }
+
+    .graph-display {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      margin-bottom: 2rem;
+    }
+
+    .graph-display h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .graph-canvas {
+      width: 100%;
+      height: 350px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      display: block;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(15, 118, 110, 0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--interactive);
+    }
+
+    .feedback {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      display: none;
+      border-left: 4px solid;
+      text-align: center;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .feedback.success {
+      background: #d4edda;
+      color: #155724;
+      border-left-color: var(--success);
+    }
+
+    .feedback.error {
+      background: #f8d7da;
+      color: #721c24;
+      border-left-color: var(--error);
+    }
+
+    .feedback.info {
+      background: #cce5ff;
+      color: #004085;
+      border-left-color: var(--accent-blue);
+    }
+
+    .sentence-display {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      text-align: center;
+      color: var(--primary-dark);
+      animation: celebrate 0.5s ease;
+    }
+
+    @keyframes celebrate {
+      0% { transform: scale(0.95); opacity: 0; }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .challenge-box {
+      background: linear-gradient(135deg, #fffbeb, #fef3c7);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 2px solid var(--accent-amber);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .challenge-box h4 {
+      color: #92400e;
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+
+    .challenge-text {
+      color: #451a03;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .placeholder-text {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .hint-text {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    .ai-disclaimer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-style: italic;
+      margin-top: 1rem;
+      opacity: 0.7;
+    }
+
+    .cta-buttons {
+      text-align: center;
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (max-width: 768px) {
+      .tabs {
+        flex-direction: column;
+      }
+      
+      .tab-btn {
+        max-width: 100%;
+      }
+      
+      .word-card {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+      
+      .clickable-card {
+        width: 90px;
+        height: 75px;
+      }
     }
   </style>
 </head>
@@ -515,607 +507,1043 @@
 
   <div class="container">
     <div class="tabs">
-      <button class="tab-btn active" data-tab="intro">📚 Introduction</button>
-      <button class="tab-btn" data-tab="describe">🧠 Describe Behavior</button>
-      <button class="tab-btn" data-tab="builder">🔨 Build & Challenge</button>
+      <button class="tab-btn active" data-tab="intro">Introduction</button>
+      <button class="tab-btn" data-tab="read">Read the Graph</button>
+      <button class="tab-btn" data-tab="build">Build from Behavior</button>
     </div>
 
-    <!-- INTRO -->
+    <!-- INTRODUCTION TAB -->
     <div id="intro" class="tab-content active">
       <div class="hero">
-        <h1>📈 Function Behavior Builder</h1>
-        <p>Master the art of analyzing and constructing functions by understanding their fundamental behaviors: monotonicity (increasing/decreasing), concavity (curving up/down), continuity (jumps and asymptotes), and more.</p>
+        <h1>Function Behavior Cards</h1>
+        <p>Master function analysis by recognizing behaviors visually and describing them mathematically. Practice reading graphs and building functions from behavioral descriptions.</p>
       </div>
 
       <div class="examples-grid">
         <div class="example-card">
-          <h3>📈 Strictly Increasing & Concave Up</h3>
-          <canvas class="example-canvas" id="ex1"></canvas>
-          <div class="math-info">
-            <strong>Mathematical Behavior:</strong><br>
-            • Function values always increase as x increases<br>
-            • Graph curves upward (holds water)<br>
-            • Rate of increase gets faster
-          </div>
+          <h3>Increasing</h3>
+          <canvas class="example-canvas" id="ex-inc"></canvas>
         </div>
         <div class="example-card">
-          <h3>📉 Strictly Decreasing & Concave Down</h3>
-          <canvas class="example-canvas" id="ex2"></canvas>
-          <div class="math-info">
-            <strong>Mathematical Behavior:</strong><br>
-            • Function values always decrease as x increases<br>
-            • Graph curves downward (sheds water)<br>
-            • Rate of decrease slows down
-          </div>
+          <h3>Decreasing</h3>
+          <canvas class="example-canvas" id="ex-dec"></canvas>
         </div>
         <div class="example-card">
-          <h3>🔀 Piecewise with Jump Discontinuity</h3>
-          <canvas class="example-canvas" id="ex3"></canvas>
-          <div class="math-info">
-            <strong>Mathematical Behavior:</strong><br>
-            • Function has a sudden jump at a point<br>
-            • Different y-values at same x-location<br>
-            • Open/closed circles show which piece includes the point
-          </div>
+          <h3>Concave Up</h3>
+          <canvas class="example-canvas" id="ex-cup"></canvas>
         </div>
         <div class="example-card">
-          <h3>〰️ S-Shaped with Inflection Point</h3>
-          <canvas class="example-canvas" id="ex4"></canvas>
-          <div class="math-info">
-            <strong>Mathematical Behavior:</strong><br>
-            • Concavity changes from down to up (or vice versa)<br>
-            • Point where curvature switches direction<br>
-            • Function may still be increasing throughout
-          </div>
+          <h3>Concave Down</h3>
+          <canvas class="example-canvas" id="ex-cdown"></canvas>
         </div>
         <div class="example-card">
-          <h3>🏔️ Parabolic with Global Minimum</h3>
-          <canvas class="example-canvas" id="ex5"></canvas>
-          <div class="math-info">
-            <strong>Mathematical Behavior:</strong><br>
-            • Lowest point on the entire graph<br>
-            • Function decreases then increases<br>
-            • Graph is concave up everywhere (U-shaped)
-          </div>
+          <h3>Jump Discontinuity</h3>
+          <canvas class="example-canvas" id="ex-jump"></canvas>
         </div>
         <div class="example-card">
-          <h3>➡️ Horizontal Asymptote</h3>
-          <canvas class="example-canvas" id="ex6"></canvas>
-          <div class="math-info">
-            <strong>Mathematical Behavior:</strong><br>
-            • Function approaches a horizontal line<br>
-            • Gets closer and closer but never touches<br>
-            • Levels off as x gets very large
-          </div>
+          <h3>Inflection Point</h3>
+          <canvas class="example-canvas" id="ex-inflect"></canvas>
+        </div>
+        <div class="example-card">
+          <h3>Vertical Asymptote</h3>
+          <canvas class="example-canvas" id="ex-vert"></canvas>
+        </div>
+        <div class="example-card">
+          <h3>Horizontal Asymptote</h3>
+          <canvas class="example-canvas" id="ex-horiz"></canvas>
         </div>
       </div>
 
-      <div class="nav-hint">
-        <button class="btn btn-primary" onclick="showTab('describe')">Practice Describing Functions →</button>
+      <div class="cta-buttons">
+        <button class="btn btn-primary" onclick="switchToTab('read')">Try Reading Graphs →</button>
+        <button class="btn btn-primary" onclick="switchToTab('build')">Build Functions →</button>
       </div>
     </div>
 
-    <!-- DESCRIBE -->
-    <div id="describe" class="tab-content">
-      <div class="canvas-wrapper">
-        <h2>🧠 Analyze the Function</h2>
-        <canvas id="ai-canvas"></canvas>
-        <div class="info-bar">
-          <strong>Instructions:</strong> Study the function above and identify all its mathematical behaviors. Select all properties that apply, then click <em>Check Analysis</em> to verify your understanding.
+    <!-- READ THE GRAPH TAB -->
+    <div id="read" class="tab-content">
+      <div class="graph-display">
+        <h3>Analyze This Function</h3>
+        <canvas class="graph-canvas" id="read-graph"></canvas>
+        <div class="controls">
+          <button class="btn btn-secondary" onclick="generateNewReadProblem()">New Function</button>
         </div>
       </div>
 
-      <div class="controls-grid">
-        <div class="control-panel" style="grid-column:1/-1">
-          <h3>📊 Function Properties</h3>
-          <div class="behaviour-grid" id="behaviour-grid">
-            <label><input type="checkbox" value="strictly_increasing"> Strictly increasing</label>
-            <label><input type="checkbox" value="strictly_decreasing"> Strictly decreasing</label>
-            <label><input type="checkbox" value="non_decreasing"> Non-decreasing (monotonic)</label>
-            <label><input type="checkbox" value="non_increasing"> Non-increasing (monotonic)</label>
-            <label><input type="checkbox" value="concave_up"> Concave up (holds water)</label>
-            <label><input type="checkbox" value="concave_down"> Concave down (sheds water)</label>
-            <label><input type="checkbox" value="inflection"> Has inflection point(s)</label>
-            <label><input type="checkbox" value="local_max"> Has local maximum</label>
-            <label><input type="checkbox" value="local_min"> Has local minimum</label>
-            <label><input type="checkbox" value="global_max"> Has global maximum</label>
-            <label><input type="checkbox" value="global_min"> Has global minimum</label>
-            <label><input type="checkbox" value="jump"> Jump discontinuity</label>
-            <label><input type="checkbox" value="removable"> Removable discontinuity</label>
-            <label><input type="checkbox" value="h_asymptote"> Horizontal asymptote</label>
-            <label><input type="checkbox" value="v_asymptote"> Vertical asymptote</label>
-            <label><input type="checkbox" value="oblique_asymptote"> Oblique asymptote</label>
-            <label><input type="checkbox" value="periodic"> Periodic behavior</label>
-            <label><input type="checkbox" value="piecewise"> Piecewise defined</label>
-          </div>
-          <div class="row" style="margin-top:1rem">
-            <button class="btn btn-primary" onclick="checkDescription()">Check Analysis</button>
-            <button class="btn btn-secondary" onclick="getAIHint()">Get Hint</button>
-            <button class="btn btn-secondary" onclick="newAIProblem()">New Function</button>
-          </div>
-          <div class="feedback" id="ai-feedback"></div>
+      <div class="card-bank">
+        <h3>Behavior Word Cards</h3>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+          Drag words to describe each behavior change from left to right
+        </p>
+        <div class="cards-container" id="read-cards">
+          <!-- Word cards will be generated here -->
         </div>
+      </div>
+
+      <div class="sequence-area">
+        <h3>Your Description</h3>
+        <div class="sequence-container" id="read-sequence">
+          <div class="placeholder-text">Drag word cards here to describe the function from left to right</div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-primary" onclick="checkReadAnswer()">Check Answer</button>
+          <button class="btn btn-secondary" onclick="clearReadSequence()">Clear</button>
+          <button class="btn btn-secondary" onclick="getHint()">Hint</button>
+        </div>
+        <div class="feedback" id="read-feedback"></div>
+        <div id="sentence-display"></div>
       </div>
     </div>
 
-    <!-- BUILDER -->
-    <div id="builder" class="tab-content">
-      <div class="canvas-wrapper">
-        <h2>🔨 Function Constructor</h2>
-        <canvas id="main-canvas"></canvas>
-        <div class="info-bar">
-          <strong>Construction Tools:</strong> 
-          • Click to add control points 
-          • Drag points to adjust position 
-          • Alt/Option-click to toggle open/closed points 
-          • Select segments to add asymptotes (shown as dashed lines)
-          • Build complex behaviors by combining segments
-        </div>
-      </div>
-
-      <div class="controls-grid">
-        <div class="control-panel">
-          <h3>📍 Control Points</h3>
-          <div class="points-list" id="points-list">
-            <p class="muted" style="text-align:center">Click canvas to add points</p>
-          </div>
-          <button class="btn btn-danger btn-small" onclick="clearPoints()">Clear All Points</button>
-        </div>
-
-        <div class="control-panel">
-          <h3>🔧 Segment Builder</h3>
-          <p class="muted" style="margin-bottom:.5rem">Select points then create:</p>
-          <div class="row">
-            <button class="btn btn-secondary btn-small" onclick="makeLine()">Linear (2 pts)</button>
-            <button class="btn btn-secondary btn-small" onclick="makeCurve()">Quadratic (3 pts)</button>
-          </div>
-          <div class="muted" style="margin-top:0.5rem">
-            💡 Tip: Curves use the middle point as a control point for curvature
-          </div>
-        </div>
-
-        <div class="control-panel">
-          <h3>📊 Function Segments</h3>
-          <div class="segments-list" id="segments-list">
-            <p class="muted" style="text-align:center">No segments yet</p>
-          </div>
-          <button class="btn btn-danger btn-small" onclick="clearSegments()">Clear All Segments</button>
-        </div>
-
-        <div class="control-panel" style="grid-column:1/-1">
-          <h3>⚙️ Asymptote Settings</h3>
-          <div class="row">
-            <select id="segment-select">
-              <option value="">Select a segment...</option>
-            </select>
-          </div>
-          <div class="row">
-            <label class="inline">Asymptote Type:
-              <select id="asym-type">
-                <option value="none">None</option>
-                <option value="y">Horizontal (y = c)</option>
-                <option value="x">Vertical (x = c)</option>
-                <option value="oblique">Oblique (y = mx + b)</option>
-              </select>
-            </label>
-            <label class="inline" id="asym-yc" style="display:none;">
-              y = <input type="number" step="0.1" id="asym-c" style="width:80px;" placeholder="c">
-            </label>
-            <label class="inline" id="asym-xc" style="display:none;">
-              x = <input type="number" step="0.1" id="asym-x" style="width:80px;" placeholder="c">
-            </label>
-            <label class="inline" id="asym-mb" style="display:none;">
-              y = <input type="number" step="0.1" id="asym-m" style="width:60px;" placeholder="m">x + 
-              <input type="number" step="0.1" id="asym-b" style="width:60px;" placeholder="b">
-            </label>
-          </div>
-          <div class="row">
-            <button class="btn btn-primary btn-small" onclick="applySegmentSettings()">Apply Asymptote</button>
-          </div>
-          <div id="seg-warn" class="feedback info" style="margin-top:0.5rem"></div>
-        </div>
-      </div>
-
+    <!-- BUILD FROM BEHAVIOR TAB -->
+    <div id="build" class="tab-content">
       <div class="challenge-box">
-        <h2>🤖 AI Challenge</h2>
-        <div class="challenge-text">
-          <strong>Current Challenge:</strong>
-          <p id="challenge-desc">Loading challenge...</p>
+        <h4>Build This Function:</h4>
+        <div class="challenge-text" id="build-challenge">
+          A function that starts low and ends high with upward curvature
         </div>
-        <p class="muted" style="margin-bottom:.5rem">
-          Build the requested function using the tools above. The AI will analyze your construction for mathematical correctness.
-        </p>
-        <div class="row" style="margin-top:.75rem">
-          <button class="btn btn-primary" onclick="checkWithAI()">Check with AI</button>
-          <button class="btn btn-secondary" onclick="getConstructionHint()">Get Hint</button>
-          <button class="btn btn-secondary" onclick="newChallenge()">New Challenge</button>
+        <div class="controls">
+          <button class="btn btn-secondary" onclick="generateNewBuildChallenge()">New Challenge</button>
         </div>
-        <div class="feedback" id="feedback"></div>
-        <p class="muted" style="margin-top:1rem; font-size:0.8rem; font-style:italic; text-align:center; opacity:0.7;">
-          ⚠️ The AI helper can make mistakes. AI helper may occasionally be unavailable during high traffic periods.
-        </p>
       </div>
+
+      <div class="card-bank">
+        <h3>Behavior Image Cards</h3>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+          Click cards to cycle options, then drag to build the function
+        </p>
+        <div class="hint-text">Click each card to see different variations!</div>
+        <div class="cards-container" id="build-cards">
+          <!-- Clickable cards will be generated here -->
+        </div>
+      </div>
+
+      <div class="sequence-area">
+        <h3>Your Construction</h3>
+        <div class="sequence-container" id="build-sequence">
+          <div class="placeholder-text">Drag configured image cards here to build your function</div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-primary" onclick="checkBuildAnswer()">Check with AI</button>
+          <button class="btn btn-secondary" onclick="clearBuildSequence()">Clear</button>
+          <button class="btn btn-secondary" onclick="animateFunction()">Preview</button>
+        </div>
+        <div class="feedback" id="build-feedback"></div>
+      </div>
+
+      <div class="graph-display">
+        <h3>Your Function Preview</h3>
+        <canvas class="graph-canvas" id="build-graph"></canvas>
+      </div>
+
+      <p class="ai-disclaimer">
+        AI assistance may occasionally be unavailable during high traffic periods.
+      </p>
     </div>
   </div>
 
   <script>
-    /* ========= Global State & Constants ========= */
-    const GRAPH_MIN = -10, GRAPH_MAX = 10;
-    const POINT_RADIUS_PX = 7, HIT_RADIUS_PX = 10, SEG_HIT_PX = 8;
+    // Global state
     const state = {
-      points: [],
-      selected: new Set(),
-      segments: [],
-      draggingId: null,
-      dragMoved: false,
-      selectedSegmentId: null,
-      currentDescribeFunction: null,
-      currentChallenge: null,
-      attemptCount: 0
+      readProblem: null,
+      readSequence: [],
+      buildChallenge: null,
+      buildSequence: [],
+      draggedCard: null,
+      hintCount: 0,
+      cardStates: {} // Track the current option for each clickable card
     };
 
-    /* ========= Drawing Example Functions (FIXED) ========= */
-    function drawExampleFunction(canvas, type) {
-      const ctx = canvas.getContext('2d');
-      const w = canvas.width, h = canvas.height;
-      ctx.clearRect(0, 0, w, h);
-      
-      // Draw grid
-      ctx.strokeStyle = '#f0f0f0';
-      ctx.lineWidth = 1;
-      for (let i = 0; i <= 4; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * w / 4, 0);
-        ctx.lineTo(i * w / 4, h);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(0, i * h / 4);
-        ctx.lineTo(w, i * h / 4);
-        ctx.stroke();
+    // Card types with multiple options for Build tab
+    const clickableCardTypes = [
+      {
+        id: 'increasing',
+        options: [
+          { id: 'inc-linear', draw: drawIncreasingLinear },
+          { id: 'inc-cup', draw: drawIncreasingConcaveUp },
+          { id: 'inc-cdown', draw: drawIncreasingConcaveDown }
+        ]
+      },
+      {
+        id: 'decreasing',
+        options: [
+          { id: 'dec-linear', draw: drawDecreasingLinear },
+          { id: 'dec-cup', draw: drawDecreasingConcaveUp },
+          { id: 'dec-cdown', draw: drawDecreasingConcaveDown }
+        ]
+      },
+      {
+        id: 'constant',
+        options: [
+          { id: 'const', draw: drawConstant }
+        ]
+      },
+      {
+        id: 'inflection',
+        options: [
+          { id: 'inflect-up-down', draw: drawInflectionUpDown },
+          { id: 'inflect-down-up', draw: drawInflectionDownUp }
+        ]
+      },
+      {
+        id: 'jump',
+        options: [
+          { id: 'jump-up-left', draw: drawJumpUpLeft },
+          { id: 'jump-up-right', draw: drawJumpUpRight },
+          { id: 'jump-down-left', draw: drawJumpDownLeft },
+          { id: 'jump-down-right', draw: drawJumpDownRight }
+        ]
+      },
+      {
+        id: 'v-asymptote',
+        options: [
+          { id: 'v-asym-left-up', draw: drawVertAsymLeftUp },
+          { id: 'v-asym-left-down', draw: drawVertAsymLeftDown },
+          { id: 'v-asym-right-up', draw: drawVertAsymRightUp },
+          { id: 'v-asym-right-down', draw: drawVertAsymRightDown }
+        ]
+      },
+      {
+        id: 'h-asymptote',
+        options: [
+          { id: 'h-asym-from-above', draw: drawHorizAsymFromAbove },
+          { id: 'h-asym-from-below', draw: drawHorizAsymFromBelow },
+          { id: 'h-asym-to-above', draw: drawHorizAsymToAbove },
+          { id: 'h-asym-to-below', draw: drawHorizAsymToBelow }
+        ]
       }
-      
-      // Draw axes
-      ctx.strokeStyle = '#ddd';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(w / 2, 0);
-      ctx.lineTo(w / 2, h);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(0, h / 2);
-      ctx.lineTo(w, h / 2);
-      ctx.stroke();
-      
-      // Draw function
+    ];
+
+    // Word behavior types for Read tab
+    const behaviorTypes = [
+      { id: 'increasing', label: 'Increasing' },
+      { id: 'decreasing', label: 'Decreasing' },
+      { id: 'constant', label: 'Constant' },
+      { id: 'concave-up', label: 'Concave Up' },
+      { id: 'concave-down', label: 'Concave Down' },
+      { id: 'linear', label: 'Linear' },
+      { id: 'inflection', label: 'Inflection Point' },
+      { id: 'jump-up', label: 'Jump Up' },
+      { id: 'jump-down', label: 'Jump Down' },
+      { id: 'vertical-asymptote', label: 'Vertical Asymptote' },
+      { id: 'horizontal-asymptote', label: 'Horizontal Asymptote' }
+    ];
+
+    // Drawing functions for clickable card options
+    function drawIncreasingLinear(ctx, w, h) {
       ctx.strokeStyle = '#0f766e';
-      ctx.lineWidth = 2.5;
-      
-      if (type === 'ex1') {
-        // Exponential - increasing and concave up
-        ctx.beginPath();
-        for (let x = -2; x <= 2; x += 0.1) {
-          const y = Math.exp(x) - 1;
-          const px = (x + 2) * w / 4;
-          const py = h - (y + 2) * h / 8;
-          if (x === -2) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
-        }
-        ctx.stroke();
-      } else if (type === 'ex2') {
-        // THIS IS THE FIX: Properly decreasing and concave down
-        // Using negative logarithm which is both decreasing and concave down
-        ctx.beginPath();
-        const points = [];
-        // Create a curve that is both strictly decreasing and concave down
-        // This creates an arch shape (∩) that decreases from left to right
-        for (let i = 0; i <= 20; i++) {
-          const t = i / 20;
-          const x = -2 + 4 * t;
-          // This function creates the correct shape: starts high left, ends low right, curves like an arch
-          const y = 2 * Math.log(3 - x);  // Logarithm of decreasing argument gives us both properties
-          points.push({x: (x + 2) * w / 4, y: h / 2 - y * h / 10});
-        }
-        
-        // Draw the curve
-        points.forEach((pt, i) => {
-          if (i === 0) ctx.moveTo(pt.x, pt.y);
-          else ctx.lineTo(pt.x, pt.y);
-        });
-        ctx.stroke();
-      } else if (type === 'ex3') {
-        // Piecewise with jump
-        const xL = w * 0.1, xM = w * 0.5, xR = w * 0.9;
-        const yA1 = h * 0.65, yA2 = h * 0.40;
-        const yB1 = h * 0.75, yB2 = h * 0.55;
-        
-        ctx.beginPath();
-        ctx.moveTo(xL, yA1);
-        ctx.lineTo(xM, yA2);
-        ctx.stroke();
-        
-        // Open circle
-        ctx.beginPath();
-        ctx.arc(xM, yA2, 4, 0, 2 * Math.PI);
-        ctx.fillStyle = '#fff';
-        ctx.fill();
-        ctx.strokeStyle = '#0f766e';
-        ctx.stroke();
-        
-        // Closed circle
-        ctx.beginPath();
-        ctx.arc(xM, yB1, 4, 0, 2 * Math.PI);
-        ctx.fillStyle = '#0f766e';
-        ctx.fill();
-        
-        // Second segment
-        ctx.strokeStyle = '#0f766e';
-        ctx.beginPath();
-        ctx.moveTo(xM, yB1);
-        ctx.lineTo(xR, yB2);
-        ctx.stroke();
-      } else if (type === 'ex4') {
-        // S-curve (cubic)
-        ctx.beginPath();
-        for (let x = -2; x <= 2; x += 0.1) {
-          const y = x * x * x;
-          const px = (x + 2) * w / 4;
-          const py = h / 2 - y * h / 16;
-          if (x === -2) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
-        }
-        ctx.stroke();
-      } else if (type === 'ex5') {
-        // Parabola (U-shaped)
-        ctx.beginPath();
-        for (let x = -2; x <= 2; x += 0.1) {
-          const y = x * x;
-          const px = (x + 2) * w / 4;
-          const py = h - (y + 1) * h / 6;
-          if (x === -2) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
-        }
-        ctx.stroke();
-      } else if (type === 'ex6') {
-        // Exponential approaching asymptote
-        ctx.beginPath();
-        for (let x = 0; x <= 4; x += 0.1) {
-          const y = 2 - 2 * Math.exp(-x);
-          const px = x * w / 4;
-          const py = h - y * h / 3;
-          if (x === 0) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
-        }
-        ctx.stroke();
-        
-        // Draw asymptote
-        ctx.strokeStyle = '#f59e0b';
-        ctx.setLineDash([5, 5]);
-        ctx.beginPath();
-        ctx.moveTo(0, h / 3);
-        ctx.lineTo(w, h / 3);
-        ctx.stroke();
-        ctx.setLineDash([]);
-      }
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h - 10);
+      ctx.lineTo(w - 10, 10);
+      ctx.stroke();
     }
-    
+
+    function drawIncreasingConcaveUp(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h - 10);
+      ctx.quadraticCurveTo(30, h - 5, w - 10, 10);
+      ctx.stroke();
+    }
+
+    function drawIncreasingConcaveDown(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h - 10);
+      ctx.quadraticCurveTo(w - 30, 5, w - 10, 10);
+      ctx.stroke();
+    }
+
+    function drawDecreasingLinear(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, 10);
+      ctx.lineTo(w - 10, h - 10);
+      ctx.stroke();
+    }
+
+    function drawDecreasingConcaveUp(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, 10);
+      ctx.quadraticCurveTo(30, h - 5, w - 10, h - 10);
+      ctx.stroke();
+    }
+
+    function drawDecreasingConcaveDown(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, 10);
+      ctx.quadraticCurveTo(w - 30, 5, w - 10, h - 10);
+      ctx.stroke();
+    }
+
+    function drawConstant(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h/2);
+      ctx.lineTo(w - 10, h/2);
+      ctx.stroke();
+    }
+
+    function drawInflectionUpDown(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h - 10);
+      ctx.bezierCurveTo(w/3, h - 20, w*2/3, 20, w - 10, 10);
+      ctx.stroke();
+      // Mark inflection
+      ctx.fillStyle = '#f59e0b';
+      ctx.beginPath();
+      ctx.arc(w/2, h/2, 4, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    function drawInflectionDownUp(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, 10);
+      ctx.bezierCurveTo(w/3, 20, w*2/3, h - 20, w - 10, h - 10);
+      ctx.stroke();
+      // Mark inflection
+      ctx.fillStyle = '#f59e0b';
+      ctx.beginPath();
+      ctx.arc(w/2, h/2, 4, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    function drawJumpUpLeft(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      // Left segment with filled circle
+      ctx.beginPath();
+      ctx.moveTo(10, h * 0.7);
+      ctx.lineTo(w/2 - 5, h * 0.7);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w/2 - 5, h * 0.7, 4, 0, 2 * Math.PI);
+      ctx.fillStyle = '#0f766e';
+      ctx.fill();
+      // Right segment with open circle
+      ctx.beginPath();
+      ctx.moveTo(w/2 + 5, h * 0.3);
+      ctx.lineTo(w - 10, h * 0.3);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w/2 + 5, h * 0.3, 4, 0, 2 * Math.PI);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    function drawJumpUpRight(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      // Left segment with open circle
+      ctx.beginPath();
+      ctx.moveTo(10, h * 0.7);
+      ctx.lineTo(w/2 - 5, h * 0.7);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w/2 - 5, h * 0.7, 4, 0, 2 * Math.PI);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+      ctx.stroke();
+      // Right segment with filled circle
+      ctx.beginPath();
+      ctx.moveTo(w/2 + 5, h * 0.3);
+      ctx.lineTo(w - 10, h * 0.3);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w/2 + 5, h * 0.3, 4, 0, 2 * Math.PI);
+      ctx.fillStyle = '#0f766e';
+      ctx.fill();
+    }
+
+    function drawJumpDownLeft(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      // Left segment with filled circle
+      ctx.beginPath();
+      ctx.moveTo(10, h * 0.3);
+      ctx.lineTo(w/2 - 5, h * 0.3);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w/2 - 5, h * 0.3, 4, 0, 2 * Math.PI);
+      ctx.fillStyle = '#0f766e';
+      ctx.fill();
+      // Right segment with open circle
+      ctx.beginPath();
+      ctx.moveTo(w/2 + 5, h * 0.7);
+      ctx.lineTo(w - 10, h * 0.7);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w/2 + 5, h * 0.7, 4, 0, 2 * Math.PI);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    function drawJumpDownRight(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      // Left segment with open circle
+      ctx.beginPath();
+      ctx.moveTo(10, h * 0.3);
+      ctx.lineTo(w/2 - 5, h * 0.3);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w/2 - 5, h * 0.3, 4, 0, 2 * Math.PI);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+      ctx.stroke();
+      // Right segment with filled circle
+      ctx.beginPath();
+      ctx.moveTo(w/2 + 5, h * 0.7);
+      ctx.lineTo(w - 10, h * 0.7);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w/2 + 5, h * 0.7, 4, 0, 2 * Math.PI);
+      ctx.fillStyle = '#0f766e';
+      ctx.fill();
+    }
+
+    function drawVertAsymLeftUp(ctx, w, h) {
+      // Vertical line on right
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath();
+      ctx.moveTo(w * 0.7, 5);
+      ctx.lineTo(w * 0.7, h - 5);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Curve from left going up
+      ctx.strokeStyle = '#0f766e';
+      ctx.beginPath();
+      ctx.moveTo(10, h * 0.7);
+      for (let x = 10; x < w * 0.7 - 8; x += 3) {
+        const t = (x - 10) / (w * 0.7 - 18);
+        const y = h * 0.7 - h * 0.5 * Math.pow(t, 2);
+        ctx.lineTo(x, Math.max(5, y));
+      }
+      ctx.stroke();
+    }
+
+    function drawVertAsymLeftDown(ctx, w, h) {
+      // Vertical line on right
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath();
+      ctx.moveTo(w * 0.7, 5);
+      ctx.lineTo(w * 0.7, h - 5);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Curve from left going down
+      ctx.strokeStyle = '#0f766e';
+      ctx.beginPath();
+      ctx.moveTo(10, h * 0.3);
+      for (let x = 10; x < w * 0.7 - 8; x += 3) {
+        const t = (x - 10) / (w * 0.7 - 18);
+        const y = h * 0.3 + h * 0.5 * Math.pow(t, 2);
+        ctx.lineTo(x, Math.min(h - 5, y));
+      }
+      ctx.stroke();
+    }
+
+    function drawVertAsymRightUp(ctx, w, h) {
+      // Vertical line on left
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath();
+      ctx.moveTo(w * 0.3, 5);
+      ctx.lineTo(w * 0.3, h - 5);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Curve from right going up
+      ctx.strokeStyle = '#0f766e';
+      ctx.beginPath();
+      ctx.moveTo(w - 10, h * 0.7);
+      for (let x = w - 10; x > w * 0.3 + 8; x -= 3) {
+        const t = (w - 10 - x) / (w - 10 - w * 0.3 - 8);
+        const y = h * 0.7 - h * 0.5 * Math.pow(t, 2);
+        ctx.lineTo(x, Math.max(5, y));
+      }
+      ctx.stroke();
+    }
+
+    function drawVertAsymRightDown(ctx, w, h) {
+      // Vertical line on left
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath();
+      ctx.moveTo(w * 0.3, 5);
+      ctx.lineTo(w * 0.3, h - 5);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Curve from right going down
+      ctx.strokeStyle = '#0f766e';
+      ctx.beginPath();
+      ctx.moveTo(w - 10, h * 0.3);
+      for (let x = w - 10; x > w * 0.3 + 8; x -= 3) {
+        const t = (w - 10 - x) / (w - 10 - w * 0.3 - 8);
+        const y = h * 0.3 + h * 0.5 * Math.pow(t, 2);
+        ctx.lineTo(x, Math.min(h - 5, y));
+      }
+      ctx.stroke();
+    }
+
+    function drawHorizAsymFromAbove(ctx, w, h) {
+      // Horizontal line
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath();
+      ctx.moveTo(5, h * 0.7);
+      ctx.lineTo(w - 5, h * 0.7);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Curve approaching from above
+      ctx.strokeStyle = '#0f766e';
+      ctx.beginPath();
+      ctx.moveTo(10, h * 0.2);
+      for (let x = 10; x < w - 10; x += 3) {
+        const t = (x - 10) / (w - 20);
+        const y = h * 0.2 + (h * 0.7 - h * 0.2 - 5) * (1 - Math.exp(-3*t));
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    function drawHorizAsymFromBelow(ctx, w, h) {
+      // Horizontal line
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath();
+      ctx.moveTo(5, h * 0.3);
+      ctx.lineTo(w - 5, h * 0.3);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Curve approaching from below
+      ctx.strokeStyle = '#0f766e';
+      ctx.beginPath();
+      ctx.moveTo(10, h * 0.8);
+      for (let x = 10; x < w - 10; x += 3) {
+        const t = (x - 10) / (w - 20);
+        const y = h * 0.8 - (h * 0.8 - h * 0.3 - 5) * (1 - Math.exp(-3*t));
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    function drawHorizAsymToAbove(ctx, w, h) {
+      // Horizontal line
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath();
+      ctx.moveTo(5, h * 0.3);
+      ctx.lineTo(w - 5, h * 0.3);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Curve diverging upward
+      ctx.strokeStyle = '#0f766e';
+      ctx.beginPath();
+      for (let x = w - 10; x > 10; x -= 3) {
+        const t = (w - 10 - x) / (w - 20);
+        const y = h * 0.3 + 5 + (h * 0.5) * (1 - Math.exp(-3*t));
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    function drawHorizAsymToBelow(ctx, w, h) {
+      // Horizontal line
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath();
+      ctx.moveTo(5, h * 0.7);
+      ctx.lineTo(w - 5, h * 0.7);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Curve diverging downward
+      ctx.strokeStyle = '#0f766e';
+      ctx.beginPath();
+      for (let x = w - 10; x > 10; x -= 3) {
+        const t = (w - 10 - x) / (w - 20);
+        const y = h * 0.7 - 5 - (h * 0.5) * (1 - Math.exp(-3*t));
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    // Initialize example canvases
     function drawExamples() {
-      const examples = ['ex1', 'ex2', 'ex3', 'ex4', 'ex5', 'ex6'];
-      examples.forEach(id => {
-        const canvas = document.getElementById(id);
+      const examples = [
+        { id: 'ex-inc', func: drawIncreasingLinear },
+        { id: 'ex-dec', func: drawDecreasingLinear },
+        { id: 'ex-cup', func: drawIncreasingConcaveUp },
+        { id: 'ex-cdown', func: drawDecreasingConcaveDown },
+        { id: 'ex-jump', func: drawJumpUpRight },
+        { id: 'ex-inflect', func: drawInflectionUpDown },
+        { id: 'ex-vert', func: drawVertAsymLeftUp },
+        { id: 'ex-horiz', func: drawHorizAsymFromBelow }
+      ];
+
+      examples.forEach(ex => {
+        const canvas = document.getElementById(ex.id);
         if (canvas) {
+          const ctx = canvas.getContext('2d');
           canvas.width = canvas.offsetWidth;
           canvas.height = canvas.offsetHeight;
-          drawExampleFunction(canvas, id);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ex.func(ctx, canvas.width, canvas.height);
         }
       });
     }
 
-    /* ========= AI Function Generation ========= */
-    class FunctionGenerator {
-      static generateRandomFunction() {
-        const types = [
-          'exponential', 'logarithmic', 'rational', 'trigonometric', 
-          'polynomial', 'piecewise', 'composite', 'absolute', 'radical'
-        ];
-        const type = types[Math.floor(Math.random() * types.length)];
-        return this[`generate${type.charAt(0).toUpperCase() + type.slice(1)}`]();
-      }
+    // Create word card for Tab 2
+    function createWordCard(type) {
+      const card = document.createElement('div');
+      card.className = 'word-card';
+      card.dataset.type = type.id;
+      card.draggable = true;
+      card.textContent = type.label;
+      
+      card.addEventListener('dragstart', handleDragStart);
+      card.addEventListener('dragend', handleDragEnd);
+      
+      return card;
+    }
 
-      static generateExponential() {
-        const a = (Math.random() * 2 - 1).toFixed(2);
-        const b = (Math.random() * 2 + 0.5).toFixed(2);
-        const c = (Math.random() * 4 - 2).toFixed(2);
-        return {
-          func: (x) => parseFloat(a) * Math.exp(parseFloat(b) * x) + parseFloat(c),
-          properties: {
-            strictly_increasing: parseFloat(a) * parseFloat(b) > 0,
-            strictly_decreasing: parseFloat(a) * parseFloat(b) < 0,
-            concave_up: parseFloat(a) * parseFloat(b) > 0,
-            concave_down: parseFloat(a) * parseFloat(b) < 0,
-            h_asymptote: true
+    // Create clickable image card for Tab 3
+    function createClickableCard(cardType) {
+      const card = document.createElement('div');
+      card.className = 'clickable-card';
+      card.dataset.cardId = cardType.id;
+      card.dataset.optionIndex = '0';
+      card.draggable = true;
+      
+      const canvas = document.createElement('canvas');
+      card.appendChild(canvas);
+      
+      // Add option indicators
+      const indicators = document.createElement('div');
+      indicators.className = 'option-indicator';
+      for (let i = 0; i < cardType.options.length; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'option-dot' + (i === 0 ? ' active' : '');
+        indicators.appendChild(dot);
+      }
+      card.appendChild(indicators);
+      
+      // Initialize card state
+      state.cardStates[cardType.id] = 0;
+      
+      // Draw initial option
+      setTimeout(() => {
+        const ctx = canvas.getContext('2d');
+        canvas.width = 90;
+        canvas.height = 60;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        cardType.options[0].draw(ctx, canvas.width, canvas.height);
+      }, 10);
+      
+      // Click to cycle options
+      card.addEventListener('click', (e) => {
+        if (e.target === card || e.target === canvas) {
+          const currentIndex = parseInt(card.dataset.optionIndex);
+          const nextIndex = (currentIndex + 1) % cardType.options.length;
+          card.dataset.optionIndex = nextIndex.toString();
+          state.cardStates[cardType.id] = nextIndex;
+          
+          // Update option indicators
+          const dots = card.querySelectorAll('.option-dot');
+          dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === nextIndex);
+          });
+          
+          // Redraw with new option
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          cardType.options[nextIndex].draw(ctx, canvas.width, canvas.height);
+        }
+      });
+      
+      card.addEventListener('dragstart', handleDragStart);
+      card.addEventListener('dragend', handleDragEnd);
+      
+      return card;
+    }
+
+    // Drag and drop handlers
+    function handleDragStart(e) {
+      const card = e.target;
+      let type;
+      
+      if (card.classList.contains('clickable-card')) {
+        // For build tab - get the current option
+        const cardId = card.dataset.cardId;
+        const optionIndex = parseInt(card.dataset.optionIndex);
+        const cardType = clickableCardTypes.find(ct => ct.id === cardId);
+        type = cardType.options[optionIndex].id;
+      } else {
+        // For read tab - word cards
+        type = card.dataset.type;
+      }
+      
+      state.draggedCard = {
+        type: type,
+        element: card,
+        fromSequence: card.parentElement.classList.contains('sequence-container'),
+        isClickable: card.classList.contains('clickable-card'),
+        cardId: card.dataset.cardId,
+        optionIndex: card.dataset.optionIndex
+      };
+      
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragEnd(e) {
+      e.target.classList.remove('dragging');
+      state.draggedCard = null;
+    }
+
+    function handleDragOver(e) {
+      if (e.preventDefault) {
+        e.preventDefault();
+      }
+      e.dataTransfer.dropEffect = 'move';
+      return false;
+    }
+
+    function handleDragEnter(e) {
+      if (e.target.classList.contains('sequence-container')) {
+        e.target.classList.add('drag-over');
+      }
+    }
+
+    function handleDragLeave(e) {
+      if (e.target.classList.contains('sequence-container')) {
+        e.target.classList.remove('drag-over');
+      }
+    }
+
+    function handleDrop(e, sequenceType) {
+      if (e.stopPropagation) {
+        e.stopPropagation();
+      }
+      
+      const container = document.getElementById(`${sequenceType}-sequence`);
+      container.classList.remove('drag-over');
+      
+      if (state.draggedCard) {
+        const placeholder = container.querySelector('.placeholder-text');
+        if (placeholder) {
+          placeholder.remove();
+        }
+        
+        if (sequenceType === 'read') {
+          // Word card for Read tab
+          const typeObj = behaviorTypes.find(t => t.id === state.draggedCard.type);
+          if (typeObj) {
+            const newCard = createWordCard(typeObj);
+            container.appendChild(newCard);
+            state.readSequence.push(state.draggedCard.type);
           }
-        };
-      }
-
-      static generateLogarithmic() {
-        const a = (Math.random() * 2 - 1).toFixed(2);
-        const b = (Math.random() * 3 + 0.5).toFixed(2);
-        return {
-          func: (x) => x > 0 ? parseFloat(a) * Math.log(parseFloat(b) * x) : NaN,
-          properties: {
-            strictly_increasing: parseFloat(a) > 0,
-            strictly_decreasing: parseFloat(a) < 0,
-            v_asymptote: true,
-            concave_down: parseFloat(a) > 0,
-            concave_up: parseFloat(a) < 0
-          }
-        };
-      }
-
-      static generateRational() {
-        const a = Math.floor(Math.random() * 5 + 1);
-        const b = Math.floor(Math.random() * 5 - 2);
-        const c = Math.floor(Math.random() * 3 + 1);
-        return {
-          func: (x) => x !== -c ? (a * x + b) / (x + c) : NaN,
-          properties: {
-            v_asymptote: true,
-            h_asymptote: true
-          }
-        };
-      }
-
-      static generateTrigonometric() {
-        const a = (Math.random() * 2 + 0.5).toFixed(2);
-        const b = (Math.random() * 2 + 0.5).toFixed(2);
-        const func = Math.random() > 0.5 ? 'sin' : 'cos';
-        return {
-          func: (x) => parseFloat(a) * Math[func](parseFloat(b) * x),
-          properties: {
-            periodic: true,
-            local_max: true,
-            local_min: true
-          }
-        };
-      }
-
-      static generatePolynomial() {
-        const degree = Math.floor(Math.random() * 3) + 2;
-        if (degree === 2) {
-          const a = (Math.random() * 2 - 1).toFixed(2);
-          const b = (Math.random() * 4 - 2).toFixed(2);
-          const c = (Math.random() * 4 - 2).toFixed(2);
-          return {
-            func: (x) => parseFloat(a) * x * x + parseFloat(b) * x + parseFloat(c),
-            properties: {
-              concave_up: parseFloat(a) > 0,
-              concave_down: parseFloat(a) < 0,
-              global_min: parseFloat(a) > 0,
-              global_max: parseFloat(a) < 0
-            }
-          };
         } else {
-          const a = (Math.random() * 0.5 - 0.25).toFixed(3);
-          const b = (Math.random() * 2 - 1).toFixed(2);
-          return {
-            func: (x) => parseFloat(a) * x * x * x + parseFloat(b) * x,
-            properties: {
-              inflection: true
-            }
-          };
+          // Image card for Build tab
+          if (state.draggedCard.isClickable) {
+            // Create a copy of the configured card
+            const cardType = clickableCardTypes.find(ct => ct.id === state.draggedCard.cardId);
+            const optionIndex = parseInt(state.draggedCard.optionIndex);
+            const option = cardType.options[optionIndex];
+            
+            const card = document.createElement('div');
+            card.className = 'clickable-card';
+            card.dataset.type = option.id;
+            card.draggable = true;
+            
+            const canvas = document.createElement('canvas');
+            card.appendChild(canvas);
+            
+            setTimeout(() => {
+              const ctx = canvas.getContext('2d');
+              canvas.width = 90;
+              canvas.height = 60;
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              option.draw(ctx, canvas.width, canvas.height);
+            }, 10);
+            
+            card.addEventListener('dragstart', handleDragStart);
+            card.addEventListener('dragend', handleDragEnd);
+            
+            container.appendChild(card);
+            state.buildSequence.push(option.id);
+            updateBuildGraph();
+          }
+        }
+        
+        // Remove from original if from sequence
+        if (state.draggedCard.fromSequence) {
+          state.draggedCard.element.remove();
+          // Update sequence arrays
+          if (sequenceType === 'read') {
+            const idx = state.readSequence.indexOf(state.draggedCard.type);
+            if (idx > -1) state.readSequence.splice(idx, 1);
+          } else {
+            const idx = state.buildSequence.indexOf(state.draggedCard.type);
+            if (idx > -1) state.buildSequence.splice(idx, 1);
+          }
         }
       }
-
-      static generatePiecewise() {
-        const breakpoint = Math.floor(Math.random() * 4 - 2);
-        const m1 = (Math.random() * 2 - 1).toFixed(2);
-        const m2 = (Math.random() * 2 - 1).toFixed(2);
-        const jump = (Math.random() * 3).toFixed(2);
-        return {
-          func: (x) => x < breakpoint ? parseFloat(m1) * x : parseFloat(m2) * x + parseFloat(jump),
-          properties: {
-            piecewise: true,
-            jump: Math.abs(parseFloat(m1) * breakpoint - (parseFloat(m2) * breakpoint + parseFloat(jump))) > 0.1
-          }
-        };
-      }
-
-      static generateComposite() {
-        const inner = Math.random() > 0.5 ? 'x2' : 'abs';
-        return {
-          func: (x) => Math.sqrt(inner === 'x2' ? x * x : Math.abs(x)),
-          properties: {
-            non_decreasing: true,
-            concave_down: true,
-            global_min: true
-          }
-        };
-      }
-
-      static generateAbsolute() {
-        const a = (Math.random() * 2 - 1).toFixed(2);
-        const b = (Math.random() * 4 - 2).toFixed(2);
-        const c = (Math.random() * 4 - 2).toFixed(2);
-        return {
-          func: (x) => Math.abs(parseFloat(a) * x + parseFloat(b)) + parseFloat(c),
-          properties: {
-            global_min: true,
-            piecewise: true
-          }
-        };
-      }
-
-      static generateRadical() {
-        const a = (Math.random() * 2 - 1).toFixed(2);
-        const b = (Math.random() * 4 - 2).toFixed(2);
-        return {
-          func: (x) => x >= -parseFloat(b) ? parseFloat(a) * Math.sqrt(x + parseFloat(b)) : NaN,
-          properties: {
-            strictly_increasing: parseFloat(a) > 0,
-            strictly_decreasing: parseFloat(a) < 0,
-            concave_down: parseFloat(a) > 0,
-            concave_up: parseFloat(a) < 0
-          }
-        };
-      }
+      
+      return false;
     }
 
-    /* ========= Challenge Generation ========= */
-    const challengeTemplates = [
-      "Construct a function that is strictly increasing and concave up on the left side, has a jump discontinuity at x = 0, then is strictly decreasing and concave down on the right side.",
-      "Build a function with a global minimum at approximately x = 0, where the function is concave up everywhere (forming a U-shape).",
-      "Create a piecewise function that is constant on the left, has a jump discontinuity, then increases linearly on the right.",
-      "Construct an S-shaped function with an inflection point near the origin.",
-      "Build a function with exactly two jump discontinuities and three distinct segments.",
-      "Create a function that approaches a horizontal asymptote as x approaches infinity.",
-      "Construct a function with a local maximum on the left and a local minimum on the right.",
-      "Build a function that is strictly decreasing everywhere but changes concavity.",
-      "Create a function with a cusp (sharp point) at x = 0.",
-      "Construct a bounded oscillating function with multiple extrema."
+    // Initialize Read tab with word cards
+    function initializeReadTab() {
+      const container = document.getElementById('read-cards');
+      container.innerHTML = '';
+      
+      behaviorTypes.forEach(type => {
+        const card = createWordCard(type);
+        container.appendChild(card);
+      });
+      
+      const sequence = document.getElementById('read-sequence');
+      sequence.addEventListener('dragover', handleDragOver);
+      sequence.addEventListener('drop', (e) => handleDrop(e, 'read'));
+      sequence.addEventListener('dragenter', handleDragEnter);
+      sequence.addEventListener('dragleave', handleDragLeave);
+      
+      generateNewReadProblem();
+    }
+
+    // Initialize Build tab with clickable cards
+    function initializeBuildTab() {
+      const container = document.getElementById('build-cards');
+      container.innerHTML = '';
+      
+      clickableCardTypes.forEach(cardType => {
+        const card = createClickableCard(cardType);
+        container.appendChild(card);
+      });
+      
+      const sequence = document.getElementById('build-sequence');
+      sequence.addEventListener('dragover', handleDragOver);
+      sequence.addEventListener('drop', (e) => handleDrop(e, 'build'));
+      sequence.addEventListener('dragenter', handleDragEnter);
+      sequence.addEventListener('dragleave', handleDragLeave);
+      
+      generateNewBuildChallenge();
+      initializeBuildGraph();
+    }
+
+    // Read problems with proper intervals
+    const readProblems = [
+      { 
+        sequence: ['increasing', 'concave-up'], 
+        intervals: [['(-∞', '∞)'], ['(-∞', '∞)']],
+        description: 'Increasing and concave up everywhere' 
+      },
+      { 
+        sequence: ['decreasing', 'concave-down', 'inflection', 'decreasing', 'concave-up'], 
+        intervals: [['(-∞', '0)'], ['(-∞', '0)'], ['x=0'], ['(0', '∞)'], ['(0', '∞)']],
+        description: 'Decreasing with inflection at x=0' 
+      },
+      { 
+        sequence: ['constant', 'jump-up', 'increasing'], 
+        intervals: [['(-∞', '0)'], ['x=0'], ['(0', '∞)']],
+        description: 'Constant then jump up, then increasing' 
+      },
+      { 
+        sequence: ['increasing', 'concave-down', 'inflection', 'increasing', 'concave-up'], 
+        intervals: [['(-∞', '0)'], ['(-∞', '0)'], ['x=0'], ['(0', '∞)'], ['(0', '∞)']],
+        description: 'S-curve with inflection at origin' 
+      },
+      {
+        sequence: ['decreasing', 'vertical-asymptote'],
+        intervals: [['(-∞', '2)'], ['x=2']],
+        description: 'Decreasing approaching vertical asymptote at x=2'
+      },
+      {
+        sequence: ['increasing', 'horizontal-asymptote'],
+        intervals: [['(-∞', '∞)'], ['y=3']],
+        description: 'Increasing approaching horizontal asymptote y=3'
+      }
     ];
 
-    /* ========= Utility Functions ========= */
-    const uid = () => Math.random().toString(36).slice(2) + Date.now().toString(36);
-    
-    function graphToScreenX(x, c) { return ((x - GRAPH_MIN) / (GRAPH_MAX - GRAPH_MIN)) * c.width; }
-    function graphToScreenY(y, c) { return ((GRAPH_MAX - y) / (GRAPH_MAX - GRAPH_MIN)) * c.height; }
-    function screenToGraphX(px, c) { return GRAPH_MIN + (px / c.width) * (GRAPH_MAX - GRAPH_MIN); }
-    function screenToGraphY(py, c) { return GRAPH_MAX - (py / c.height) * (GRAPH_MAX - GRAPH_MIN); }
-    function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+    // Generate new Read problem
+    function generateNewReadProblem() {
+      state.readProblem = readProblems[Math.floor(Math.random() * readProblems.length)];
+      state.hintCount = 0;
+      drawReadGraph();
+      clearReadSequence();
+    }
 
-    /* ========= Canvas Setup & Drawing ========= */
-    function setupCanvas() {
-      const canvas = document.getElementById('main-canvas');
+    // Draw the graph for Read tab
+    function drawReadGraph() {
+      const canvas = document.getElementById('read-graph');
       if (!canvas) return;
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      canvas.addEventListener('click', handleCanvasClick);
-      canvas.addEventListener('mousedown', handleMouseDown);
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
-    }
-
-    function setupDescribeCanvas() {
-      const c = document.getElementById('ai-canvas');
-      if (!c) return;
-      c.width = c.offsetWidth;
-      c.height = c.offsetHeight;
-    }
-
-    function drawGrid(ctx, c, showAxesLabels = true) {
-      const w = c.width, h = c.height;
       
-      // Grid lines
-      ctx.strokeStyle = '#e8e8e8';
-      ctx.lineWidth = 1;
-      for (let i = 0; i <= 20; i++) {
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth || 800;
+      canvas.height = 350;
+      
+      const w = canvas.width;
+      const h = canvas.height;
+      
+      ctx.clearRect(0, 0, w, h);
+      drawGrid(ctx, w, h);
+      
+      // Draw based on problem type
+      ctx.save();
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      
+      const problem = state.readProblem;
+      
+      // Custom drawing for each problem type
+      if (problem.description.includes('everywhere')) {
+        // Simple increasing concave up
         ctx.beginPath();
-        ctx.moveTo(i * w / 20, 0);
-        ctx.lineTo(i * w / 20, h);
+        ctx.moveTo(50, h - 50);
+        for (let x = 50; x < w - 50; x += 5) {
+          const t = (x - 50) / (w - 100);
+          const y = h - 50 - 200 * Math.pow(t, 2);
+          ctx.lineTo(x, Math.max(50, y));
+        }
+        ctx.stroke();
+      } else if (problem.description.includes('inflection at x=0')) {
+        // S-curve through origin
+        ctx.beginPath();
+        for (let x = 50; x < w - 50; x += 5) {
+          const t = (x - w/2) / 150;
+          const y = h/2 - 100 * Math.tanh(t);
+          if (x === 50) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        // Mark inflection
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.arc(w/2, h/2, 6, 0, 2 * Math.PI);
+        ctx.fill();
+      } else if (problem.description.includes('jump up')) {
+        // Constant then jump then increasing
+        ctx.beginPath();
+        ctx.moveTo(50, h * 0.6);
+        ctx.lineTo(w/2 - 10, h * 0.6);
+        ctx.stroke();
+        // Jump
+        ctx.beginPath();
+        ctx.arc(w/2 - 10, h * 0.6, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = 'white';
+        ctx.fill();
         ctx.stroke();
         ctx.beginPath();
-        ctx.moveTo(0, i * h / 20);
-        ctx.lineTo(w, i * h / 20);
+        ctx.arc(w/2 + 10, h * 0.4, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = '#0f766e';
+        ctx.fill();
+        // Increasing part
+        ctx.beginPath();
+        ctx.moveTo(w/2 + 10, h * 0.4);
+        ctx.lineTo(w - 50, h * 0.2);
+        ctx.stroke();
+      } else if (problem.description.includes('S-curve')) {
+        // S-curve with clear concavity changes
+        ctx.beginPath();
+        for (let x = 50; x < w - 50; x += 5) {
+          const t = (x - w/2) / 150;
+          const y = h/2 - 80 * (t + 0.3 * Math.sin(2*t));
+          if (x === 50) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        // Mark inflection
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.arc(w/2, h/2, 6, 0, 2 * Math.PI);
+        ctx.fill();
+      } else if (problem.description.includes('vertical asymptote')) {
+        // Vertical asymptote at x=2 (mapped to screen)
+        const asymX = w * 0.6;
+        ctx.strokeStyle = '#dc2626';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(asymX, 30);
+        ctx.lineTo(asymX, h - 30);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        // Function approaching
+        ctx.strokeStyle = '#0f766e';
+        ctx.beginPath();
+        ctx.moveTo(50, h * 0.3);
+        for (let x = 50; x < asymX - 10; x += 5) {
+          const t = (x - 50) / (asymX - 60);
+          const y = h * 0.3 + 150 * Math.pow(t, 3);
+          ctx.lineTo(x, Math.min(h - 30, y));
+        }
+        ctx.stroke();
+      } else if (problem.description.includes('horizontal asymptote')) {
+        // Horizontal asymptote at y=3
+        const asymY = h * 0.3;
+        ctx.strokeStyle = '#dc2626';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(50, asymY);
+        ctx.lineTo(w - 50, asymY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        // Function approaching
+        ctx.strokeStyle = '#0f766e';
+        ctx.beginPath();
+        ctx.moveTo(50, h * 0.7);
+        for (let x = 50; x < w - 50; x += 5) {
+          const t = (x - 50) / (w - 100);
+          const y = h * 0.7 - (h * 0.7 - asymY - 10) * (1 - Math.exp(-3*t));
+          ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+      
+      ctx.restore();
+    }
+
+    // Draw grid
+    function drawGrid(ctx, w, h) {
+      ctx.strokeStyle = '#e8e8e8';
+      ctx.lineWidth = 1;
+      
+      for (let x = 0; x <= w; x += 50) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+      }
+      
+      for (let y = 0; y <= h; y += 50) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
         ctx.stroke();
       }
       
@@ -1123,786 +1551,360 @@
       ctx.strokeStyle = '#666';
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(w / 2, 0);
-      ctx.lineTo(w / 2, h);
+      ctx.moveTo(w/2, 0);
+      ctx.lineTo(w/2, h);
       ctx.stroke();
       ctx.beginPath();
-      ctx.moveTo(0, h / 2);
-      ctx.lineTo(w, h / 2);
+      ctx.moveTo(0, h/2);
+      ctx.lineTo(w, h/2);
       ctx.stroke();
-      
-      // Labels
-      if (showAxesLabels) {
-        ctx.fillStyle = '#666';
-        ctx.font = '11px Arial';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'top';
-        for (let i = -10; i <= 10; i += 5) {
-          if (i !== 0) {
-            ctx.fillText(i, graphToScreenX(i, c), h / 2 + 5);
-          }
-        }
-        ctx.textBaseline = 'middle';
-        ctx.textAlign = 'left';
-        for (let i = -10; i <= 10; i += 5) {
-          if (i !== 0) {
-            ctx.fillText(i, w / 2 + 5, graphToScreenY(i, c));
-          }
-        }
-      }
     }
 
-    function drawFunction(ctx, c, func, color = '#0f766e', lineWidth = 2.5) {
-      ctx.strokeStyle = color;
-      ctx.lineWidth = lineWidth;
-      ctx.beginPath();
-      
-      let started = false;
-      const step = (GRAPH_MAX - GRAPH_MIN) / 400;
-      
-      for (let x = GRAPH_MIN; x <= GRAPH_MAX; x += step) {
-        const y = func(x);
-        if (!isNaN(y) && isFinite(y) && Math.abs(y) < 100) {
-          const px = graphToScreenX(x, c);
-          const py = graphToScreenY(y, c);
-          
-          if (!started) {
-            ctx.moveTo(px, py);
-            started = true;
-          } else {
-            ctx.lineTo(px, py);
-          }
-        } else {
-          if (started) {
-            ctx.stroke();
-            ctx.beginPath();
-            started = false;
-          }
-        }
-      }
-      
-      if (started) ctx.stroke();
+    // Clear sequences
+    function clearReadSequence() {
+      const container = document.getElementById('read-sequence');
+      container.innerHTML = '<div class="placeholder-text">Drag word cards here to describe the function from left to right</div>';
+      state.readSequence = [];
+      document.getElementById('read-feedback').classList.remove('show');
+      document.getElementById('sentence-display').innerHTML = '';
     }
 
-    /* ========= AI Problem Generation for Describe Tab ========= */
-    function newAIProblem() {
-      const func = FunctionGenerator.generateRandomFunction();
-      state.currentDescribeFunction = func;
-      
-      const c = document.getElementById('ai-canvas');
-      if (!c) return;
-      
-      const ctx = c.getContext('2d');
-      ctx.clearRect(0, 0, c.width, c.height);
-      drawGrid(ctx, c);
-      drawFunction(ctx, c, func.func);
-      
-      // Clear previous selections
-      document.querySelectorAll('#behaviour-grid input[type="checkbox"]').forEach(cb => cb.checked = false);
-      const fb = document.getElementById('ai-feedback');
-      fb.className = 'feedback';
-      fb.innerHTML = '';
+    function clearBuildSequence() {
+      const container = document.getElementById('build-sequence');
+      container.innerHTML = '<div class="placeholder-text">Drag configured image cards here to build your function</div>';
+      state.buildSequence = [];
+      document.getElementById('build-feedback').classList.remove('show');
+      updateBuildGraph();
     }
 
-    function analyzeFunction(func, samples = 400) {
-      const properties = new Set();
-      const step = (GRAPH_MAX - GRAPH_MIN) / samples;
-      const values = [];
-      const derivatives = [];
+    // Get hint for Read tab
+    function getHint() {
+      const feedback = document.getElementById('read-feedback');
+      state.hintCount++;
       
-      // Sample function
-      for (let x = GRAPH_MIN; x <= GRAPH_MAX; x += step) {
-        const y = func(x);
-        if (!isNaN(y) && isFinite(y)) {
-          values.push({ x, y });
-        }
-      }
-      
-      if (values.length < 10) return properties;
-      
-      // Estimate derivatives
-      for (let i = 1; i < values.length - 1; i++) {
-        const dx = values[i + 1].x - values[i - 1].x;
-        const dy = values[i + 1].y - values[i - 1].y;
-        derivatives.push({ x: values[i].x, dy_dx: dy / dx });
-      }
-      
-      // Analyze monotonicity
-      let increasing = 0, decreasing = 0;
-      for (const d of derivatives) {
-        if (d.dy_dx > 0.01) increasing++;
-        if (d.dy_dx < -0.01) decreasing++;
-      }
-      
-      if (increasing > derivatives.length * 0.9) properties.add('strictly_increasing');
-      if (decreasing > derivatives.length * 0.9) properties.add('strictly_decreasing');
-      
-      // Analyze concavity
-      let concaveUp = 0, concaveDown = 0;
-      for (let i = 1; i < derivatives.length - 1; i++) {
-        const d2y_dx2 = (derivatives[i + 1].dy_dx - derivatives[i - 1].dy_dx) / (derivatives[i + 1].x - derivatives[i - 1].x);
-        if (d2y_dx2 > 0.01) concaveUp++;
-        if (d2y_dx2 < -0.01) concaveDown++;
-      }
-      
-      if (concaveUp > derivatives.length * 0.8) properties.add('concave_up');
-      if (concaveDown > derivatives.length * 0.8) properties.add('concave_down');
-      if (concaveUp > 0.3 * derivatives.length && concaveDown > 0.3 * derivatives.length) properties.add('inflection');
-      
-      // Check for extrema
-      for (let i = 1; i < values.length - 1; i++) {
-        if (values[i].y > values[i - 1].y && values[i].y > values[i + 1].y) {
-          properties.add('local_max');
-        }
-        if (values[i].y < values[i - 1].y && values[i].y < values[i + 1].y) {
-          properties.add('local_min');
-        }
-      }
-      
-      return properties;
-    }
-
-    function checkDescription() {
-      if (!state.currentDescribeFunction) {
-        newAIProblem();
-        return;
-      }
-      
-      const selected = new Set(Array.from(document.querySelectorAll('#behaviour-grid input[type="checkbox"]:checked')).map(cb => cb.value));
-      const actual = analyzeFunction(state.currentDescribeFunction.func);
-      
-      // Add known properties from generation
-      if (state.currentDescribeFunction.properties) {
-        Object.entries(state.currentDescribeFunction.properties).forEach(([key, value]) => {
-          if (value === true) actual.add(key);
-        });
-      }
-      
-      const correct = Array.from(selected).filter(p => actual.has(p));
-      const missed = Array.from(actual).filter(p => !selected.has(p) && 
-        ['strictly_increasing', 'strictly_decreasing', 'concave_up', 'concave_down', 
-         'inflection', 'global_min', 'global_max', 'jump', 'h_asymptote', 'v_asymptote', 'piecewise'].includes(p));
-      const incorrect = Array.from(selected).filter(p => !actual.has(p));
-      
-      const fb = document.getElementById('ai-feedback');
-      
-      if (missed.length === 0 && incorrect.length === 0) {
-        fb.className = 'feedback show success';
-        fb.innerHTML = `✅ <strong>Correct!</strong> You identified all the key properties of this function.`;
-      } else if (correct.length === actual.size && incorrect.length > 0) {
-        fb.className = 'feedback show warning';
-        fb.innerHTML = `<strong>Almost there.</strong> You found all the correct properties but also selected some that aren't present.<br>✗ Remove these: ${incorrect.join(', ')}`;
-      } else if (correct.length > 0) {
-        fb.className = 'feedback show warning';
-        fb.innerHTML = `<strong>Partial.</strong> ${correct.length}/${actual.size} properties correct.<br>`;
-        if (missed.length > 0) fb.innerHTML += `⚠ Still missing: ${missed.join(', ')}<br>`;
-        if (incorrect.length > 0) fb.innerHTML += `✗ Not present: ${incorrect.join(', ')}`;
+      if (state.hintCount === 1) {
+        feedback.className = 'feedback info show';
+        feedback.textContent = `Hint: Look for ${state.readProblem.sequence.length} behaviors/changes in the graph.`;
+      } else if (state.hintCount === 2) {
+        feedback.className = 'feedback info show';
+        feedback.textContent = `Hint: The first behavior is "${state.readProblem.sequence[0].replace(/-/g, ' ')}".`;
       } else {
-        fb.className = 'feedback show error';
-        fb.innerHTML = `<strong>Not correct.</strong> None of your selections match the function's properties. Look more carefully at the graph's behavior.`;
+        feedback.className = 'feedback info show';
+        const labels = state.readProblem.sequence.map(s => 
+          behaviorTypes.find(t => t.id === s)?.label || s
+        );
+        feedback.textContent = `Answer: ${labels.join(' → ')}`;
       }
     }
 
-    function getAIHint() {
-      if (!state.currentDescribeFunction) {
-        newAIProblem();
+    // Check Read answer
+    function checkReadAnswer() {
+      const feedback = document.getElementById('read-feedback');
+      const sentenceDisplay = document.getElementById('sentence-display');
+      
+      if (state.readSequence.length === 0) {
+        feedback.className = 'feedback error show';
+        feedback.textContent = 'Please add behavior cards first.';
         return;
       }
       
-      const fb = document.getElementById('ai-feedback');
-      fb.className = 'feedback show info';
+      const correct = JSON.stringify(state.readSequence) === JSON.stringify(state.readProblem.sequence);
       
-      const hints = [
-        "Look at the overall trend: Is the function going up or down as x increases?",
-        "Check the curvature: Is the graph bending upward (holds water) or downward (sheds water)?",
-        "Look for special points: Are there any peaks (local maxima) or valleys (local minima)?",
-        "Check the endpoints: Does the function approach any horizontal or vertical lines?",
-        "Consider continuity: Are there any breaks or jumps in the graph?"
-      ];
-      
-      fb.innerHTML = `💡 <strong>Hint:</strong> ${hints[Math.floor(Math.random() * hints.length)]}`;
-    }
-
-    /* ========= Challenge Management ========= */
-    function newChallenge() {
-      const challenge = challengeTemplates[Math.floor(Math.random() * challengeTemplates.length)];
-      state.currentChallenge = challenge;
-      state.attemptCount = 0;
-      document.getElementById('challenge-desc').textContent = challenge;
-      document.getElementById('feedback').classList.remove('show');
-    }
-
-    function getConstructionHint() {
-      const fb = document.getElementById('feedback');
-      fb.className = 'feedback show info';
-      
-      const hints = [
-        "Use 2 points to create a linear segment, 3 points for a quadratic curve.",
-        "Alt/Option-click on a point to toggle between open and closed (for discontinuities).",
-        "Drag points to adjust the shape and behavior of your function.",
-        "For jump discontinuities, align two segments at the same x-value with different y-values.",
-        "Remember: concave up means the curve opens upward like U, concave down like ∩.",
-        "For inflection points, connect segments with different concavities."
-      ];
-      
-      fb.innerHTML = `💡 <strong>Hint:</strong> ${hints[Math.floor(Math.random() * hints.length)]}`;
-    }
-
-    /* ========= AI Integration (IMPROVED) ========= */
-    async function callAI(prompt, maxRetries = 2) {
-      for (let attempt = 0; attempt <= maxRetries; attempt++) {
-        try {
-          if (attempt > 0) {
-            await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
-          }
-          
-          const response = await fetch('/api/gemini', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-              contents: [{ 
-                role: "user", 
-                parts: [{ text: prompt }] 
-              }] 
-            })
-          });
-          
-          if (!response.ok) throw new Error(`API error: ${response.status}`);
-          
-          const data = await response.json();
-          const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-          
-          if (!text) throw new Error('Empty response from AI');
-          
-          return text;
-          
-        } catch (error) {
-          if (attempt === maxRetries) {
-            console.error('AI API Error:', error);
-            return null;
-          }
-        }
-      }
-    }
-
-    async function checkWithAI() {
-      const fb = document.getElementById('feedback');
-      fb.className = 'feedback show info';
-      fb.innerHTML = 'Analyzing your construction...';
-      
-      if (state.segments.length === 0) {
-        fb.className = 'feedback show error';
-        fb.innerHTML = '❌ Please build a function first! Click on the canvas to add points, then create segments.';
-        return;
-      }
-      
-      // Analyze the built function
-      const analysis = analyzeBuiltFunction();
-      
-      const prompt = `You are an encouraging high school math teacher. Analyze this function construction and provide specific feedback.
-
-Challenge: "${state.currentChallenge}"
-
-Student's construction:
-${JSON.stringify(analysis, null, 2)}
-
-Provide feedback in exactly this format:
-- If CORRECT: "Excellent! You successfully [specific achievement]. Your function [specific property observed]."
-- If PARTIALLY CORRECT: "Great progress! Your [what's correct] is perfect. To complete it, [specific next step]."
-- If INCORRECT: "Let's work on this together. I see [what they tried]. Try [specific action] to achieve [goal]."
-
-Use these terms: "strictly increasing/decreasing", "concave up/down", "jump discontinuity", "local maximum/minimum"
-Keep it to 2-3 sentences. Be encouraging and specific.`;
-
-      try {
-        const response = await callAI(prompt);
+      if (correct) {
+        feedback.className = 'feedback success show';
+        feedback.textContent = 'Excellent! You correctly identified all behaviors!';
         
-        if (response) {
-          state.attemptCount++;
-          
-          const isCorrect = response.toLowerCase().includes('excellent') || 
-                           response.toLowerCase().includes('successfully');
-          
-          fb.className = `feedback show ${isCorrect ? 'success' : 'warning'}`;
-          fb.innerHTML = `${isCorrect ? '✅' : '⚠️'} ${response}`;
-          
-          if (!isCorrect && state.attemptCount > 2) {
-            fb.innerHTML += '<br><br>💡 <em>Hint: Focus on one part at a time. Make sure each segment has the right shape.</em>';
-          }
-        } else {
-          checkAnswerFallback(analysis);
-        }
-      } catch (error) {
-        console.error('AI check failed:', error);
-        checkAnswerFallback(analysis);
-      }
-    }
-
-    function analyzeBuiltFunction() {
-      const analysis = {
-        segments: state.segments.length,
-        hasJumps: false,
-        isFunction: true,
-        behaviors: [],
-        points: []
-      };
-      
-      // Collect and analyze all points
-      const allPoints = [];
-      for (const seg of state.segments) {
-        const pts = seg.pointIds.map(id => state.points.find(p => p.id === id)).filter(Boolean);
-        if (seg.type === 'line' && pts.length === 2) {
-          const [p1, p2] = pts.sort((a, b) => a.x - b.x);
-          for (let t = 0; t <= 1; t += 0.1) {
-            allPoints.push({
-              x: p1.x + t * (p2.x - p1.x),
-              y: p1.y + t * (p2.y - p1.y)
-            });
-          }
-        } else if (seg.type === 'curve' && pts.length === 3) {
-          const [p0, p1, p2] = pts;
-          for (let t = 0; t <= 1; t += 0.05) {
-            const s = 1 - t;
-            allPoints.push({
-              x: s * s * p0.x + 2 * s * t * p1.x + t * t * p2.x,
-              y: s * s * p0.y + 2 * s * t * p1.y + t * t * p2.y
-            });
-          }
-        }
-      }
-      
-      allPoints.sort((a, b) => a.x - b.x);
-      analysis.points = allPoints;
-      
-      // Check for jumps
-      const xGroups = {};
-      for (const pt of allPoints) {
-        const key = pt.x.toFixed(1);
-        if (!xGroups[key]) xGroups[key] = [];
-        xGroups[key].push(pt.y);
-      }
-      
-      for (const [x, ys] of Object.entries(xGroups)) {
-        const uniqueY = [...new Set(ys.map(y => y.toFixed(1)))];
-        if (uniqueY.length > 1 && Math.abs(Math.max(...ys) - Math.min(...ys)) > 0.5) {
-          analysis.hasJumps = true;
-        }
-      }
-      
-      // Analyze monotonicity and concavity
-      if (allPoints.length >= 3) {
-        let increasing = 0, decreasing = 0;
-        let concaveUp = 0, concaveDown = 0;
+        // Generate complete sentence with intervals
+        const sentence = generateSentence(state.readProblem);
+        sentenceDisplay.className = 'sentence-display';
+        sentenceDisplay.innerHTML = `<strong>Complete Description:</strong><br>${sentence}`;
         
-        for (let i = 1; i < allPoints.length; i++) {
-          if (allPoints[i].y > allPoints[i-1].y) increasing++;
-          if (allPoints[i].y < allPoints[i-1].y) decreasing++;
-        }
-        
-        for (let i = 1; i < allPoints.length - 1; i++) {
-          const midY = allPoints[i].y;
-          const expectedY = (allPoints[i-1].y + allPoints[i+1].y) / 2;
-          if (midY < expectedY) concaveUp++;
-          if (midY > expectedY) concaveDown++;
-        }
-        
-        analysis.behaviors.push({
-          monotonicity: increasing > decreasing ? 'mostly increasing' : 'mostly decreasing',
-          concavity: concaveUp > concaveDown ? 'mostly concave up' : 'mostly concave down'
+        // Celebrate
+        const cards = document.querySelectorAll('#read-sequence .word-card');
+        cards.forEach((card, i) => {
+          setTimeout(() => {
+            card.style.transform = 'scale(1.1)';
+            card.style.background = 'linear-gradient(135deg, #10b981, #0f766e)';
+            card.style.color = 'white';
+          }, i * 100);
         });
-      }
-      
-      return analysis;
-    }
-
-    function checkAnswerFallback(analysis) {
-      const fb = document.getElementById('feedback');
-      
-      if (!state.currentChallenge) {
-        fb.className = 'feedback show info';
-        fb.innerHTML = '📊 Your function is ready! Click "New Challenge" for a specific task.';
-        return;
-      }
-      
-      if (analysis.segments > 0) {
-        fb.className = 'feedback show success';
-        fb.innerHTML = '✅ Good start! Keep building to match all the requirements.';
       } else {
-        fb.className = 'feedback show warning';
-        fb.innerHTML = '⚠️ Add more segments to complete the challenge.';
-      }
-    }
-
-    /* ========= Point & Segment Management (same as before) ========= */
-    function addPoint(x, y) {
-      const p = { id: uid(), x, y, open: false };
-      state.points.push(p);
-      updatePointsList();
-      redraw();
-    }
-
-    function updatePointsList() {
-      const list = document.getElementById('points-list');
-      if (state.points.length === 0) {
-        list.innerHTML = '<p class="muted" style="text-align:center">Click canvas to add points</p>';
-        return;
-      }
-      
-      list.innerHTML = state.points.map(p => {
-        const sel = state.selected.has(p.id);
-        return `<div class="point-row ${sel ? 'selected' : ''}" data-id="${p.id}">
-          <span class="point-symbol" data-role="toggle-open" title="Toggle open/closed">
-            ${p.open ? '○' : '●'}
-          </span>
-          <div class="point-coords">
-            (<input type="number" step="0.1" class="coord-input" data-role="x" value="${p.x.toFixed(2)}">,
-            <input type="number" step="0.1" class="coord-input" data-role="y" value="${p.y.toFixed(2)}">)
-          </div>
-          <span class="delete-btn" data-role="delete">×</span>
-        </div>`;
-      }).join('');
-      
-      list.querySelectorAll('.point-row').forEach(row => {
-        const id = row.getAttribute('data-id');
-        row.addEventListener('click', e => {
-          const role = e.target.getAttribute('data-role');
-          if (role) return;
-          if (state.selected.has(id)) state.selected.delete(id);
-          else state.selected.add(id);
-          updatePointsList();
-          redraw();
-        });
-        
-        row.querySelector('[data-role="toggle-open"]')?.addEventListener('click', e => {
-          e.stopPropagation();
-          const p = state.points.find(pt => pt.id === id);
-          if (p) {
-            p.open = !p.open;
-            updatePointsList();
-            redraw();
-          }
-        });
-        
-        row.querySelector('[data-role="delete"]')?.addEventListener('click', e => {
-          e.stopPropagation();
-          deletePoint(id);
-        });
-        
-        row.querySelector('[data-role="x"]')?.addEventListener('change', e => {
-          const v = parseFloat(e.target.value);
-          const p = state.points.find(pt => pt.id === id);
-          if (p) {
-            p.x = clamp(v, GRAPH_MIN, GRAPH_MAX);
-            updatePointsList();
-            redraw();
-          }
-        });
-        
-        row.querySelector('[data-role="y"]')?.addEventListener('change', e => {
-          const v = parseFloat(e.target.value);
-          const p = state.points.find(pt => pt.id === id);
-          if (p) {
-            p.y = clamp(v, GRAPH_MIN, GRAPH_MAX);
-            updatePointsList();
-            redraw();
-          }
-        });
-      });
-    }
-
-    function deletePoint(id) {
-      state.points = state.points.filter(p => p.id !== id);
-      state.selected.delete(id);
-      state.segments = state.segments.filter(s => !s.pointIds.includes(id));
-      updatePointsList();
-      updateSegmentsList();
-      redraw();
-    }
-
-    function clearPoints() {
-      state.points = [];
-      state.selected.clear();
-      state.segments = [];
-      updatePointsList();
-      updateSegmentsList();
-      redraw();
-    }
-
-    function makeLine() {
-      const ids = [...state.selected];
-      if (ids.length !== 2) {
-        alert('Please select exactly 2 points for a line segment.');
-        return;
-      }
-      const pts = ids.map(id => state.points.find(p => p.id === id)).sort((a, b) => a.x - b.x);
-      state.segments.push({
-        id: uid(),
-        type: 'line',
-        pointIds: [pts[0].id, pts[1].id],
-        asym: { type: 'none' }
-      });
-      state.selected.clear();
-      updatePointsList();
-      updateSegmentsList();
-      redraw();
-    }
-
-    function makeCurve() {
-      const ids = [...state.selected];
-      if (ids.length !== 3) {
-        alert('Please select exactly 3 points for a quadratic curve.');
-        return;
-      }
-      const pts = ids.map(id => state.points.find(p => p.id === id)).sort((a, b) => a.x - b.x);
-      pts[1].open = true;
-      state.segments.push({
-        id: uid(),
-        type: 'curve',
-        pointIds: [pts[0].id, pts[1].id, pts[2].id],
-        asym: { type: 'none' }
-      });
-      state.selected.clear();
-      updatePointsList();
-      updateSegmentsList();
-      redraw();
-    }
-
-    function clearSegments() {
-      state.segments = [];
-      updateSegmentsList();
-      redraw();
-    }
-
-    function updateSegmentsList() {
-      const list = document.getElementById('segments-list');
-      if (state.segments.length === 0) {
-        list.innerHTML = '<p class="muted" style="text-align:center">No segments yet</p>';
-        return;
-      }
-      
-      list.innerHTML = state.segments.map((s, i) => `
-        <div class="segment-item" data-id="${s.id}" 
-             style="border-left:4px solid ${state.selectedSegmentId === s.id ? '#f59e0b' : 'var(--primary)'};">
-          <span>Segment ${i + 1}: ${s.type === 'line' ? 'Linear' : 'Quadratic'} (${s.pointIds.length} pts)</span>
-          <span class="delete-btn" data-role="delete-seg">×</span>
-        </div>`).join('');
-      
-      list.querySelectorAll('.segment-item').forEach(row => {
-        const id = row.getAttribute('data-id');
-        row.addEventListener('click', e => {
-          if (e.target.getAttribute('data-role') === 'delete-seg') {
-            state.segments = state.segments.filter(seg => seg.id !== id);
-            updateSegmentsList();
-            redraw();
-            return;
-          }
-          state.selectedSegmentId = id;
-          updateSegmentsList();
-          redraw();
-        });
-      });
-    }
-
-    /* ========= Asymptote Settings (simplified) ========= */
-    function handleAsymUI() {
-      const t = document.getElementById('asym-type').value;
-      document.getElementById('asym-yc').style.display = (t === 'y') ? 'inline-flex' : 'none';
-      document.getElementById('asym-xc').style.display = (t === 'x') ? 'inline-flex' : 'none';
-      document.getElementById('asym-mb').style.display = (t === 'oblique') ? 'inline-flex' : 'none';
-    }
-
-    function applySegmentSettings() {
-      // Simplified - not critical for the main functionality
-      handleAsymUI();
-    }
-
-    /* ========= Canvas Interaction Handlers ========= */
-    function hitTestPoint(canvas, mx, my) {
-      for (const p of state.points) {
-        const px = graphToScreenX(p.x, canvas);
-        const py = graphToScreenY(p.y, canvas);
-        if (Math.hypot(px - mx, py - my) <= HIT_RADIUS_PX) {
-          return p.id;
-        }
-      }
-      return null;
-    }
-
-    function handleCanvasClick(e) {
-      const c = document.getElementById('main-canvas');
-      const r = c.getBoundingClientRect();
-      const x = e.clientX - r.left;
-      const y = e.clientY - r.top;
-      
-      const hitId = hitTestPoint(c, x, y);
-      if (hitId) {
-        if (e.altKey || e.metaKey) {
-          const p = state.points.find(pt => pt.id === hitId);
-          if (p) {
-            p.open = !p.open;
-            updatePointsList();
-            redraw();
-          }
+        feedback.className = 'feedback error show';
+        const missing = state.readProblem.sequence.length - state.readSequence.length;
+        if (missing > 0) {
+          feedback.textContent = `You're missing ${missing} behavior(s).`;
+        } else if (missing < 0) {
+          feedback.textContent = `Too many behaviors. You have ${-missing} extra card(s).`;
         } else {
-          if (state.selected.has(hitId)) {
-            state.selected.delete(hitId);
-          } else {
-            state.selected.add(hitId);
-          }
-          updatePointsList();
-          redraw();
+          feedback.textContent = 'Not quite right. Check the order.';
         }
-        return;
-      }
-      
-      addPoint(screenToGraphX(x, c), screenToGraphY(y, c));
-    }
-
-    function handleMouseDown(e) {
-      const c = document.getElementById('main-canvas');
-      const r = c.getBoundingClientRect();
-      const x = e.clientX - r.left;
-      const y = e.clientY - r.top;
-      state.draggingId = hitTestPoint(c, x, y);
-    }
-
-    function handleMouseMove(e) {
-      const c = document.getElementById('main-canvas');
-      if (!c || !state.draggingId) return;
-      
-      const r = c.getBoundingClientRect();
-      const x = e.clientX - r.left;
-      const y = e.clientY - r.top;
-      const gx = screenToGraphX(x, c);
-      const gy = screenToGraphY(y, c);
-      
-      const p = state.points.find(pt => pt.id === state.draggingId);
-      if (p) {
-        p.x = clamp(gx, GRAPH_MIN, GRAPH_MAX);
-        p.y = clamp(gy, GRAPH_MIN, GRAPH_MAX);
-        updatePointsList();
-        redraw();
+        sentenceDisplay.innerHTML = '';
       }
     }
 
-    function handleMouseUp() {
-      state.draggingId = null;
-    }
-
-    /* ========= Drawing Functions ========= */
-    function redraw() {
-      const c = document.getElementById('main-canvas');
-      if (!c) return;
+    // Generate sentence from sequence with intervals
+    function generateSentence(problem) {
+      let sentence = "The function ";
+      const behaviors = problem.sequence;
+      const intervals = problem.intervals;
       
-      const ctx = c.getContext('2d');
-      ctx.clearRect(0, 0, c.width, c.height);
-      drawGrid(ctx, c);
-      drawSegments(ctx, c);
-      drawPoints(ctx, c);
-    }
-
-    function drawSegments(ctx, c) {
-      for (const seg of state.segments) {
-        const pts = seg.pointIds.map(id => state.points.find(p => p.id === id)).filter(Boolean);
+      behaviors.forEach((behavior, i) => {
+        if (i > 0) sentence += ", ";
         
-        ctx.strokeStyle = '#0f766e';
-        ctx.lineWidth = 3;
+        const interval = intervals[i];
+        const intervalStr = interval ? interval.join(', ') : "";
         
-        if (seg.type === 'line' && pts.length === 2) {
-          const [p1, p2] = pts;
-          const x1 = graphToScreenX(p1.x, c);
-          const y1 = graphToScreenY(p1.y, c);
-          const x2 = graphToScreenX(p2.x, c);
-          const y2 = graphToScreenY(p2.y, c);
-          
-          ctx.beginPath();
-          ctx.moveTo(x1, y1);
-          ctx.lineTo(x2, y2);
-          ctx.stroke();
-        } else if (seg.type === 'curve' && pts.length === 3) {
-          const [p0, p1, p2] = pts;
-          const x0 = graphToScreenX(p0.x, c);
-          const y0 = graphToScreenY(p0.y, c);
-          const cx = graphToScreenX(p1.x, c);
-          const cy = graphToScreenY(p1.y, c);
-          const x2 = graphToScreenX(p2.x, c);
-          const y2 = graphToScreenY(p2.y, c);
-          
-          ctx.beginPath();
-          ctx.moveTo(x0, y0);
-          ctx.quadraticCurveTo(cx, cy, x2, y2);
-          ctx.stroke();
+        const typeObj = behaviorTypes.find(t => t.id === behavior);
+        const label = typeObj ? typeObj.label.toLowerCase() : behavior;
+        
+        if (behavior === 'inflection') {
+          sentence += `has an inflection point at ${intervalStr}`;
+        } else if (behavior.includes('jump')) {
+          sentence += `has a ${label} discontinuity at ${intervalStr}`;
+        } else if (behavior.includes('asymptote')) {
+          sentence += `approaches a ${label} at ${intervalStr}`;
+        } else {
+          sentence += `is ${label} on ${intervalStr}`;
         }
-      }
+      });
+      
+      sentence += ".";
+      return sentence;
     }
 
-    function drawPoints(ctx, c) {
-      for (const p of state.points) {
-        const x = graphToScreenX(p.x, c);
-        const y = graphToScreenY(p.y, c);
-        const sel = state.selected.has(p.id);
+    // Build challenges - more abstract descriptions
+    const buildChallenges = [
+      {
+        description: "A function that starts low and ends high with upward curvature",
+        expectedBehaviors: ['inc-cup']
+      },
+      {
+        description: "A function that changes from falling to rising",
+        expectedBehaviors: ['dec-cup', 'inc-cup']
+      },
+      {
+        description: "A function with a sudden vertical displacement",
+        expectedBehaviors: ['const', 'jump-up-right', 'inc-linear']
+      },
+      {
+        description: "A function that changes its bending direction",
+        expectedBehaviors: ['inc-cup', 'inflect-up-down', 'inc-cdown']
+      },
+      {
+        description: "A function that approaches a limiting value",
+        expectedBehaviors: ['inc-linear', 'h-asym-from-below']
+      },
+      {
+        description: "A function with an undefined point",
+        expectedBehaviors: ['inc-linear', 'v-asym-left-up']
+      },
+      {
+        description: "A horizontal line that suddenly drops and continues falling",
+        expectedBehaviors: ['const', 'jump-down-right', 'dec-linear']
+      },
+      {
+        description: "A function that smoothly transitions between opposite curvatures",
+        expectedBehaviors: ['dec-cdown', 'inflect-down-up', 'inc-cup']
+      }
+    ];
+
+    // Generate new Build challenge
+    function generateNewBuildChallenge() {
+      state.buildChallenge = buildChallenges[Math.floor(Math.random() * buildChallenges.length)];
+      document.getElementById('build-challenge').textContent = state.buildChallenge.description;
+      clearBuildSequence();
+    }
+
+    // Initialize and update Build graph
+    function initializeBuildGraph() {
+      const canvas = document.getElementById('build-graph');
+      if (!canvas) return;
+      
+      canvas.width = canvas.offsetWidth || 800;
+      canvas.height = 350;
+      
+      const ctx = canvas.getContext('2d');
+      drawGrid(ctx, canvas.width, canvas.height);
+    }
+
+    function updateBuildGraph() {
+      const canvas = document.getElementById('build-graph');
+      if (!canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      
+      ctx.clearRect(0, 0, w, h);
+      drawGrid(ctx, w, h);
+      
+      if (state.buildSequence.length === 0) return;
+      
+      // Draw the composed function based on selected behaviors
+      ctx.save();
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      
+      // Map behavior IDs to drawing logic
+      let x = 80;
+      let currentY = h * 0.5;
+      const segmentWidth = (w - 160) / Math.max(state.buildSequence.length, 1);
+      
+      state.buildSequence.forEach((behaviorId, i) => {
+        const startX = x;
+        const endX = x + segmentWidth;
         
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = sel ? '#f59e0b' : '#0f766e';
-        ctx.fillStyle = p.open ? '#fff' : (sel ? '#f59e0b' : '#0f766e');
-        
+        // Draw based on behavior ID
+        // This is simplified - you'd implement full drawing logic for each behavior type
         ctx.beginPath();
-        ctx.arc(x, y, POINT_RADIUS_PX, 0, 2 * Math.PI);
-        ctx.fill();
+        ctx.moveTo(startX, currentY);
+        
+        if (behaviorId.includes('inc')) {
+          currentY -= 40;
+          if (behaviorId.includes('cup')) {
+            ctx.quadraticCurveTo((startX + endX)/2, currentY + 20, endX, currentY);
+          } else if (behaviorId.includes('cdown')) {
+            ctx.quadraticCurveTo((startX + endX)/2, currentY - 20, endX, currentY);
+          } else {
+            ctx.lineTo(endX, currentY);
+          }
+        } else if (behaviorId.includes('dec')) {
+          currentY += 40;
+          if (behaviorId.includes('cup')) {
+            ctx.quadraticCurveTo((startX + endX)/2, currentY + 20, endX, currentY);
+          } else if (behaviorId.includes('cdown')) {
+            ctx.quadraticCurveTo((startX + endX)/2, currentY - 20, endX, currentY);
+          } else {
+            ctx.lineTo(endX, currentY);
+          }
+        } else if (behaviorId === 'const') {
+          ctx.lineTo(endX, currentY);
+        }
+        // Add more behavior handling...
+        
         ctx.stroke();
+        x = endX;
+      });
+      
+      ctx.restore();
+    }
+
+    // Animate function construction
+    function animateFunction() {
+      const canvas = document.getElementById('build-graph');
+      if (canvas) {
+        canvas.style.opacity = '0';
+        updateBuildGraph();
+        setTimeout(() => {
+          canvas.style.transition = 'opacity 1s ease';
+          canvas.style.opacity = '1';
+        }, 100);
       }
     }
 
-    /* ========= Tab Management ========= */
+    // AI Integration
+    async function callAI(prompt) {
+      try {
+        const response = await fetch('/api/gemini', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            contents: [{ 
+              role: "user", 
+              parts: [{ text: prompt }] 
+            }] 
+          })
+        });
+        
+        if (!response.ok) return null;
+        
+        const data = await response.json();
+        return data.candidates?.[0]?.content?.parts?.[0]?.text;
+      } catch (error) {
+        console.error('AI Error:', error);
+        return null;
+      }
+    }
+
+    async function checkBuildAnswer() {
+      const feedback = document.getElementById('build-feedback');
+      
+      if (state.buildSequence.length === 0) {
+        feedback.className = 'feedback error show';
+        feedback.textContent = 'Please add image cards first.';
+        return;
+      }
+      
+      const prompt = `Challenge: "${state.buildChallenge.description}"
+Student built: ${state.buildSequence.join(' → ')}
+
+Evaluate if their visual construction matches the description. Don't give away the answer.
+Respond with ONE of:
+- "Correct!" if it matches
+- "Not quite. Check your [first/middle/last] card." if wrong
+- "Close! Adjust the [specific aspect]" if partially correct
+
+Keep response under 15 words. Don't reveal the solution.`;
+
+      feedback.className = 'feedback info show';
+      feedback.textContent = 'Checking...';
+      
+      const aiResponse = await callAI(prompt);
+      
+      if (aiResponse) {
+        if (aiResponse.toLowerCase().includes('correct')) {
+          feedback.className = 'feedback success show';
+        } else if (aiResponse.toLowerCase().includes('close')) {
+          feedback.className = 'feedback info show';
+        } else {
+          feedback.className = 'feedback error show';
+        }
+        feedback.textContent = aiResponse;
+      } else {
+        feedback.className = 'feedback info show';
+        feedback.textContent = 'AI unavailable. Review your sequence.';
+      }
+    }
+
+    // Tab management
+    function switchToTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.tab === tabName) {
+          btn.classList.add('active');
+        }
+      });
+      
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      document.getElementById(tabName).classList.add('active');
+      
+      if (tabName === 'intro') {
+        setTimeout(drawExamples, 50);
+      } else if (tabName === 'read') {
+        initializeReadTab();
+      } else if (tabName === 'build') {
+        initializeBuildTab();
+      }
+    }
+
     function setupTabs() {
       document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => showTab(btn.dataset.tab));
+        btn.addEventListener('click', () => {
+          switchToTab(btn.dataset.tab);
+        });
       });
     }
 
-    function showTab(tab) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-      document.getElementById(tab).classList.add('active');
-      
-      if (tab === 'intro') {
-        setTimeout(drawExamples, 50);
-      } else if (tab === 'describe') {
-        setTimeout(() => {
-          setupDescribeCanvas();
-          if (!state.currentDescribeFunction) newAIProblem();
-        }, 50);
-      } else if (tab === 'builder') {
-        setTimeout(() => {
-          setupCanvas();
-          redraw();
-          if (!state.currentChallenge) newChallenge();
-        }, 50);
-      }
-    }
-
-    /* ========= Initialization ========= */
-    document.getElementById('asym-type')?.addEventListener('change', handleAsymUI);
-
+    // Initialize
     window.addEventListener('DOMContentLoaded', () => {
       setupTabs();
-      setupCanvas();
-      setupDescribeCanvas();
-      newChallenge();
-      showTab('intro');
-      setTimeout(drawExamples, 100);
-    });
-
-    window.addEventListener('resize', () => {
-      setupCanvas();
-      redraw();
-      setupDescribeCanvas();
-      if (document.getElementById('intro').classList.contains('active')) {
-        drawExamples();
-      }
+      drawExamples();
     });
   </script>
 </body>
 </html>
-
+      
+      
