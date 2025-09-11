@@ -7,90 +7,64 @@
   <link rel="icon" href="/logo-mathswell-square-mirror.ico" type="image/x-icon">
   <link rel="icon" href="/logo-mathswell-square-mirror.svg" type="image/svg+xml">
   <style>
-    :root {
-      --primary: #0f766e;
-      --primary-light: #10b981;
-      --background: #f7faf9;
-      --interactive: #e6fffb;
-      --text-primary: #212121;
-      --text-muted: #4b5563;
-      --accent-amber: #f59e0b;
-      --accent-red: #c62828;
-      --surface: #ffffff;
-      --border: #e0e7e4;
+    :root{
+      --primary:#0f766e; --primary-light:#10b981; --background:#f7faf9; --interactive:#e6fffb;
+      --text-primary:#212121; --text-muted:#4b5563; --accent-amber:#f59e0b; --accent-red:#c62828;
+      --surface:#ffffff; --border:#e0e7e4;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: system-ui, -apple-system, sans-serif; background: var(--background); color: var(--text-primary); line-height: 1.6; }
-    .mathswell-nav { display: flex; justify-content: center; margin: 1rem 0; padding: 0.5rem; }
-    .mw-link { display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; font-weight: 700; color: var(--primary); padding: 0.5rem 1rem; border-radius: 999px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
-    .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 2px solid var(--border); }
-    .tab-btn { padding: 0.75rem 1.5rem; background: transparent; border: none; color: var(--text-muted); font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-    .tab-btn:hover { background: var(--interactive); }
-    .tab-btn.active { color: var(--primary); background: white; border-bottom: 2px solid var(--primary); margin-bottom: -2px; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    .hero { background: linear-gradient(135deg, var(--interactive), var(--surface)); padding: 2rem; border-radius: 12px; margin-bottom: 2rem; }
-    .hero h1 { color: var(--primary); margin-bottom: 1rem; }
-
-    .examples-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-    .example-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-    .example-card h3 { color: var(--primary); margin-bottom: 1rem; }
-    .example-canvas { width: 100%; height: 200px; border: 2px solid var(--border); border-radius: 8px; background: white; margin-bottom: 1rem; display: block; }
-
-    /* Shared canvases */
-    #main-canvas, #ai-canvas {
-      width: 100%;
-      height: 500px;
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      background: white;
-      display: block;
-    }
-    #main-canvas { cursor: crosshair; }
-
-    .canvas-wrapper { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
-    .controls-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-    .control-panel { background: var(--interactive); padding: 1rem; border-radius: 8px; }
-    .control-panel h3 { color: var(--primary); margin-bottom: 0.75rem; font-size: 1rem; }
-    .btn { padding: 0.5rem 1rem; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s; width: 100%; margin-bottom: 0.5rem; }
-    .btn-primary { background: var(--primary); color: white; }
-    .btn-primary:hover { background: var(--primary-light); }
-    .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
-    .btn-secondary:hover { background: var(--interactive); }
-    .btn-danger { background: var(--accent-red); color: white; }
-    .btn-small { padding: 0.3rem 0.6rem; font-size: 0.85rem; width: auto; }
-
-    .points-list, .segments-list { max-height: 220px; overflow-y: auto; background: white; border-radius: 4px; padding: 0.5rem; }
-    .point-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.3rem; margin-bottom: 0.3rem; background: white; border-radius: 4px; cursor: pointer; }
-    .point-row:hover { background: #f0f0f0; }
-    .point-row.selected { background: var(--primary); color: white; }
-    .point-coords { display: flex; gap: 0.3rem; align-items: center; flex: 1; }
-    .coord-input { width: 60px; padding: 2px 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 0.85rem; font-family: monospace; }
-    .point-row.selected .coord-input { background: rgba(255,255,255,0.9); color: black; border-color: white; }
-    .point-symbol { font-size: 1.2rem; margin: 0 0.25rem; cursor: pointer; }
-    .delete-btn { color: var(--accent-red); cursor: pointer; font-weight: bold; padding: 0 0.5rem; }
-
-    .challenge-box { background: linear-gradient(135deg, #fff3cd, #ffeaa7); padding: 1.5rem; border-radius: 12px; border: 2px solid var(--accent-amber); }
-    .challenge-box h2 { color: #856404; margin-bottom: 1rem; }
-    .challenge-text { background: white; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; }
-
-    textarea { width: 100%; padding: 0.75rem; border: 2px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 1rem; resize: vertical; min-height: 60px; }
-
-    .feedback { padding: 1rem; border-radius: 6px; margin-top: 1rem; display: none; }
-    .feedback.show { display: block; }
-    .feedback.success { background: #d4edda; color: #155724; }
-    .feedback.error { background: #f8d7da; color: #721c24; }
-    .feedback.info { background: #cce5ff; color: #004085; }
-
-    .info-bar { background: var(--interactive); padding: 0.75rem; border-radius: 6px; margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted); }
-
-    /* Describe tab controls */
-    .behaviour-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem 1rem; }
-    .behaviour-item { display: flex; align-items: center; gap: 0.5rem; background: white; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border); }
-    .behaviour-item input { transform: scale(1.1); }
-    @media (max-width: 768px) { .controls-grid { grid-template-columns: 1fr; } }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,sans-serif;background:var(--background);color:var(--text-primary);line-height:1.6}
+    .mathswell-nav{display:flex;justify-content:center;margin:1rem 0;padding:0.5rem}
+    .mw-link{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;font-weight:700;color:var(--primary);padding:.5rem 1rem;border-radius:999px;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+    .container{max-width:1200px;margin:0 auto;padding:0 1rem}
+    .tabs{display:flex;gap:.5rem;margin-bottom:2rem;border-bottom:2px solid var(--border)}
+    .tab-btn{padding:.75rem 1.5rem;background:transparent;border:none;color:var(--text-muted);font-size:1rem;font-weight:600;cursor:pointer;transition:.2s}
+    .tab-btn:hover{background:var(--interactive)}
+    .tab-btn.active{color:var(--primary);background:#fff;border-bottom:2px solid var(--primary);margin-bottom:-2px}
+    .tab-content{display:none}
+    .tab-content.active{display:block}
+    .hero{background:linear-gradient(135deg,var(--interactive),var(--surface));padding:2rem;border-radius:12px;margin-bottom:2rem}
+    .hero h1{color:var(--primary);margin-bottom:1rem}
+    .examples-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;margin-bottom:2rem}
+    .example-card{background:#fff;padding:1.5rem;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+    .example-card h3{color:var(--primary);margin-bottom:1rem}
+    .example-canvas{width:100%;height:200px;border:2px solid var(--border);border-radius:8px;background:#fff;margin-bottom:1rem;display:block}
+    #main-canvas,#ai-canvas{width:100%;height:500px;border:2px solid var(--border);border-radius:8px;background:#fff;display:block}
+    #main-canvas{cursor:crosshair}
+    .canvas-wrapper{background:#fff;padding:1.5rem;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1);margin-bottom:1.5rem}
+    .controls-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;margin-bottom:1.5rem}
+    .control-panel{background:var(--interactive);padding:1rem;border-radius:8px}
+    .control-panel h3{color:var(--primary);margin-bottom:.75rem;font-size:1rem}
+    .btn{padding:.5rem 1rem;border:none;border-radius:6px;font-weight:600;cursor:pointer;transition:.2s;width:100%;margin-bottom:.5rem}
+    .btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-light)}
+    .btn-secondary{background:#fff;color:var(--primary);border:2px solid var(--primary)}.btn-secondary:hover{background:var(--interactive)}
+    .btn-danger{background:var(--accent-red);color:#fff}
+    .btn-small{padding:.3rem .6rem;font-size:.85rem;width:auto}
+    .points-list,.segments-list{max-height:220px;overflow-y:auto;background:#fff;border-radius:4px;padding:.5rem}
+    .point-row{display:flex;align-items:center;gap:.5rem;padding:.3rem;margin-bottom:.3rem;background:#fff;border-radius:4px;cursor:pointer}
+    .point-row:hover{background:#f0f0f0}
+    .point-row.selected{background:var(--primary);color:#fff}
+    .point-coords{display:flex;gap:.3rem;align-items:center;flex:1}
+    .coord-input{width:60px;padding:2px 4px;border:1px solid #ddd;border-radius:3px;font-size:.85rem;font-family:monospace}
+    .point-row.selected .coord-input{background:rgba(255,255,255,.9);color:#000;border-color:#fff}
+    .point-symbol{font-size:1.2rem;margin:0 .25rem;cursor:pointer}
+    .delete-btn{color:var(--accent-red);cursor:pointer;font-weight:bold;padding:0 .5rem}
+    .challenge-box{background:linear-gradient(135deg,#fff3cd,#ffeaa7);padding:1.5rem;border-radius:12px;border:2px solid var(--accent-amber)}
+    .challenge-box h2{color:#856404;margin-bottom:1rem}
+    .challenge-text{background:#fff;padding:1rem;border-radius:6px;margin-bottom:1rem}
+    textarea{width:100%;padding:.75rem;border:2px solid var(--border);border-radius:6px;font:inherit;resize:vertical;min-height:60px}
+    .feedback{padding:.75rem 1rem;border-radius:6px;margin-top:.5rem;display:none}
+    .feedback.show{display:block}
+    .feedback.success{background:#d4edda;color:#155724}
+    .feedback.error{background:#f8d7da;color:#721c24}
+    .feedback.info{background:#cce5ff;color:#004085}
+    .info-bar{background:var(--interactive);padding:.75rem;border-radius:6px;margin-top:1rem;font-size:.9rem;color:var(--text-muted)}
+    .behaviour-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.5rem 1rem}
+    .row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+    .row>*{flex:1;min-width:140px}
+    .inline{display:inline-flex;gap:.5rem;align-items:center}
+    .muted{color:var(--text-muted);font-size:.9rem}
+    @media (max-width:768px){.controls-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -108,139 +82,135 @@
       <button class="tab-btn" data-tab="builder">Build & Challenge</button>
     </div>
 
-    <!-- 1) Introduction Tab -->
+    <!-- INTRO -->
     <div id="intro" class="tab-content active">
       <div class="hero">
         <h1>📈 Function Behavior Builder</h1>
-        <p>Learn to analyze and build functions by understanding their behavior: how they increase, decrease, curve, connect, and jump.</p>
+        <p>Learn to analyze and build functions by understanding their behavior: increase/decrease, concavity, jumps and asymptotes.</p>
       </div>
 
       <div class="examples-grid">
         <div class="example-card">
           <h3>Increasing & Curving Up</h3>
           <canvas class="example-canvas" id="ex1"></canvas>
-          <div class="math-info">
-            <strong>Behavior:</strong>
-            • Goes up left→right<br/>• Curves upward (concave up)<br/>• Gets steeper
-          </div>
+          <div class="math-info"><strong>Behavior:</strong> • Goes up left→right • Concave up • Gets steeper</div>
         </div>
         <div class="example-card">
           <h3>Decreasing & Curving Down</h3>
           <canvas class="example-canvas" id="ex2"></canvas>
-          <div class="math-info">
-            <strong>Behavior:</strong>
-            • Goes down left→right<br/>• Curves downward (concave down)<br/>• Less steep over time
-          </div>
+          <div class="math-info"><strong>Behavior:</strong> • Goes down left→right • Concave down • Less steep</div>
         </div>
         <div class="example-card">
           <h3>Piecewise with Jump</h3>
           <canvas class="example-canvas" id="ex3"></canvas>
-          <div class="math-info">
-            <strong>Behavior:</strong>
-            • Break (discontinuity)<br/>• Open/closed circles matter<br/>• Different rules
-          </div>
+          <div class="math-info"><strong>Behavior:</strong> • Same x at the break • Open/closed mark value • Two different y-values</div>
         </div>
         <div class="example-card">
           <h3>S-Shaped (Inflection)</h3>
           <canvas class="example-canvas" id="ex4"></canvas>
-          <div class="math-info">
-            <strong>Behavior:</strong>
-            • Changes concavity<br/>• Has an inflection point<br/>• Always increasing
-          </div>
+          <div class="math-info"><strong>Behavior:</strong> • Changes concavity • Inflection • Always increasing</div>
         </div>
         <div class="example-card">
           <h3>U-Shaped Valley</h3>
           <canvas class="example-canvas" id="ex5"></canvas>
-          <div class="math-info">
-            <strong>Behavior:</strong>
-            • Decreases then increases<br/>• Has a minimum<br/>• Concave up
-          </div>
+          <div class="math-info"><strong>Behavior:</strong> • Decreases then increases • Minimum • Concave up</div>
         </div>
         <div class="example-card">
           <h3>Approaching a Line</h3>
           <canvas class="example-canvas" id="ex6"></canvas>
-          <div class="math-info">
-            <strong>Behavior:</strong>
-            • Levels off<br/>• Asymptotic to a line<br/>• Never reaches it
-          </div>
+          <div class="math-info"><strong>Behavior:</strong> • Levels off • Asymptotic to a line • Never reaches it</div>
         </div>
       </div>
 
-      <div style="text-align:center; margin:2rem 0;">
-        <button class="btn btn-primary" style="width:auto; padding:1rem 3rem;" onclick="showTab('describe')">Practice Describing →</button>
+      <div style="text-align:center;margin:2rem 0;">
+        <button class="btn btn-primary" style="width:auto;padding:1rem 3rem" onclick="showTab('describe')">Practice Describing →</button>
       </div>
     </div>
 
-    <!-- 2) Describe Behavior Tab (NEW) -->
+    <!-- DESCRIBE -->
     <div id="describe" class="tab-content">
       <div class="canvas-wrapper">
-        <h2 style="color: var(--primary); margin-bottom: 1rem;">Describe the Function</h2>
+        <h2 style="color:var(--primary);margin-bottom:1rem">Describe the Function</h2>
         <canvas id="ai-canvas"></canvas>
-        <div class="info-bar">
-          <strong>Instructions:</strong> The AI has drawn a function. Tick every behavior that applies, then click <em>Check Description</em>. Use <em>New Function</em> to get another one.
-        </div>
+        <div class="info-bar"><strong>Instructions:</strong> The AI drew a function. Tick all behaviors that apply, then click <em>Check Description</em>.</div>
       </div>
 
       <div class="controls-grid">
-        <div class="control-panel">
+        <div class="control-panel" style="grid-column:1/-1">
           <h3>🧠 Your Description</h3>
           <div class="behaviour-grid" id="behaviour-grid">
-            <label class="behaviour-item"><input type="checkbox" value="increasing"> Increasing left→right</label>
-            <label class="behaviour-item"><input type="checkbox" value="decreasing"> Decreasing left→right</label>
-            <label class="behaviour-item"><input type="checkbox" value="curving_up"> Curving upward (concave up)</label>
-            <label class="behaviour-item"><input type="checkbox" value="curving_down"> Curving downward (concave down)</label>
-            <label class="behaviour-item"><input type="checkbox" value="s_shape"> S-shaped / changes concavity</label>
-            <label class="behaviour-item"><input type="checkbox" value="u_minimum"> Has a minimum (U-shaped)</label>
-            <label class="behaviour-item"><input type="checkbox" value="jump"> Has a jump discontinuity</label>
-            <label class="behaviour-item"><input type="checkbox" value="approaches_line"> Levels off / approaches a line</label>
-            <label class="behaviour-item"><input type="checkbox" value="piecewise"> Piecewise (multiple segments)</label>
+            <label class="inline"><input type="checkbox" value="increasing"> Increasing left→right</label>
+            <label class="inline"><input type="checkbox" value="decreasing"> Decreasing left→right</label>
+            <label class="inline"><input type="checkbox" value="curving_up"> Curving upward (concave up)</label>
+            <label class="inline"><input type="checkbox" value="curving_down"> Curving downward (concave down)</label>
+            <label class="inline"><input type="checkbox" value="s_shape"> S-shaped / changes concavity</label>
+            <label class="inline"><input type="checkbox" value="u_minimum"> Has a minimum (U-shaped)</label>
+            <label class="inline"><input type="checkbox" value="jump"> Has a jump discontinuity</label>
+            <label class="inline"><input type="checkbox" value="approaches_line"> Levels off / approaches a line</label>
+            <label class="inline"><input type="checkbox" value="piecewise"> Piecewise (multiple segments)</label>
           </div>
-          <div style="display:flex; gap:0.5rem; margin-top:0.75rem;">
+          <div class="row" style="margin-top:.75rem">
             <button class="btn btn-primary" onclick="checkDescription()">Check Description</button>
             <button class="btn btn-secondary" onclick="newAIProblem()">New Function</button>
           </div>
           <div class="feedback" id="ai-feedback"></div>
         </div>
-
-        <div class="control-panel">
-          <h3>📝 Tip</h3>
-          <p style="font-size:0.95rem;">If a function both <em>increases and decreases</em>, choose the concavity or jump features that best describe the visible parts. “Piecewise” means it’s built from distinct segments (often with a jump).</p>
-        </div>
       </div>
     </div>
 
-    <!-- 3) Build & Challenge Tab (original builder) -->
+    <!-- BUILDER -->
     <div id="builder" class="tab-content">
       <div class="canvas-wrapper">
-        <h2 style="color: var(--primary); margin-bottom: 1rem;">Function Builder</h2>
+        <h2 style="color:var(--primary);margin-bottom:1rem">Function Builder</h2>
         <canvas id="main-canvas"></canvas>
         <div class="info-bar">
-          <strong>Instructions:</strong> Click empty space to add a point • Click a point (or its row) to select/deselect • <strong>Alt/Option-click</strong> a point (or click ○/●) to toggle open/closed • Drag points to move (hold Shift to snap by 0.5) • Use selected points to create segments
+          <strong>Instructions:</strong> Click to add points • Drag to move • Alt/Option-click point (or the ○/●) to toggle open/closed • Click a segment to select • Use Segment Settings to add an asymptote (dashed). You can stretch your pieces to approach it.
         </div>
       </div>
 
       <div class="controls-grid">
         <div class="control-panel">
           <h3>📍 Points</h3>
-          <div class="points-list" id="points-list"><p style="color:#999; text-align:center;">Click canvas to add points</p></div>
+          <div class="points-list" id="points-list"><p class="muted" style="text-align:center">Click canvas to add points</p></div>
           <button class="btn btn-danger btn-small" onclick="clearPoints()">Clear All Points</button>
         </div>
 
         <div class="control-panel">
           <h3>🔧 Build Segments</h3>
-          <p style="font-size:0.85rem; margin-bottom:0.5rem;">Select points then:</p>
-          <button class="btn btn-secondary btn-small" onclick="makeLine()">Make Line (2 pts)</button>
-          <button class="btn btn-secondary btn-small" onclick="makeCurve()">Make Curve (3 pts)</button>
-          <div style="margin-top:0.5rem; font-size:0.85rem;">
-            <label><input type="checkbox" id="extend-left"> Extend left</label><br/>
-            <label><input type="checkbox" id="extend-right"> Extend right</label>
+          <p class="muted" style="margin-bottom:.5rem">Select points then create:</p>
+          <div class="row">
+            <button class="btn btn-secondary btn-small" onclick="makeLine()">Make Line (2 pts)</button>
+            <button class="btn btn-secondary btn-small" onclick="makeCurve()">Make Curve (3 pts)</button>
           </div>
+          <div class="muted">Tip: select a segment (list or canvas) to configure it.</div>
         </div>
 
         <div class="control-panel">
           <h3>📊 Function Segments</h3>
-          <div class="segments-list" id="segments-list"><p style="color:#999; text-align:center;">No segments yet</p></div>
+          <div class="segments-list" id="segments-list"><p class="muted" style="text-align:center">No segments yet</p></div>
           <button class="btn btn-danger btn-small" onclick="clearSegments()">Clear All</button>
+        </div>
+
+        <div class="control-panel" style="grid-column:1/-1">
+          <h3>⚙️ Segment Settings</h3>
+          <div class="row">
+            <select id="segment-select"></select>
+          </div>
+          <div class="row">
+            <label class="inline">Asymptote:
+              <select id="asym-type">
+                <option value="none">None</option>
+                <option value="y">Horizontal (y = c)</option>
+                <option value="x">Vertical (x = c)</option>
+                <option value="oblique">Oblique (y = m x + b)</option>
+              </select>
+            </label>
+            <label class="inline" id="asym-yc" style="display:none;">c: <input type="number" step="0.1" id="asym-c" style="width:100px;"></label>
+            <label class="inline" id="asym-xc" style="display:none;">c: <input type="number" step="0.1" id="asym-x" style="width:100px;"></label>
+            <label class="inline" id="asym-mb" style="display:none;">m: <input type="number" step="0.1" id="asym-m" style="width:100px;"> b: <input type="number" step="0.1" id="asym-b" style="width:100px;"></label>
+          </div>
+          <div class="row"><button class="btn btn-primary btn-small" onclick="applySegmentSettings()">Apply to Segment</button></div>
+          <div id="seg-warn" class="feedback info" style="margin-top:0"></div>
         </div>
       </div>
 
@@ -250,9 +220,9 @@
           <strong>Challenge:</strong>
           <p id="challenge-desc">Build a function that increases and curves upward on the left side, has a jump discontinuity in the middle, then decreases and curves downward on the right side.</p>
         </div>
-        <p style="font-size:0.85rem; color:#666; margin-bottom:0.5rem;">Build the function above, then click Check Answer to see how you did.</p>
-        <textarea id="user-notes" placeholder="Optional: Add any notes about your construction..."></textarea>
-        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+        <p class="muted" style="margin-bottom:.5rem">Build the function above, then click Check Answer.</p>
+        <textarea id="user-notes" placeholder="Optional: add notes..."></textarea>
+        <div class="row" style="margin-top:.5rem">
           <button class="btn btn-primary" onclick="checkAnswer()">Check Answer</button>
           <button class="btn btn-secondary" onclick="getHint()">Get Hint</button>
           <button class="btn btn-secondary" onclick="newChallenge()">New Challenge</button>
@@ -263,572 +233,346 @@
   </div>
 
   <script>
-    /* ============================
-       Shared helpers & examples
-    ============================ */
-    function drawExampleFunction(canvas, type) {
+    /* ========= Examples & Tabs ========= */
+    function drawExampleFunction(canvas, type){
       const ctx = canvas.getContext('2d');
-      const w = canvas.width;
-      const h = canvas.height;
-
-      // Simple grid
+      const w = canvas.width, h = canvas.height;
       ctx.clearRect(0,0,w,h);
-      ctx.strokeStyle = '#f0f0f0';
-      ctx.lineWidth = 1;
-      for (let i = 0; i <= 4; i++) {
-        ctx.beginPath(); ctx.moveTo(i * w/4, 0); ctx.lineTo(i * w/4, h); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(0, i * h/4); ctx.lineTo(w, i * h/4); ctx.stroke();
+      ctx.strokeStyle = '#f0f0f0'; ctx.lineWidth=1;
+      for(let i=0;i<=4;i++){
+        ctx.beginPath(); ctx.moveTo(i*w/4,0); ctx.lineTo(i*w/4,h); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0,i*h/4); ctx.lineTo(w,i*h/4); ctx.stroke();
       }
-      // Axes
-      ctx.strokeStyle = '#ddd'; ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.moveTo(w/2, 0); ctx.lineTo(w/2, h); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
+      ctx.strokeStyle = '#ddd'; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(w/2,0); ctx.lineTo(w/2,h); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0,h/2); ctx.lineTo(w,h/2); ctx.stroke();
 
-      // Draw function
-      ctx.strokeStyle = '#0f766e';
-      ctx.lineWidth = 2;
-
-      if (type === 'ex1' || type === 'inc_up') {
+      ctx.strokeStyle = '#0f766e'; ctx.lineWidth=2;
+      if(type==='ex1'||type==='inc_up'){
         ctx.beginPath();
-        for (let x = -2; x <= 2; x += 0.1) {
-          const y = Math.exp(x) - 1;
-          const px = (x + 2) * w / 4;
-          const py = h - (y + 2) * h / 8;
-          (x === -2 ? ctx.moveTo(px, py) : ctx.lineTo(px, py));
-        }
+        for (let x=-2;x<=2;x+=.1){ const y=Math.exp(x)-1, px=(x+2)*w/4, py=h-(y+2)*h/8; x===-2?ctx.moveTo(px,py):ctx.lineTo(px,py); }
         ctx.stroke();
-      } else if (type === 'ex2' || type === 'dec_down') {
+      } else if(type==='ex2'||type==='dec_down'){
         ctx.beginPath();
-        for (let x = -2; x <= 2; x += 0.1) {
-          const y = -Math.sqrt(x + 2);
-          const px = (x + 2) * w / 4;
-          const py = h/2 - y * h / 4;
-          (x === -2 ? ctx.moveTo(px, py) : ctx.lineTo(px, py));
-        }
+        for (let x=-2;x<=2;x+=.1){ const y=-Math.sqrt(x+2), px=(x+2)*w/4, py=h/2 - y*h/4; x===-2?ctx.moveTo(px,py):ctx.lineTo(px,py); }
         ctx.stroke();
-      } else if (type === 'ex3' || type === 'piecewise_jump') {
+      } else if(type==='ex3'||type==='piecewise_jump'){
+        const xL=w*.1, xM=w*.5, xR=w*.9, yA1=h*.65, yA2=h*.40, yB1=h*.75, yB2=h*.55;
+        ctx.beginPath(); ctx.moveTo(xL,yA1); ctx.lineTo(xM,yA2); ctx.stroke();
+        ctx.beginPath(); ctx.arc(xM,yA2,4,0,2*Math.PI); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#0f766e'; ctx.stroke();
+        ctx.beginPath(); ctx.arc(xM,yB1,4,0,2*Math.PI); ctx.fillStyle='#0f766e'; ctx.fill();
+        ctx.strokeStyle='#0f766e'; ctx.beginPath(); ctx.moveTo(xM,yB1); ctx.lineTo(xR,yB2); ctx.stroke();
+      } else if(type==='ex4'||type==='s_curve'){
         ctx.beginPath();
-        ctx.moveTo(w * 0.1, h * 0.6);
-        ctx.lineTo(w * 0.45, h * 0.4);
+        for (let x=-2;x<=2;x+=.1){ const y=x*x*x, px=(x+2)*w/4, py=h/2 - y*h/16; x===-2?ctx.moveTo(px,py):ctx.lineTo(px,py); }
         ctx.stroke();
-
-        ctx.beginPath(); // open circle
-        ctx.arc(w * 0.45, h * 0.4, 4, 0, 2 * Math.PI);
-        ctx.fillStyle = 'white'; ctx.fill(); ctx.stroke();
-
-        ctx.beginPath(); // filled circle
-        ctx.arc(w * 0.55, h * 0.7, 4, 0, 2 * Math.PI);
-        ctx.fillStyle = '#0f766e'; ctx.fill();
-
+      } else if(type==='ex5'||type==='u_valley'){
         ctx.beginPath();
-        ctx.moveTo(w * 0.55, h * 0.7);
-        ctx.lineTo(w * 0.9, h * 0.5);
+        for (let x=-2;x<=2;x+=.1){ const y=x*x, px=(x+2)*w/4, py=h-(y+1)*h/6; x===-2?ctx.moveTo(px,py):ctx.lineTo(px,py); }
         ctx.stroke();
-      } else if (type === 'ex4' || type === 's_curve') {
+      } else if(type==='ex6'||type==='approach_line'){
         ctx.beginPath();
-        for (let x = -2; x <= 2; x += 0.1) {
-          const y = x * x * x;
-          const px = (x + 2) * w / 4;
-          const py = h/2 - y * h / 16;
-          (x === -2 ? ctx.moveTo(px, py) : ctx.lineTo(px, py));
-        }
+        for (let x=0;x<=4;x+=.1){ const y=2-2*Math.exp(-x), px=x*w/4, py=h - y*h/3; x===0?ctx.moveTo(px,py):ctx.lineTo(px,py); }
         ctx.stroke();
-      } else if (type === 'ex5' || type === 'u_valley') {
-        ctx.beginPath();
-        for (let x = -2; x <= 2; x += 0.1) {
-          const y = x * x;
-          const px = (x + 2) * w / 4;
-          const py = h - (y + 1) * h / 6;
-          (x === -2 ? ctx.moveTo(px, py) : ctx.lineTo(px, py));
-        }
-        ctx.stroke();
-      } else if (type === 'ex6' || type === 'approach_line') {
-        ctx.beginPath();
-        for (let x = 0; x <= 4; x += 0.1) {
-          const y = 2 - 2 * Math.exp(-x);
-          const px = x * w / 4;
-          const py = h - y * h / 3;
-          (x === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py));
-        }
-        ctx.stroke();
-
-        ctx.strokeStyle = '#f59e0b';
-        ctx.setLineDash([5, 5]);
-        ctx.beginPath();
-        ctx.moveTo(0, h/3);
-        ctx.lineTo(w, h/3);
-        ctx.stroke();
-        ctx.setLineDash([]);
+        ctx.strokeStyle='#f59e0b'; ctx.setLineDash([5,5]);
+        ctx.beginPath(); ctx.moveTo(0,h/3); ctx.lineTo(w,h/3); ctx.stroke(); ctx.setLineDash([]);
       }
     }
-
-    function drawExamples(){
-      ['ex1','ex2','ex3','ex4','ex5','ex6'].forEach(id=>{
-        const canvas=document.getElementById(id);
-        if(canvas){
-          canvas.width = canvas.offsetWidth;
-          canvas.height = canvas.offsetHeight;
-          drawExampleFunction(canvas, id);
-        }
-      });
-    }
-
-    /* ============================
-       TAB framework
-    ============================ */
-    function setupTabs(){
-      document.querySelectorAll('.tab-btn').forEach(btn=>{
-        btn.addEventListener('click', ()=> showTab(btn.dataset.tab));
-      });
-    }
+    function drawExamples(){['ex1','ex2','ex3','ex4','ex5','ex6'].forEach(id=>{const c=document.getElementById(id);if(c){c.width=c.offsetWidth;c.height=c.offsetHeight;drawExampleFunction(c,id);}});}
+    function setupTabs(){document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>showTab(btn.dataset.tab)));}
     function showTab(tab){
       document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
       document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
       document.getElementById(tab).classList.add('active');
-
-      if (tab === 'intro') {
-        setTimeout(drawExamples, 50);
-      } else if (tab === 'describe') {
-        setTimeout(()=>{ setupDescribeCanvas(); if(!currentAIProblem) newAIProblem(); else drawAIProblem(); }, 50);
-      } else if (tab === 'builder') {
-        setTimeout(()=>{ setupCanvas(); redraw(); }, 50);
-      }
+      if(tab==='intro'){setTimeout(drawExamples,50);}
+      else if(tab==='describe'){setTimeout(()=>{setupDescribeCanvas(); if(!currentAIProblem) newAIProblem(); else drawAIProblem();},50);}
+      else if(tab==='builder'){setTimeout(()=>{setupCanvas(); redraw(); refreshSegmentSelect(); preloadSegmentSettings(); updateAsymUIForSeg();},50);}
     }
+    window.addEventListener('DOMContentLoaded',()=>{setupTabs();setupCanvas();setupDescribeCanvas();drawExamples();});
 
-    // Initialize
-    window.addEventListener('DOMContentLoaded', () => {
-      setupTabs();
-      setupCanvas();
-      setupDescribeCanvas();
-      drawExamples();
-    });
-
-    /* ============================
-       DESCRIBE TAB (AI draws; user describes)
-    ============================ */
-    // Problem types and ground-truth tags for checking
-    const aiTypes = [
-      { key: 'inc_up',         tags: ['increasing','curving_up'] },
-      { key: 'dec_down',       tags: ['decreasing','curving_down'] },
-      { key: 'piecewise_jump', tags: ['piecewise','jump'] },
-      { key: 's_curve',        tags: ['increasing','s_shape'] },
-      { key: 'u_valley',       tags: ['u_minimum','curving_up'] },
-      { key: 'approach_line',  tags: ['increasing','approaches_line'] },
+    /* ========= DESCRIBE TAB ========= */
+    const aiTypes=[
+      {key:'inc_up',tags:['increasing','curving_up']},
+      {key:'dec_down',tags:['decreasing','curving_down']},
+      {key:'piecewise_jump',tags:['piecewise','jump']},
+      {key:'s_curve',tags:['increasing','s_shape']},
+      {key:'u_valley',tags:['u_minimum','curving_up']},
+      {key:'approach_line',tags:['increasing','approaches_line']}
     ];
-
-    let currentAIProblem = null;
-
-    function setupDescribeCanvas(){
-      const canvas = document.getElementById('ai-canvas');
-      if(!canvas) return;
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    }
-
-    function newAIProblem(){
-      const pick = aiTypes[Math.floor(Math.random()*aiTypes.length)];
-      currentAIProblem = { key: pick.key, tags: new Set(pick.tags) };
-      drawAIProblem();
-      // Clear user selections & feedback
-      document.querySelectorAll('#behaviour-grid input[type="checkbox"]').forEach(cb => cb.checked = false);
-      const fb = document.getElementById('ai-feedback');
-      fb.className = 'feedback';
-      fb.innerHTML = '';
-    }
-
-    function drawAIProblem(){
-      const canvas = document.getElementById('ai-canvas');
-      if(!canvas || !currentAIProblem) return;
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      drawExampleFunction(canvas, currentAIProblem.key);
-    }
-
+    let currentAIProblem=null;
+    function setupDescribeCanvas(){const c=document.getElementById('ai-canvas');if(!c)return;c.width=c.offsetWidth;c.height=c.offsetHeight;}
+    function newAIProblem(){const p=aiTypes[Math.floor(Math.random()*aiTypes.length)];currentAIProblem={key:p.key,tags:new Set(p.tags)};drawAIProblem();document.querySelectorAll('#behaviour-grid input[type="checkbox"]').forEach(cb=>cb.checked=false);const fb=document.getElementById('ai-feedback');fb.className='feedback';fb.innerHTML='';}
+    function drawAIProblem(){const c=document.getElementById('ai-canvas');if(!c||!currentAIProblem)return;c.width=c.offsetWidth;c.height=c.offsetHeight;drawExampleFunction(c,currentAIProblem.key);}
     function checkDescription(){
-      if(!currentAIProblem){
-        newAIProblem();
-        return;
-      }
-      const selected = new Set(
-        Array.from(document.querySelectorAll('#behaviour-grid input[type="checkbox"]:checked'))
-          .map(cb => cb.value)
-      );
-      const truth = currentAIProblem.tags;
-
-      // scoring
-      const correct = Array.from(selected).filter(t => truth.has(t));
-      const missed  = Array.from(truth).filter(t => !selected.has(t));
-      const extras  = Array.from(selected).filter(t => !truth.has(t));
-
-      const fb = document.getElementById('ai-feedback');
-      if (missed.length === 0 && extras.length === 0 && correct.length === truth.size) {
-        fb.className = 'feedback show success';
-        fb.innerHTML = `✅ Perfect! You identified all behaviors.`;
-      } else {
-        fb.className = 'feedback show info';
-        fb.innerHTML = `
-          <div><strong>Result:</strong> ${correct.length}/${truth.size} core behaviors correct.</div>
-          ${correct.length ? `<div>✔️ Correct: ${correct.join(', ')}</div>` : ''}
-          ${missed.length ? `<div>❗Missing: ${missed.join(', ')}</div>` : ''}
-          ${extras.length ? `<div>⚠️ Not needed: ${extras.join(', ')}</div>` : ''}
-        `;
-      }
+      if(!currentAIProblem){newAIProblem();return;}
+      const selected=new Set(Array.from(document.querySelectorAll('#behaviour-grid input[type="checkbox"]:checked')).map(cb=>cb.value));
+      const truth=currentAIProblem.tags;
+      const correct=Array.from(selected).filter(t=>truth.has(t));
+      const missed=Array.from(truth).filter(t=>!selected.has(t));
+      const extras=Array.from(selected).filter(t=>!truth.has(t));
+      const fb=document.getElementById('ai-feedback');
+      if(missed.length===0&&extras.length===0&&correct.length===truth.size){fb.className='feedback show success';fb.innerHTML='✅ Perfect! You identified all behaviors.';}
+      else{fb.className='feedback show info';fb.innerHTML=`<div><strong>Result:</strong> ${correct.length}/${truth.size} core behaviors correct.</div>${correct.length?`<div>✔️ Correct: ${correct.join(', ')}</div>`:''}${missed.length?`<div>❗Missing: ${missed.join(', ')}</div>`:''}${extras.length?`<div>⚠️ Not needed: ${extras.join(', ')}</div>`:''}`;}
     }
 
-    /* ============================
-       BUILDER TAB (user builds)
-       — This is your previously improved Function Builder
-    ============================ */
-    const GRAPH_MIN = -10, GRAPH_MAX = 10; // both axes
-    const POINT_RADIUS_PX = 7;
-    const HIT_RADIUS_PX = 10;
-
-    const state = {
-      points: [],               // {id, x, y, open}
-      selected: new Set(),      // Set<string>
-      segments: [],             // {id, type:'line'|'curve', pointIds:[...], extendLeft, extendRight}
-      draggingId: null,
-      dragMoved: false
-    };
-
-    const uid = () => String(Math.random().toString(36).slice(2)+Date.now().toString(36));
-
-    // Coord transforms
-    function graphToScreenX(x, canvas){ return ( (x - GRAPH_MIN) / (GRAPH_MAX - GRAPH_MIN) ) * canvas.width; }
-    function graphToScreenY(y, canvas){ return ( (GRAPH_MAX - y) / (GRAPH_MAX - GRAPH_MIN) ) * canvas.height; }
-    function screenToGraphX(px, canvas){ return GRAPH_MIN + (px / canvas.width) * (GRAPH_MAX - GRAPH_MIN); }
-    function screenToGraphY(py, canvas){ return GRAPH_MAX - (py / canvas.height) * (GRAPH_MAX - GRAPH_MIN); }
-    function clamp(val, min, max){ return Math.max(min, Math.min(max, val)); }
+    /* ========= BUILDER ========= */
+    const GRAPH_MIN=-10, GRAPH_MAX=10, POINT_RADIUS_PX=7, HIT_RADIUS_PX=10, SEG_HIT_PX=8;
+    const state={points:[],selected:new Set(),segments:[],draggingId:null,dragMoved:false,selectedSegmentId:null};
+    const uid = ()=>String(Math.random().toString(36).slice(2)+Date.now().toString(36));
+    function graphToScreenX(x,c){return ((x-GRAPH_MIN)/(GRAPH_MAX-GRAPH_MIN))*c.width}
+    function graphToScreenY(y,c){return ((GRAPH_MAX-y)/(GRAPH_MAX-GRAPH_MIN))*c.height}
+    function screenToGraphX(px,c){return GRAPH_MIN+(px/c.width)*(GRAPH_MAX-GRAPH_MIN)}
+    function screenToGraphY(py,c){return GRAPH_MAX-(py/c.height)*(GRAPH_MAX-GRAPH_MIN)}
+    function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
 
     function setupCanvas(){
-      const canvas = document.getElementById('main-canvas');
-      if(!canvas) return;
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-
-      canvas.addEventListener('click', handleCanvasClick);
-      canvas.addEventListener('mousedown', handleMouseDown);
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+      const canvas=document.getElementById('main-canvas'); if(!canvas) return;
+      canvas.width=canvas.offsetWidth; canvas.height=canvas.offsetHeight;
+      canvas.addEventListener('click',handleCanvasClick);
+      canvas.addEventListener('mousedown',handleMouseDown);
+      window.addEventListener('mousemove',handleMouseMove);
+      window.addEventListener('mouseup',handleMouseUp);
     }
 
-    function hitTestPoint(canvas, mx, my){
-      for(const p of state.points){
-        const px = graphToScreenX(p.x, canvas);
-        const py = graphToScreenY(p.y, canvas);
-        if(Math.hypot(px-mx, py-my) <= HIT_RADIUS_PX) return p.id;
+    /* ---- hit-testing ---- */
+    function hitTestPoint(canvas,mx,my){for(const p of state.points){const px=graphToScreenX(p.x,canvas), py=graphToScreenY(p.y,canvas); if(Math.hypot(px-mx,py-my)<=HIT_RADIUS_PX) return p.id;} return null;}
+    function ptSegDist(px,py,x1,y1,x2,y2){const vx=x2-x1,vy=y2-y1,wx=px-x1,wy=py-y1,c1=vx*wx+vy*wy;if(c1<=0)return Math.hypot(px-x1,py-y1);const c2=vx*vx+vy*vy;if(c2<=c1)return Math.hypot(px-x2,py-y2);const t=c1/c2, qx=x1+t*vx, qy=y1+t*vy;return Math.hypot(px-qx,py-qy);}
+    function sampleQuadScreen(p0,p1,p2,c,n=60){const pts=[];for(let i=0;i<=n;i++){const t=i/n,s=1-t,gx=s*s*p0.x+2*s*t*p1.x+t*t*p2.x,gy=s*s*p0.y+2*s*t*p1.y+t*t*p2.y;pts.push([graphToScreenX(gx,c),graphToScreenY(gy,c)])}return pts;}
+    function segEndData(seg){
+      if(!seg) return null;
+      const pts=seg.pointIds.map(id=>state.points.find(p=>p.id===id));
+      if(seg.type==='line'&&pts.length===2){const [p1,p2]=pts.sort((a,b)=>a.x-b.x);const m=(p2.y-p1.y)/(p2.x-p1.x||1e-6);return{left:{x:p1.x,y:p1.y,slope:m},right:{x:p2.x,y:p2.y,slope:m}}}
+      if(seg.type==='curve'&&pts.length===3){const [p0,p1,p2]=pts;const d0={dx:(p1.x-p0.x)*2,dy:(p1.y-p0.y)*2};const d1={dx:(p2.x-p1.x)*2,dy:(p2.y-p1.y)*2};const mL=d0.dx===0?Infinity:d0.dy/d0.dx;const mR=d1.dx===0?Infinity:d1.dy/d1.dx;return{left:{x:p0.x,y:p0.y,slope:mL},right:{x:p2.x,y:p2.y,slope:mR}}}
+      return null;
+    }
+    function buildSegmentHitPolylines(seg,c){
+      const polys=[]; const pts=seg.pointIds.map(id=>state.points.find(p=>p.id===id)).filter(Boolean);
+      if(seg.type==='line'&&pts.length===2){
+        const [p1,p2]=pts;
+        const x1=graphToScreenX(p1.x,c), y1=graphToScreenY(p1.y,c);
+        const x2=graphToScreenX(p2.x,c), y2=graphToScreenY(p2.y,c);
+        polys.push([[x1,y1],[x2,y2]]);
+      } else if(seg.type==='curve'&&pts.length===3){
+        const [p0,p1,p2]=pts; polys.push(sampleQuadScreen(p0,p1,p2,c,60));
+      }
+      return polys;
+    }
+    function hitTestSegment(canvas,mx,my){
+      for(let i=state.segments.length-1;i>=0;i--){
+        const seg=state.segments[i], polys=buildSegmentHitPolylines(seg,canvas);
+        for(const poly of polys){for(let j=0;j<poly.length-1;j++){const [x1,y1]=poly[j],[x2,y2]=poly[j+1]; if(ptSegDist(mx,my,x1,y1,x2,y2)<=SEG_HIT_PX) return seg.id;}}
       }
       return null;
     }
 
+    /* ---- canvas interactions ---- */
     function handleCanvasClick(e){
-      const canvas = document.getElementById('main-canvas');
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const hitId = hitTestPoint(canvas, x, y);
+      const c=document.getElementById('main-canvas'), r=c.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top;
+      const hitId=hitTestPoint(c,x,y);
       if(hitId){
-        if(e.altKey || e.metaKey){ // toggle open/closed
-          const p = state.points.find(pt=>pt.id===hitId);
-          if(p){ p.open = !p.open; updatePointsList(); redraw(); }
-        }else{ // toggle selection
-          if(state.selected.has(hitId)) state.selected.delete(hitId);
-          else state.selected.add(hitId);
-          updatePointsList(); redraw();
-        }
+        if(e.altKey||e.metaKey){const p=state.points.find(pt=>pt.id===hitId); if(p){p.open=!p.open; updatePointsList(); redraw();}}
+        else{ if(state.selected.has(hitId)) state.selected.delete(hitId); else state.selected.add(hitId); updatePointsList(); redraw(); }
         return;
       }
-
-      // No hit -> add point
-      const gx = screenToGraphX(x, canvas);
-      const gy = screenToGraphY(y, canvas);
-      addPoint(gx, gy);
+      const hitSegId=hitTestSegment(c,x,y);
+      if(hitSegId){state.selectedSegmentId=hitSegId; updateSegmentsList(); refreshSegmentSelect(); preloadSegmentSettings(); updateAsymUIForSeg(); redraw(); return;}
+      addPoint(screenToGraphX(x,c),screenToGraphY(y,c));
     }
-
     function handleMouseDown(e){
-      const canvas = document.getElementById('main-canvas');
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const hitId = hitTestPoint(canvas, x, y);
-      state.draggingId = hitId;
-      state.dragMoved = false;
+      const c=document.getElementById('main-canvas'), r=c.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top;
+      state.draggingId=hitTestPoint(c,x,y); state.dragMoved=false;
     }
-
     function handleMouseMove(e){
+      const c=document.getElementById('main-canvas'); if(!c) return;
+      if(!state.draggingId){
+        const r=c.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top;
+        const onPoint=!!hitTestPoint(c,x,y), onSeg=!!hitTestSegment(c,x,y);
+        c.style.cursor=(onPoint||onSeg)?'pointer':'crosshair';
+      }
       if(!state.draggingId) return;
-      const canvas = document.getElementById('main-canvas');
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const gxRaw = screenToGraphX(x, canvas);
-      const gyRaw = screenToGraphY(y, canvas);
-      const snap = e.shiftKey ? 0.5 : 0;
-      const gx = snap ? Math.round(gxRaw / snap) * snap : gxRaw;
-      const gy = snap ? Math.round(gyRaw / snap) * snap : gyRaw;
-
-      const p = state.points.find(pt=>pt.id===state.draggingId);
-      if(p){
-        p.x = clamp(gx, GRAPH_MIN, GRAPH_MAX);
-        p.y = clamp(gy, GRAPH_MIN, GRAPH_MAX);
-        state.dragMoved = true;
-        updatePointsList();
-        redraw();
-      }
+      const r=c.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top;
+      const gx=screenToGraphX(x,c), gy=screenToGraphY(y,c);
+      const p=state.points.find(pt=>pt.id===state.draggingId); if(p){p.x=clamp(gx,GRAPH_MIN,GRAPH_MAX); p.y=clamp(gy,GRAPH_MIN,GRAPH_MAX); state.dragMoved=true; updatePointsList(); redraw();}
     }
+    function handleMouseUp(){state.draggingId=null;}
 
-    function handleMouseUp(){
-      state.draggingId = null;
-    }
-
-    // Points CRUD & list
-    function addPoint(x, y){
-      const p = { id: uid(), x, y, open:false };
-      state.points.push(p);
-      updatePointsList();
-      redraw();
-    }
-
+    /* ---- points & segments ---- */
+    function addPoint(x,y){const p={id:uid(),x,y,open:false}; state.points.push(p); updatePointsList(); redraw();}
     function updatePointsList(){
-      const list = document.getElementById('points-list');
-      if(state.points.length===0){
-        list.innerHTML = '<p style="color:#999; text-align:center;">Click canvas to add points</p>';
-        return;
-      }
-      list.innerHTML = state.points.map(p=>{
-        const selected = state.selected.has(p.id);
-        return `
-          <div class="point-row ${selected ? 'selected':''}" data-id="${p.id}">
-            <span class="point-symbol" data-role="toggle-open" title="Toggle open/closed">${p.open ? '○':'●'}</span>
-            <div class="point-coords">
-              (<input type="number" step="0.1" class="coord-input" data-role="x" value="${p.x.toFixed(2)}">,
-               <input type="number" step="0.1" class="coord-input" data-role="y" value="${p.y.toFixed(2)}">)
-            </div>
-            <span class="delete-btn" data-role="delete">×</span>
-          </div>
-        `;
+      const list=document.getElementById('points-list');
+      if(state.points.length===0){list.innerHTML='<p class="muted" style="text-align:center">Click canvas to add points</p>'; return;}
+      list.innerHTML=state.points.map(p=>{
+        const sel=state.selected.has(p.id);
+        return `<div class="point-row ${sel?'selected':''}" data-id="${p.id}">
+          <span class="point-symbol" data-role="toggle-open" title="Toggle open/closed">${p.open?'○':'●'}</span>
+          <div class="point-coords">(<input type="number" step="0.1" class="coord-input" data-role="x" value="${p.x.toFixed(2)}">,
+          <input type="number" step="0.1" class="coord-input" data-role="y" value="${p.y.toFixed(2)}">)</div>
+          <span class="delete-btn" data-role="delete">×</span></div>`;
       }).join('');
-
-      // delegate events
       list.querySelectorAll('.point-row').forEach(row=>{
-        const id = row.getAttribute('data-id');
-
-        row.addEventListener('click', (e)=>{
-          const role = e.target.getAttribute('data-role');
-          if(role) return;
-          if(state.selected.has(id)) state.selected.delete(id);
-          else state.selected.add(id);
-          updatePointsList(); redraw();
-        });
-
-        row.querySelector('[data-role="toggle-open"]').addEventListener('click', (e)=>{
-          e.stopPropagation();
-          const p = state.points.find(pt=>pt.id===id);
-          if(p){ p.open = !p.open; updatePointsList(); redraw(); }
-        });
-
-        row.querySelector('[data-role="delete"]').addEventListener('click', (e)=>{
-          e.stopPropagation();
-          deletePoint(id);
-        });
-
-        row.querySelector('[data-role="x"]').addEventListener('change', (e)=>{
-          const v = parseFloat(e.target.value);
-          const p = state.points.find(pt=>pt.id===id);
-          if(p){
-            p.x = clamp(v, GRAPH_MIN, GRAPH_MAX);
-            updatePointsList(); redraw();
-          }
-        });
-
-        row.querySelector('[data-role="y"]').addEventListener('change', (e)=>{
-          const v = parseFloat(e.target.value);
-          const p = state.points.find(pt=>pt.id===id);
-          if(p){
-            p.y = clamp(v, GRAPH_MIN, GRAPH_MAX);
-            updatePointsList(); redraw();
-          }
-        });
+        const id=row.getAttribute('data-id');
+        row.addEventListener('click',e=>{const role=e.target.getAttribute('data-role'); if(role) return; if(state.selected.has(id)) state.selected.delete(id); else state.selected.add(id); updatePointsList(); redraw();});
+        row.querySelector('[data-role="toggle-open"]').addEventListener('click',e=>{e.stopPropagation();const p=state.points.find(pt=>pt.id===id); if(p){p.open=!p.open; updatePointsList(); redraw();}});
+        row.querySelector('[data-role="delete"]').addEventListener('click',e=>{e.stopPropagation(); deletePoint(id);});
+        row.querySelector('[data-role="x"]').addEventListener('change',e=>{const v=parseFloat(e.target.value); const p=state.points.find(pt=>pt.id===id); if(p){p.x=clamp(v,GRAPH_MIN,GRAPH_MAX); updatePointsList(); redraw();}});
+        row.querySelector('[data-role="y"]').addEventListener('change',e=>{const v=parseFloat(e.target.value); const p=state.points.find(pt=>pt.id===id); if(p){p.y=clamp(v,GRAPH_MIN,GRAPH_MAX); updatePointsList(); redraw();}});
       });
     }
-
     function deletePoint(id){
-      state.points = state.points.filter(p=>p.id!==id);
+      state.points=state.points.filter(p=>p.id!==id);
       state.selected.delete(id);
-      state.segments = state.segments.filter(s=>!s.pointIds.includes(id));
-      updatePointsList();
-      updateSegmentsList();
-      redraw();
+      state.segments=state.segments.filter(s=>!s.pointIds.includes(id));
+      if(state.selectedSegmentId && !state.segments.find(s=>s.id===state.selectedSegmentId)) state.selectedSegmentId=null;
+      updatePointsList(); updateSegmentsList(); refreshSegmentSelect(); preloadSegmentSettings(); updateAsymUIForSeg(); redraw();
     }
-
-    function clearPoints(){
-      state.points = [];
-      state.selected.clear();
-      state.segments = [];
-      updatePointsList();
-      updateSegmentsList();
-      redraw();
-    }
-
-    // Segments
+    function clearPoints(){state.points=[];state.selected.clear();state.segments=[];state.selectedSegmentId=null;updatePointsList();updateSegmentsList();refreshSegmentSelect();preloadSegmentSettings();updateAsymUIForSeg();redraw();}
     function makeLine(){
-      const ids = Array.from(state.selected);
-      if(ids.length !== 2){ alert('Please select exactly 2 points for a line.'); return; }
-      const pts = ids.map(id=>state.points.find(p=>p.id===id)).filter(Boolean).sort((a,b)=>a.x-b.x);
-      const extendLeft = document.getElementById('extend-left').checked;
-      const extendRight = document.getElementById('extend-right').checked;
-      state.segments.push({ id: uid(), type:'line', pointIds:[pts[0].id, pts[1].id], extendLeft, extendRight });
-      state.selected.clear();
-      updatePointsList();
-      updateSegmentsList();
-      redraw();
+      const ids=[...state.selected]; if(ids.length!==2){alert('Please select exactly 2 points for a line.');return;}
+      const pts=ids.map(id=>state.points.find(p=>p.id===id)).sort((a,b)=>a.x-b.x);
+      state.segments.push({id:uid(),type:'line',pointIds:[pts[0].id,pts[1].id],asym:{type:'none'}});
+      state.selected.clear(); updatePointsList(); updateSegmentsList(); refreshSegmentSelect(); preloadSegmentSettings(); updateAsymUIForSeg(); redraw();
     }
-
     function makeCurve(){
-      const ids = Array.from(state.selected);
-      if(ids.length !== 3){ alert('Please select exactly 3 points for a curve.'); return; }
-      const pts = ids.map(id=>state.points.find(p=>p.id===id)).filter(Boolean).sort((a,b)=>a.x-b.x);
-      const mid = pts[1]; if(mid) mid.open = true;
-      const extendLeft = document.getElementById('extend-left').checked;
-      const extendRight = document.getElementById('extend-right').checked;
-      state.segments.push({ id: uid(), type:'curve', pointIds:[pts[0].id, pts[1].id, pts[2].id], extendLeft, extendRight });
-      state.selected.clear();
-      updatePointsList();
-      updateSegmentsList();
-      redraw();
+      const ids=[...state.selected]; if(ids.length!==3){alert('Please select exactly 3 points for a curve.');return;}
+      const pts=ids.map(id=>state.points.find(p=>p.id===id)).sort((a,b)=>a.x-b.x);
+      pts[1].open=true;
+      state.segments.push({id:uid(),type:'curve',pointIds:[pts[0].id,pts[1].id,pts[2].id],asym:{type:'none'}});
+      state.selected.clear(); updatePointsList(); updateSegmentsList(); refreshSegmentSelect(); preloadSegmentSettings(); updateAsymUIForSeg(); redraw();
     }
-
-    function clearSegments(){
-      state.segments = [];
-      updateSegmentsList();
-      redraw();
-    }
-
+    function clearSegments(){state.segments=[];state.selectedSegmentId=null;updateSegmentsList();refreshSegmentSelect();preloadSegmentSettings();updateAsymUIForSeg();redraw();}
     function updateSegmentsList(){
-      const list = document.getElementById('segments-list');
-      if(state.segments.length===0){
-        list.innerHTML = '<p style="color:#999; text-align:center;">No segments yet</p>';
-        return;
-      }
-      list.innerHTML = state.segments.map((s,i)=>`
-        <div class="segment-item" data-id="${s.id}">
+      const list=document.getElementById('segments-list');
+      if(state.segments.length===0){list.innerHTML='<p class="muted" style="text-align:center">No segments yet</p>';return;}
+      list.innerHTML=state.segments.map((s,i)=>`
+        <div class="segment-item" data-id="${s.id}" style="display:flex;justify-content:space-between;align-items:center;padding:.5rem;margin-bottom:.3rem;background:#fff;border-left:3px solid ${state.selectedSegmentId===s.id?'#f59e0b':'var(--primary)'};border-radius:4px;">
           <span>Segment ${i+1}: ${s.type} (${s.pointIds.length} pts)</span>
           <span class="delete-btn" data-role="delete-seg">×</span>
-        </div>
-      `).join('');
+        </div>`).join('');
       list.querySelectorAll('.segment-item').forEach(row=>{
-        const id = row.getAttribute('data-id');
-        row.querySelector('[data-role="delete-seg"]').addEventListener('click', ()=>{
-          state.segments = state.segments.filter(seg=>seg.id!==id);
-          updateSegmentsList(); redraw();
+        const id=row.getAttribute('data-id');
+        row.addEventListener('click',e=>{
+          if(e.target.getAttribute('data-role')==='delete-seg'){state.segments=state.segments.filter(seg=>seg.id!==id); if(state.selectedSegmentId===id) state.selectedSegmentId=null; updateSegmentsList(); refreshSegmentSelect(); preloadSegmentSettings(); updateAsymUIForSeg(); redraw(); return;}
+          state.selectedSegmentId=id; updateSegmentsList(); refreshSegmentSelect(); preloadSegmentSettings(); updateAsymUIForSeg(); redraw();
         });
       });
     }
+    function refreshSegmentSelect(){const sel=document.getElementById('segment-select'); if(!sel) return; sel.innerHTML=state.segments.map((s,i)=>`<option value="${s.id}" ${state.selectedSegmentId===s.id?'selected':''}>Segment ${i+1} (${s.type})</option>`).join('');}
 
+    /* ---- Segment settings (asymptote only) ---- */
+    const asymTypeEl=document.getElementById('asym-type');
+    const asymYcWrap=document.getElementById('asym-yc'), asymXcWrap=document.getElementById('asym-xc'), asymMBWrap=document.getElementById('asym-mb');
+    const asymCEl=document.getElementById('asym-c'), asymXEl=document.getElementById('asym-x'), asymMEl=document.getElementById('asym-m'), asymBEl=document.getElementById('asym-b');
+    const segWarn=document.getElementById('seg-warn');
+    document.getElementById('asym-type').addEventListener('change',handleAsymUI);
+    document.getElementById('segment-select').addEventListener('change',e=>{state.selectedSegmentId=e.target.value||null; updateSegmentsList(); preloadSegmentSettings(); updateAsymUIForSeg(); redraw();});
+
+    function handleAsymUI(){
+      const t=asymTypeEl.value;
+      asymYcWrap.style.display=(t==='y')?'inline-flex':'none';
+      asymXcWrap.style.display=(t==='x')?'inline-flex':'none';
+      asymMBWrap.style.display=(t==='oblique')?'inline-flex':'none';
+    }
+    function preloadSegmentSettings(){
+      const seg=currentSeg();
+      if(!seg){asymTypeEl.value='none'; [asymMEl,asymBEl,asymCEl,asymXEl].forEach(el=>el.value=''); handleAsymUI(); return;}
+      const a=seg.asym||{type:'none'};
+      asymTypeEl.value=a.type||'none';
+      asymMEl.value=(a.m ?? ''); asymBEl.value=(a.b ?? ''); asymCEl.value=(a.c ?? ''); asymXEl.value=(a.c ?? '');
+      handleAsymUI();
+    }
+    function currentSeg(){return state.segments.find(s=>s.id===state.selectedSegmentId)||null;}
+    function showSegWarn(msg,kind='info'){if(!msg){segWarn.className='feedback';segWarn.style.display='none';segWarn.innerHTML='';return;} segWarn.className=`feedback show ${kind==='error'?'error':'info'}`; segWarn.style.display='block'; segWarn.innerHTML=msg;}
+    function updateAsymUIForSeg(){
+      const seg=currentSeg(); handleAsymUI();
+      if(!seg){asymTypeEl.disabled=true; [asymCEl,asymXEl,asymMEl,asymBEl].forEach(el=>el.disabled=true); showSegWarn('Select a segment to add an asymptote.','info'); return;}
+      if(seg.type==='line'){
+        asymTypeEl.value='none'; asymTypeEl.disabled=true; [asymCEl,asymXEl,asymMEl,asymBEl].forEach(el=>el.disabled=true);
+        showSegWarn('This segment is a straight line. Asymptotes are disabled to preserve its behavior.','info'); return;
+      }
+      asymTypeEl.disabled=false; [asymCEl,asymXEl,asymMEl,asymBEl].forEach(el=>el.disabled=false);
+      showSegWarn('Asymptote will be shown as a dashed line. Stretch your segment(s) to approach it.','info');
+    }
+
+    function applySegmentSettings(){
+      const seg=currentSeg(); if(!seg){alert('Select a segment first.');return;}
+      const type=asymTypeEl.value;
+      if(type==='none'){seg.asym={type:'none'}; updateSegmentsList(); redraw(); showSegWarn('Asymptote cleared.','info'); return;}
+      if(seg.type==='line'){seg.asym={type:'none'}; updateSegmentsList(); redraw(); showSegWarn('Asymptotes are disabled for straight lines.','info'); return;}
+
+      if(type==='y'){
+        const c=parseFloat(asymCEl.value); if(Number.isNaN(c)){showSegWarn('Please provide a numeric value for y = c.','error');return;}
+        seg.asym={type:'y',c}; showSegWarn('Horizontal asymptote set: y = '+c+'.','info');
+      } else if(type==='x'){
+        const c=parseFloat(asymXEl.value); if(Number.isNaN(c)){showSegWarn('Please provide a numeric value for x = c.','error');return;}
+        seg.asym={type:'x',c}; showSegWarn('Vertical asymptote set: x = '+c+'.','info');
+      } else if(type==='oblique'){
+        const m=parseFloat(asymMEl.value), b=parseFloat(asymBEl.value);
+        if(Number.isNaN(m)||Number.isNaN(b)){showSegWarn('Please provide numeric values for m and b.','error');return;}
+        seg.asym={type:'oblique',m,b}; showSegWarn(`Oblique asymptote set: y = ${m}x + ${b}.`,'info');
+      }
+      updateSegmentsList(); redraw();
+    }
+
+    /* ---- Drawing ---- */
     function redraw(){
-      const canvas = document.getElementById('main-canvas');
-      if(!canvas) return;
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      drawGrid(ctx, canvas);
-      drawSegments(ctx, canvas);
-      drawPoints(ctx, canvas);
+      const c=document.getElementById('main-canvas'); if(!c) return;
+      const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+      drawGrid(ctx,c); drawSegments(ctx,c); drawPoints(ctx,c);
     }
-
-    function drawGrid(ctx, canvas){
-      const w=canvas.width, h=canvas.height;
-
-      // light grid
-      ctx.strokeStyle = '#e0e0e0';
-      ctx.lineWidth = 1;
-      for(let i=0;i<=20;i++){
-        ctx.beginPath(); ctx.moveTo(i*w/20,0); ctx.lineTo(i*w/20,h); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(0,i*h/20); ctx.lineTo(w,i*h/20); ctx.stroke();
+    function drawGrid(ctx,c){
+      const w=c.width,h=c.height;
+      ctx.strokeStyle='#e0e0e0'; ctx.lineWidth=1;
+      for(let i=0;i<=20;i++){ctx.beginPath();ctx.moveTo(i*w/20,0);ctx.lineTo(i*w/20,h);ctx.stroke(); ctx.beginPath();ctx.moveTo(0,i*h/20);ctx.lineTo(w,i*h/20);ctx.stroke();}
+      ctx.strokeStyle='#666'; ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(w/2,0);ctx.lineTo(w/2,h);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(0,h/2);ctx.lineTo(w,h/2);ctx.stroke();
+      ctx.fillStyle='#666'; ctx.font='11px Arial'; ctx.textAlign='center'; ctx.textBaseline='top';
+      for(let i=-10;i<=10;i+=5){if(i!==0) ctx.fillText(i,graphToScreenX(i,c),h/2+5);}
+    }
+    function drawAsymptote(ctx,c,asym){
+      if(!asym||asym.type==='none') return;
+      ctx.save(); ctx.setLineDash([6,4]); ctx.strokeStyle='#f59e0b'; ctx.lineWidth=1.5;
+      if(asym.type==='y'){const y=graphToScreenY(asym.c,c); ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(c.width,y); ctx.stroke();}
+      else if(asym.type==='x'){const x=graphToScreenX(asym.c,c); ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,c.height); ctx.stroke();}
+      else if(asym.type==='oblique'){
+        const x1=GRAPH_MIN,x2=GRAPH_MAX,y1=asym.m*x1+asym.b,y2=asym.m*x2+asym.b;
+        ctx.beginPath(); ctx.moveTo(graphToScreenX(x1,c),graphToScreenY(y1,c)); ctx.lineTo(graphToScreenX(x2,c),graphToScreenY(y2,c)); ctx.stroke();
       }
-      // axes
-      ctx.strokeStyle = '#666'; ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(w/2,0); ctx.lineTo(w/2,h); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0,h/2); ctx.lineTo(w,h/2); ctx.stroke();
-
-      // labels
-      ctx.fillStyle = '#666';
-      ctx.font = '11px Arial';
-      ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-      for(let i=-10;i<=10;i+=5){ if(i!==0) ctx.fillText(i, graphToScreenX(i, canvas), h/2 + 5); }
+      ctx.restore();
     }
-
-    function drawSegments(ctx, canvas){
-      ctx.strokeStyle = '#0f766e';
-      ctx.lineWidth = 3;
-
+    function drawSegments(ctx,c){
+      for(const seg of state.segments){drawAsymptote(ctx,c,seg.asym);}
       for(const seg of state.segments){
-        const pts = seg.pointIds.map(id=>state.points.find(p=>p.id===id)).filter(Boolean);
-        if(seg.type==='line' && pts.length===2){
-          const [p1,p2] = pts;
-          const x1 = graphToScreenX(p1.x, canvas), y1 = graphToScreenY(p1.y, canvas);
-          const x2 = graphToScreenX(p2.x, canvas), y2 = graphToScreenY(p2.y, canvas);
+        const pts=seg.pointIds.map(id=>state.points.find(p=>p.id===id)).filter(Boolean);
+        const highlight=state.selectedSegmentId===seg.id;
+        ctx.strokeStyle = highlight ? '#ef4444' : '#0f766e';
+        ctx.lineWidth   = highlight ? 4 : 3;
 
-          let sx1 = x1, sy1 = y1, sx2 = x2, sy2 = y2;
-          if(Math.abs(x2-x1) > 0.0001){
-            const m = (y2-y1)/(x2-x1);
-            if(seg.extendLeft){ const yAtLeft = y1 - m*x1; sx1 = 0; sy1 = yAtLeft; }
-            if(seg.extendRight){ const yAtRight = y2 + m*(canvas.width - x2); sx2 = canvas.width; sy2 = yAtRight; }
-          }
-
-          ctx.beginPath(); ctx.moveTo(sx1, sy1); ctx.lineTo(sx2, sy2); ctx.stroke();
+        if(seg.type==='line'&&pts.length===2){
+          const [p1,p2]=pts;
+          const x1=graphToScreenX(p1.x,c), y1=graphToScreenY(p1.y,c);
+          const x2=graphToScreenX(p2.x,c), y2=graphToScreenY(p2.y,c);
+          ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
         }
-        else if(seg.type==='curve' && pts.length===3){
-          const [p1,p2,p3] = pts;
-          const x1 = graphToScreenX(p1.x, canvas), y1 = graphToScreenY(p1.y, canvas);
-          const cx = graphToScreenX(p2.x, canvas), cy = graphToScreenY(p2.y, canvas);
-          const x3 = graphToScreenX(p3.x, canvas), y3 = graphToScreenY(p3.y, canvas);
-          ctx.beginPath(); ctx.moveTo(x1, y1); ctx.quadraticCurveTo(cx, cy, x3, y3); ctx.stroke();
+        else if(seg.type==='curve'&&pts.length===3){
+          const [p0,p1,p2]=pts;
+          const x0=graphToScreenX(p0.x,c), y0=graphToScreenY(p0.y,c);
+          const cx=graphToScreenX(p1.x,c), cy=graphToScreenY(p1.y,c);
+          const x2=graphToScreenX(p2.x,c), y2=graphToScreenY(p2.y,c);
+          ctx.beginPath(); ctx.moveTo(x0,y0); ctx.quadraticCurveTo(cx,cy,x2,y2); ctx.stroke();
         }
       }
     }
-
-    function drawPoints(ctx, canvas){
+    function drawPoints(ctx,c){
       for(const p of state.points){
-        const x = graphToScreenX(p.x, canvas);
-        const y = graphToScreenY(p.y, canvas);
-        const selected = state.selected.has(p.id);
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = selected ? '#f59e0b' : '#0f766e';
-        ctx.fillStyle = p.open ? 'white' : (selected ? '#f59e0b' : '#0f766e');
-
-        ctx.beginPath();
-        ctx.arc(x, y, POINT_RADIUS_PX, 0, 2*Math.PI);
-        ctx.fill();
-        ctx.stroke();
+        const x=graphToScreenX(p.x,c), y=graphToScreenY(p.y,c), sel=state.selected.has(p.id);
+        ctx.lineWidth=2; ctx.strokeStyle=sel?'#f59e0b':'#0f766e'; ctx.fillStyle=p.open?'#fff':(sel?'#f59e0b':'#0f766e');
+        ctx.beginPath(); ctx.arc(x,y,POINT_RADIUS_PX,0,2*Math.PI); ctx.fill(); ctx.stroke();
       }
     }
 
-    // Challenges (builder)
-    function checkAnswer(){
-      const feedback = document.getElementById('feedback');
-      if(state.segments.length===0){
-        feedback.className='feedback show error';
-        feedback.innerHTML='Please build a function first!';
-        return;
-      }
-      feedback.className='feedback show info';
-      feedback.innerHTML='Checking your function...';
-      setTimeout(()=>{
-        feedback.className='feedback show success';
-        const hasCurve = state.segments.some(s=>s.type==='curve');
-        feedback.innerHTML = `Great work! You built ${state.segments.length} segment(s). ${hasCurve ? 'Nice use of curves!' : 'Consider adding a curve for smoother transitions.'}`;
-      }, 500);
-    }
-    function getHint(){
-      const feedback=document.getElementById('feedback');
-      feedback.className='feedback show info';
-      feedback.innerHTML='💡 Use 2 selected points for a line and 3 for a curve. Drag points to fine-tune. Alt/Option-click toggles open/closed.';
-    }
-    let currentChallenge=0;
+    /* ========= Challenge (behavioral check) ========= */
     const challenges=[
       "Build a function that increases and curves upward on the left side, has a jump discontinuity in the middle, then decreases and curves downward on the right side.",
       "Create a U-shaped function that has its lowest point around x = 0.",
@@ -836,20 +580,68 @@
       "Build an S-shaped function that starts curving down but changes to curving up.",
       "Create a piecewise function with at least two jumps and three different segments."
     ];
-    function newChallenge(){
-      currentChallenge=(currentChallenge+1)%challenges.length;
-      document.getElementById('challenge-desc').textContent=challenges[currentChallenge];
-      document.getElementById('feedback').classList.remove('show');
-      document.getElementById('user-notes').value='';
-    }
+    let currentChallenge=0;
+    function newChallenge(){currentChallenge=(currentChallenge+1)%challenges.length; document.getElementById('challenge-desc').textContent=challenges[currentChallenge]; document.getElementById('feedback').classList.remove('show'); document.getElementById('user-notes').value='';}
+    function getHint(){const fb=document.getElementById('feedback'); fb.className='feedback show info'; fb.innerHTML='💡 Use 2 points for a line, 3 for a curve. Drag to adjust. Alt/Option-click toggles open/closed. Add an asymptote and stretch your pieces toward it.';}
 
-    // Resize: keep everything crisp
-    window.addEventListener('resize', ()=>{
-      setupCanvas(); redraw();
-      setupDescribeCanvas(); drawAIProblem();
-      drawExamples();
-    });
+    function checkAnswer(){
+      const fb=document.getElementById('feedback');
+      if(state.segments.length===0){fb.className='feedback show error'; fb.innerHTML='Please build a function first!'; return;}
+      const report=evaluateBuild(); const req=requirementsForChallenge(currentChallenge);
+      const misses=[]; for(const k of Object.keys(req)){ if(req[k] && !report[k]) misses.push(k); }
+      if(misses.length===0){fb.className='feedback show success'; fb.innerHTML='✅ Correct! Your construction matches the requested behavior.';}
+      else{fb.className='feedback show error'; fb.innerHTML=`❗Not quite. Missing/incorrect: ${misses.join(', ')}<br><span class="muted">Detected — left: ${report.leftTrend}, concavity: ${report.leftConcavity}; right: ${report.rightTrend}, concavity: ${report.rightConcavity}; jump: ${report.hasJump?'yes':'no'}; segments: ${report.segmentCount}</span>`;}
+    }
+    function requirementsForChallenge(i){
+      switch(i){
+        case 0: return {incLeft:true,cuLeft:true,hasJump:true,decRight:true,cdRight:true};
+        case 1: return {uShape:true};
+        case 2: return {constLeft:true,hasJump:true,lineUpRight:true};
+        case 3: return {sShape:true};
+        case 4: return {piecewise3:true};
+        default: return {};
+      }
+    }
+    function evaluateBuild(){
+      let samples=[];
+      for(const seg of state.segments){
+        const pts=seg.pointIds.map(id=>state.points.find(p=>p.id===id));
+        if(seg.type==='line'&&pts.length===2) samples=samples.concat(sampleLine(pts[0],pts[1],30));
+        else if(seg.type==='curve'&&pts.length===3) samples=samples.concat(sampleQuad(pts[0],pts[1],pts[2],60));
+      }
+      samples.sort((a,b)=>a.x-b.x);
+      const left=samples.filter(p=>p.x<0), right=samples.filter(p=>p.x>0);
+      const useLeft=left.length?left:samples.slice(0,Math.floor(samples.length/2));
+      const useRight=right.length?right:samples.slice(Math.floor(samples.length/2));
+      const leftTrend=trend(useLeft), rightTrend=trend(useRight);
+      const leftConcavity=concavity(useLeft), rightConcavity=concavity(useRight);
+      const hasJump=detectJump(); const uShape=detectUShape(samples);
+      const constLeft=isFlat(useLeft), lineUpRight=isLineUp(useRight);
+      const sShape=(leftConcavity==='down'&&rightConcavity==='up'&&(leftTrend==='inc'||rightTrend==='inc'));
+      return {leftTrend,rightTrend,leftConcavity,rightConcavity,hasJump,uShape,constLeft,lineUpRight,sShape,piecewise3:state.segments.length>=3,incLeft:leftTrend==='inc',decRight:rightTrend==='dec',cuLeft:leftConcavity==='up',cdRight:rightConcavity==='down',segmentCount:state.segments.length};
+    }
+    function sampleLine(p1,p2,n){const res=[];for(let i=0;i<=n;i++){const t=i/n;res.push({x:p1.x+(p2.x-p1.x)*t,y:p1.y+(p2.y-p1.y)*t});}return res;}
+    function sampleQuad(p0,p1,p2,n){const res=[];for(let i=0;i<=n;i++){const t=i/n,s=1-t,x=s*s*p0.x+2*s*t*p1.x+t*t*p2.x,y=s*s*p0.y+2*s*t*p1.y+t*t*p2.y;res.push({x,y});}return res;}
+    function trend(arr){if(arr.length<3)return'flat';let pos=0,neg=0;for(let i=1;i<arr.length;i++){const dx=arr[i].x-arr[i-1].x,dy=arr[i].y-arr[i-1].y;if(dx===0)continue;const s=dy/dx; if(s>0.02)pos++; else if(s<-0.02)neg++;} if(pos>2*neg)return'inc'; if(neg>2*pos)return'dec'; return'flat';}
+    function concavity(arr){if(arr.length<5)return'flat';let up=0,down=0;for(let i=2;i<arr.length;i++){const dx1=arr[i-1].x-arr[i-2].x,dx2=arr[i].x-arr[i-1].x;if(dx1===0||dx2===0)continue;const s1=(arr[i-1].y-arr[i-2].y)/dx1,s2=(arr[i].y-arr[i-1].y)/dx2,d=s2-s1;if(d>0.02)up++; else if(d<-0.02)down++;} if(up>2*down)return'up'; if(down>2*up)return'down'; return'flat';}
+    function detectJump(){
+      const epsX=.05, epsY=.3, endpoints=[];
+      for(const seg of state.segments){
+        const pts=seg.pointIds.map(id=>state.points.find(p=>p.id===id));
+        if(seg.type==='line'&&pts.length===2){endpoints.push({x:pts[0].x,y:pts[0].y}); endpoints.push({x:pts[1].x,y:pts[1].y});}
+        else if(seg.type==='curve'&&pts.length===3){endpoints.push({x:pts[0].x,y:pts[0].y}); endpoints.push({x:pts[2].x,y:pts[2].y});}
+      }
+      for(let i=0;i<endpoints.length;i++)for(let j=i+1;j<endpoints.length;j++)
+        if(Math.abs(endpoints[i].x-endpoints[j].x)<epsX && Math.abs(endpoints[i].y-endpoints[j].y)>epsY) return true;
+      return false;
+    }
+    function detectUShape(samples){if(samples.length<5)return false;const minPt=samples.reduce((a,b)=>b.y<a.y?b:a,samples[0]);const nearZero=Math.abs(minPt.x)<2;return nearZero&&(concavity(samples)==='up');}
+    function isFlat(arr){if(arr.length<3)return false;let s=0,c=0;for(let i=1;i<arr.length;i++){const dx=arr[i].x-arr[i-1].x;if(dx===0)continue;const dy=arr[i].y-arr[i-1].y;s+=Math.abs(dy/dx);c++;}return(c>0)&&(s/c<.03);}
+    function isLineUp(arr){if(arr.length<3)return false;const m=(arr[arr.length-1].y-arr[0].y)/(arr[arr.length-1].x-arr[0].x);if(m<.05)return false;const b=arr[0].y-m*arr[0].x;let err=0;for(const p of arr){err+=Math.abs(p.y-(m*p.x+b));}return err/arr.length<1.0;}
+
+    window.addEventListener('resize',()=>{setupCanvas(); redraw(); setupDescribeCanvas(); drawAIProblem(); drawExamples();});
   </script>
 </body>
 </html>
+
 
