@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Function Behavior Builder | Mathswell</title>
   <link rel="icon" href="/logo-mathswell-square-mirror.ico" type="image/x-icon">
   <link rel="icon" href="/logo-mathswell-square-mirror.svg" type="image/svg+xml">
-
   <style>
     :root {
       --primary: #0f766e;
@@ -17,365 +16,81 @@
       --text-muted: #4b5563;
       --accent-amber: #f59e0b;
       --accent-red: #c62828;
-      --success: #10b981;
       --surface: #ffffff;
       --border: #e0e7e4;
     }
-    
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: var(--background);
-      color: var(--text-primary);
-      line-height: 1.6;
-    }
-    
-    .mathswell-nav {
-      display: flex;
-      justify-content: center;
-      margin: 1rem 0;
-      padding: 0.5rem;
-    }
-    
-    .mw-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      text-decoration: none;
-      font-weight: 700;
-      color: var(--primary);
-      padding: 0.5rem 1rem;
-      border-radius: 999px;
-      background: white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1rem;
-    }
-    
-    .tabs {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 2rem;
-      border-bottom: 2px solid var(--border);
-    }
-    
-    .tab-btn {
-      padding: 0.75rem 1.5rem;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .tab-btn:hover {
-      background: var(--interactive);
-    }
-    
-    .tab-btn.active {
-      color: var(--primary);
-      background: white;
-      border-bottom: 2px solid var(--primary);
-      margin-bottom: -2px;
-    }
-    
-    .tab-content {
-      display: none;
-    }
-    
-    .tab-content.active {
-      display: block;
-    }
-    
-    .hero {
-      background: linear-gradient(135deg, var(--interactive), var(--surface));
-      padding: 2rem;
-      border-radius: 12px;
-      margin-bottom: 2rem;
-    }
-    
-    .hero h1 {
-      color: var(--primary);
-      margin-bottom: 1rem;
-    }
-    
-    .examples-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    
-    .example-card {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    }
-    
-    .example-card h3 {
-      color: var(--primary);
-      margin-bottom: 1rem;
-    }
-    
-    .example-canvas {
-      width: 100%;
-      height: 200px;
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      background: white;
-      margin-bottom: 1rem;
-      display: block;
-    }
-    
-    #main-canvas {
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--background); color: var(--text-primary); line-height: 1.6; }
+    .mathswell-nav { display: flex; justify-content: center; margin: 1rem 0; padding: 0.5rem; }
+    .mw-link { display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; font-weight: 700; color: var(--primary); padding: 0.5rem 1rem; border-radius: 999px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+    .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 2px solid var(--border); }
+    .tab-btn { padding: 0.75rem 1.5rem; background: transparent; border: none; color: var(--text-muted); font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .tab-btn:hover { background: var(--interactive); }
+    .tab-btn.active { color: var(--primary); background: white; border-bottom: 2px solid var(--primary); margin-bottom: -2px; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .hero { background: linear-gradient(135deg, var(--interactive), var(--surface)); padding: 2rem; border-radius: 12px; margin-bottom: 2rem; }
+    .hero h1 { color: var(--primary); margin-bottom: 1rem; }
+
+    .examples-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+    .example-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .example-card h3 { color: var(--primary); margin-bottom: 1rem; }
+    .example-canvas { width: 100%; height: 200px; border: 2px solid var(--border); border-radius: 8px; background: white; margin-bottom: 1rem; display: block; }
+
+    /* Shared canvases */
+    #main-canvas, #ai-canvas {
       width: 100%;
       height: 500px;
       border: 2px solid var(--border);
       border-radius: 8px;
       background: white;
-      cursor: crosshair;
       display: block;
     }
-    
-    .math-info {
-      background: var(--interactive);
-      padding: 1rem;
-      border-radius: 6px;
-      font-size: 0.9rem;
-    }
-    
-    .math-info strong {
-      color: var(--primary);
-      display: block;
-      margin-bottom: 0.3rem;
-    }
-    
-    .canvas-wrapper {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-      margin-bottom: 1.5rem;
-    }
-    
-    .controls-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    
-    .control-panel {
-      background: var(--interactive);
-      padding: 1rem;
-      border-radius: 8px;
-    }
-    
-    .control-panel h3 {
-      color: var(--primary);
-      margin-bottom: 0.75rem;
-      font-size: 1rem;
-    }
-    
-    .btn {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      width: 100%;
-      margin-bottom: 0.5rem;
-    }
-    
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-    
-    .btn-primary:hover {
-      background: var(--primary-light);
-    }
-    
-    .btn-secondary {
-      background: white;
-      color: var(--primary);
-      border: 2px solid var(--primary);
-    }
-    
-    .btn-secondary:hover {
-      background: var(--interactive);
-    }
-    
-    .btn-danger {
-      background: var(--accent-red);
-      color: white;
-    }
-    
-    .btn-small {
-      padding: 0.3rem 0.6rem;
-      font-size: 0.85rem;
-      width: auto;
-    }
-    
-    .points-list {
-      max-height: 200px;
-      overflow-y: auto;
-      background: white;
-      border-radius: 4px;
-      padding: 0.5rem;
-    }
-    
-    .point-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.3rem;
-      margin-bottom: 0.3rem;
-      background: white;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    .point-row:hover {
-      background: #f0f0f0;
-    }
-    
-    .point-row.selected {
-      background: var(--primary);
-      color: white;
-    }
-    
-    .point-coords {
-      display: flex;
-      gap: 0.3rem;
-      align-items: center;
-      flex: 1;
-    }
-    
-    .coord-input {
-      width: 45px;
-      padding: 2px 4px;
-      border: 1px solid #ddd;
-      border-radius: 3px;
-      font-size: 0.85rem;
-      font-family: monospace;
-    }
-    
-    .point-row.selected .coord-input {
-      background: white;
-      color: black;
-    }
-    
-    .point-symbol {
-      font-size: 1.2rem;
-      margin: 0 0.5rem;
-    }
-    
-    .delete-btn {
-      color: var(--accent-red);
-      cursor: pointer;
-      font-weight: bold;
-      padding: 0 0.5rem;
-    }
-    
-    .segments-list {
-      max-height: 200px;
-      overflow-y: auto;
-      background: white;
-      border-radius: 4px;
-      padding: 0.5rem;
-    }
-    
-    .segment-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.5rem;
-      margin-bottom: 0.3rem;
-      background: white;
-      border-left: 3px solid var(--primary);
-      border-radius: 4px;
-    }
-    
-    .challenge-box {
-      background: linear-gradient(135deg, #fff3cd, #ffeaa7);
-      padding: 1.5rem;
-      border-radius: 12px;
-      border: 2px solid var(--accent-amber);
-    }
-    
-    .challenge-box h2 {
-      color: #856404;
-      margin-bottom: 1rem;
-    }
-    
-    .challenge-text {
-      background: white;
-      padding: 1rem;
-      border-radius: 6px;
-      margin-bottom: 1rem;
-    }
-    
-    textarea {
-      width: 100%;
-      padding: 0.75rem;
-      border: 2px solid var(--border);
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 1rem;
-      resize: vertical;
-      min-height: 60px;
-    }
-    
-    .feedback {
-      padding: 1rem;
-      border-radius: 6px;
-      margin-top: 1rem;
-      display: none;
-    }
-    
-    .feedback.show {
-      display: block;
-    }
-    
-    .feedback.success {
-      background: #d4edda;
-      color: #155724;
-    }
-    
-    .feedback.error {
-      background: #f8d7da;
-      color: #721c24;
-    }
-    
-    .feedback.info {
-      background: #cce5ff;
-      color: #004085;
-    }
-    
-    .info-bar {
-      background: var(--interactive);
-      padding: 0.75rem;
-      border-radius: 6px;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-    
-    @media (max-width: 768px) {
-      .controls-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+    #main-canvas { cursor: crosshair; }
+
+    .canvas-wrapper { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
+    .controls-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .control-panel { background: var(--interactive); padding: 1rem; border-radius: 8px; }
+    .control-panel h3 { color: var(--primary); margin-bottom: 0.75rem; font-size: 1rem; }
+    .btn { padding: 0.5rem 1rem; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s; width: 100%; margin-bottom: 0.5rem; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-light); }
+    .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
+    .btn-secondary:hover { background: var(--interactive); }
+    .btn-danger { background: var(--accent-red); color: white; }
+    .btn-small { padding: 0.3rem 0.6rem; font-size: 0.85rem; width: auto; }
+
+    .points-list, .segments-list { max-height: 220px; overflow-y: auto; background: white; border-radius: 4px; padding: 0.5rem; }
+    .point-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.3rem; margin-bottom: 0.3rem; background: white; border-radius: 4px; cursor: pointer; }
+    .point-row:hover { background: #f0f0f0; }
+    .point-row.selected { background: var(--primary); color: white; }
+    .point-coords { display: flex; gap: 0.3rem; align-items: center; flex: 1; }
+    .coord-input { width: 60px; padding: 2px 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 0.85rem; font-family: monospace; }
+    .point-row.selected .coord-input { background: rgba(255,255,255,0.9); color: black; border-color: white; }
+    .point-symbol { font-size: 1.2rem; margin: 0 0.25rem; cursor: pointer; }
+    .delete-btn { color: var(--accent-red); cursor: pointer; font-weight: bold; padding: 0 0.5rem; }
+
+    .challenge-box { background: linear-gradient(135deg, #fff3cd, #ffeaa7); padding: 1.5rem; border-radius: 12px; border: 2px solid var(--accent-amber); }
+    .challenge-box h2 { color: #856404; margin-bottom: 1rem; }
+    .challenge-text { background: white; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; }
+
+    textarea { width: 100%; padding: 0.75rem; border: 2px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 1rem; resize: vertical; min-height: 60px; }
+
+    .feedback { padding: 1rem; border-radius: 6px; margin-top: 1rem; display: none; }
+    .feedback.show { display: block; }
+    .feedback.success { background: #d4edda; color: #155724; }
+    .feedback.error { background: #f8d7da; color: #721c24; }
+    .feedback.info { background: #cce5ff; color: #004085; }
+
+    .info-bar { background: var(--interactive); padding: 0.75rem; border-radius: 6px; margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted); }
+
+    /* Describe tab controls */
+    .behaviour-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem 1rem; }
+    .behaviour-item { display: flex; align-items: center; gap: 0.5rem; background: white; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border); }
+    .behaviour-item input { transform: scale(1.1); }
+    @media (max-width: 768px) { .controls-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -389,14 +104,15 @@
   <div class="container">
     <div class="tabs">
       <button class="tab-btn active" data-tab="intro">Introduction</button>
+      <button class="tab-btn" data-tab="describe">Describe Behavior</button>
       <button class="tab-btn" data-tab="builder">Build & Challenge</button>
     </div>
 
-    <!-- Introduction Tab -->
+    <!-- 1) Introduction Tab -->
     <div id="intro" class="tab-content active">
       <div class="hero">
         <h1>📈 Function Behavior Builder</h1>
-        <p>Learn to analyze and build functions by understanding their behavior: how they increase, decrease, curve, and connect.</p>
+        <p>Learn to analyze and build functions by understanding their behavior: how they increase, decrease, curve, connect, and jump.</p>
       </div>
 
       <div class="examples-grid">
@@ -405,633 +121,237 @@
           <canvas class="example-canvas" id="ex1"></canvas>
           <div class="math-info">
             <strong>Behavior:</strong>
-            • Goes up from left to right<br>
-            • Curves upward (like a smile)<br>
-            • Gets steeper as x increases
+            • Goes up left→right<br/>• Curves upward (concave up)<br/>• Gets steeper
           </div>
         </div>
-
         <div class="example-card">
           <h3>Decreasing & Curving Down</h3>
           <canvas class="example-canvas" id="ex2"></canvas>
           <div class="math-info">
             <strong>Behavior:</strong>
-            • Goes down from left to right<br>
-            • Curves downward (like a frown)<br>
-            • Gets less steep over time
+            • Goes down left→right<br/>• Curves downward (concave down)<br/>• Less steep over time
           </div>
         </div>
-
         <div class="example-card">
           <h3>Piecewise with Jump</h3>
           <canvas class="example-canvas" id="ex3"></canvas>
           <div class="math-info">
             <strong>Behavior:</strong>
-            • Has a break (discontinuity)<br>
-            • Different rules on each side<br>
-            • Open/closed circles matter
+            • Break (discontinuity)<br/>• Open/closed circles matter<br/>• Different rules
           </div>
         </div>
-
         <div class="example-card">
           <h3>S-Shaped (Inflection)</h3>
           <canvas class="example-canvas" id="ex4"></canvas>
           <div class="math-info">
             <strong>Behavior:</strong>
-            • Changes from curving down to up<br>
-            • Has an inflection point<br>
-            • Always increasing
+            • Changes concavity<br/>• Has an inflection point<br/>• Always increasing
           </div>
         </div>
-
         <div class="example-card">
           <h3>U-Shaped Valley</h3>
           <canvas class="example-canvas" id="ex5"></canvas>
           <div class="math-info">
             <strong>Behavior:</strong>
-            • Decreases then increases<br>
-            • Has a minimum point<br>
-            • Curves upward throughout
+            • Decreases then increases<br/>• Has a minimum<br/>• Concave up
           </div>
         </div>
-
         <div class="example-card">
           <h3>Approaching a Line</h3>
           <canvas class="example-canvas" id="ex6"></canvas>
           <div class="math-info">
             <strong>Behavior:</strong>
-            • Gets closer to a horizontal line<br>
-            • Never quite reaches it<br>
-            • Levels off as x increases
+            • Levels off<br/>• Asymptotic to a line<br/>• Never reaches it
           </div>
         </div>
       </div>
 
-      <div style="text-align: center; margin: 2rem 0;">
-        <button class="btn btn-primary" style="width: auto; padding: 1rem 3rem;" onclick="showTab('builder')">
-          Start Building Functions →
-        </button>
+      <div style="text-align:center; margin:2rem 0;">
+        <button class="btn btn-primary" style="width:auto; padding:1rem 3rem;" onclick="showTab('describe')">Practice Describing →</button>
       </div>
     </div>
 
-    <!-- Builder Tab -->
+    <!-- 2) Describe Behavior Tab (NEW) -->
+    <div id="describe" class="tab-content">
+      <div class="canvas-wrapper">
+        <h2 style="color: var(--primary); margin-bottom: 1rem;">Describe the Function</h2>
+        <canvas id="ai-canvas"></canvas>
+        <div class="info-bar">
+          <strong>Instructions:</strong> The AI has drawn a function. Tick every behavior that applies, then click <em>Check Description</em>. Use <em>New Function</em> to get another one.
+        </div>
+      </div>
+
+      <div class="controls-grid">
+        <div class="control-panel">
+          <h3>🧠 Your Description</h3>
+          <div class="behaviour-grid" id="behaviour-grid">
+            <label class="behaviour-item"><input type="checkbox" value="increasing"> Increasing left→right</label>
+            <label class="behaviour-item"><input type="checkbox" value="decreasing"> Decreasing left→right</label>
+            <label class="behaviour-item"><input type="checkbox" value="curving_up"> Curving upward (concave up)</label>
+            <label class="behaviour-item"><input type="checkbox" value="curving_down"> Curving downward (concave down)</label>
+            <label class="behaviour-item"><input type="checkbox" value="s_shape"> S-shaped / changes concavity</label>
+            <label class="behaviour-item"><input type="checkbox" value="u_minimum"> Has a minimum (U-shaped)</label>
+            <label class="behaviour-item"><input type="checkbox" value="jump"> Has a jump discontinuity</label>
+            <label class="behaviour-item"><input type="checkbox" value="approaches_line"> Levels off / approaches a line</label>
+            <label class="behaviour-item"><input type="checkbox" value="piecewise"> Piecewise (multiple segments)</label>
+          </div>
+          <div style="display:flex; gap:0.5rem; margin-top:0.75rem;">
+            <button class="btn btn-primary" onclick="checkDescription()">Check Description</button>
+            <button class="btn btn-secondary" onclick="newAIProblem()">New Function</button>
+          </div>
+          <div class="feedback" id="ai-feedback"></div>
+        </div>
+
+        <div class="control-panel">
+          <h3>📝 Tip</h3>
+          <p style="font-size:0.95rem;">If a function both <em>increases and decreases</em>, choose the concavity or jump features that best describe the visible parts. “Piecewise” means it’s built from distinct segments (often with a jump).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3) Build & Challenge Tab (original builder) -->
     <div id="builder" class="tab-content">
       <div class="canvas-wrapper">
         <h2 style="color: var(--primary); margin-bottom: 1rem;">Function Builder</h2>
         <canvas id="main-canvas"></canvas>
         <div class="info-bar">
-          <strong>Instructions:</strong> Click to add points • Click points to toggle open/closed • Edit coordinates in the list • Select points and create segments
+          <strong>Instructions:</strong> Click empty space to add a point • Click a point (or its row) to select/deselect • <strong>Alt/Option-click</strong> a point (or click ○/●) to toggle open/closed • Drag points to move (hold Shift to snap by 0.5) • Use selected points to create segments
         </div>
       </div>
 
       <div class="controls-grid">
         <div class="control-panel">
           <h3>📍 Points</h3>
-          <div class="points-list" id="points-list">
-            <p style="color: #999; text-align: center;">Click canvas to add points</p>
-          </div>
+          <div class="points-list" id="points-list"><p style="color:#999; text-align:center;">Click canvas to add points</p></div>
           <button class="btn btn-danger btn-small" onclick="clearPoints()">Clear All Points</button>
         </div>
 
         <div class="control-panel">
           <h3>🔧 Build Segments</h3>
-          <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Select points then:</p>
+          <p style="font-size:0.85rem; margin-bottom:0.5rem;">Select points then:</p>
           <button class="btn btn-secondary btn-small" onclick="makeLine()">Make Line (2 pts)</button>
           <button class="btn btn-secondary btn-small" onclick="makeCurve()">Make Curve (3 pts)</button>
-          <div style="margin-top: 0.5rem; font-size: 0.85rem;">
-            <label><input type="checkbox" id="extend-left"> Extend left</label><br>
+          <div style="margin-top:0.5rem; font-size:0.85rem;">
+            <label><input type="checkbox" id="extend-left"> Extend left</label><br/>
             <label><input type="checkbox" id="extend-right"> Extend right</label>
           </div>
         </div>
 
         <div class="control-panel">
           <h3>📊 Function Segments</h3>
-          <div class="segments-list" id="segments-list">
-            <p style="color: #999; text-align: center;">No segments yet</p>
-          </div>
+          <div class="segments-list" id="segments-list"><p style="color:#999; text-align:center;">No segments yet</p></div>
           <button class="btn btn-danger btn-small" onclick="clearSegments()">Clear All</button>
         </div>
       </div>
 
       <div class="challenge-box">
         <h2>🤖 AI Challenge</h2>
-        
         <div class="challenge-text">
           <strong>Challenge:</strong>
           <p id="challenge-desc">Build a function that increases and curves upward on the left side, has a jump discontinuity in the middle, then decreases and curves downward on the right side.</p>
         </div>
-        
-        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">
-          Build the function above, then click Check Answer to see how you did.
-        </p>
-        
+        <p style="font-size:0.85rem; color:#666; margin-bottom:0.5rem;">Build the function above, then click Check Answer to see how you did.</p>
         <textarea id="user-notes" placeholder="Optional: Add any notes about your construction..."></textarea>
-        
-        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
           <button class="btn btn-primary" onclick="checkAnswer()">Check Answer</button>
           <button class="btn btn-secondary" onclick="getHint()">Get Hint</button>
           <button class="btn btn-secondary" onclick="newChallenge()">New Challenge</button>
         </div>
-        
         <div class="feedback" id="feedback"></div>
       </div>
     </div>
   </div>
 
   <script>
-    // Global state
-    let points = [];
-    let selectedPoints = [];
-    let segments = [];
-    let currentChallenge = 0;
-    
-    const challenges = [
-      "Build a function that increases and curves upward on the left side, has a jump discontinuity in the middle, then decreases and curves downward on the right side.",
-      "Create a U-shaped function that has its lowest point around x = 0.",
-      "Make a function that is constant (flat) on the left, then suddenly jumps up and continues as a straight line going upward.",
-      "Build an S-shaped function that starts curving down but changes to curving up.",
-      "Create a piecewise function with at least two jumps and three different segments."
-    ];
-
-    // Initialize
-    window.addEventListener('DOMContentLoaded', init);
-
-    function init() {
-      setupTabs();
-      setupCanvas();
-      drawExamples();
-    }
-
-    function setupTabs() {
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const tab = btn.dataset.tab;
-          showTab(tab);
-        });
-      });
-    }
-
-    function showTab(tab) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      
-      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-      document.getElementById(tab).classList.add('active');
-      
-      if (tab === 'intro') {
-        setTimeout(drawExamples, 50);
-      } else {
-        setTimeout(() => {
-          setupCanvas();
-          redraw();
-        }, 50);
-      }
-    }
-
-    function setupCanvas() {
-      const canvas = document.getElementById('main-canvas');
-      if (!canvas) return;
-      
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      
-      canvas.onclick = handleCanvasClick;
-    }
-
-    function handleCanvasClick(e) {
-      const canvas = document.getElementById('main-canvas');
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      // Check if clicking existing point
-      for (let p of points) {
-        const px = (p.x + 10) * canvas.width / 20;
-        const py = (10 - p.y) * canvas.height / 20;
-        if (Math.abs(px - x) < 10 && Math.abs(py - y) < 10) {
-          p.open = !p.open;
-          updatePointsList();
-          redraw();
-          return;
-        }
-      }
-      
-      // Add new point
-      const graphX = (x / canvas.width) * 20 - 10;
-      const graphY = 10 - (y / canvas.height) * 20;
-      
-      points.push({
-        x: graphX,
-        y: graphY,
-        open: false,
-        id: Date.now() + Math.random()
-      });
-      
-      updatePointsList();
-      redraw();
-    }
-
-    function updatePointsList() {
-      const list = document.getElementById('points-list');
-      if (points.length === 0) {
-        list.innerHTML = '<p style="color: #999; text-align: center;">Click canvas to add points</p>';
-        return;
-      }
-      
-      list.innerHTML = points.map(p => {
-        const selected = selectedPoints.includes(p.id);
-        return `
-          <div class="point-row ${selected ? 'selected' : ''}" onclick="toggleSelect('${p.id}')">
-            <div class="point-coords">
-              (<input type="number" class="coord-input" value="${p.x.toFixed(1)}" 
-                onchange="updateX('${p.id}', this.value)" onclick="event.stopPropagation()" step="0.5">,
-              <input type="number" class="coord-input" value="${p.y.toFixed(1)}" 
-                onchange="updateY('${p.id}', this.value)" onclick="event.stopPropagation()" step="0.5">)
-            </div>
-            <span class="point-symbol">${p.open ? '○' : '●'}</span>
-            <span class="delete-btn" onclick="deletePoint(event, '${p.id}')">×</span>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function toggleSelect(id) {
-      const idx = selectedPoints.indexOf(id);
-      if (idx >= 0) {
-        selectedPoints.splice(idx, 1);
-      } else {
-        selectedPoints.push(id);
-      }
-      updatePointsList();
-    }
-
-    function updateX(id, value) {
-      const point = points.find(p => p.id === id);
-      if (point) {
-        point.x = parseFloat(value);
-        redraw();
-      }
-    }
-
-    function updateY(id, value) {
-      const point = points.find(p => p.id === id);
-      if (point) {
-        point.y = parseFloat(value);
-        redraw();
-      }
-    }
-
-    function deletePoint(event, id) {
-      event.stopPropagation();
-      points = points.filter(p => p.id !== id);
-      selectedPoints = selectedPoints.filter(sid => sid !== id);
-      updatePointsList();
-      redraw();
-    }
-
-    function clearPoints() {
-      points = [];
-      selectedPoints = [];
-      updatePointsList();
-      redraw();
-    }
-
-    function makeLine() {
-      const selected = points.filter(p => selectedPoints.includes(p.id));
-      if (selected.length !== 2) {
-        alert('Please select exactly 2 points for a line');
-        return;
-      }
-      
-      const sorted = selected.sort((a, b) => a.x - b.x);
-      segments.push({
-        type: 'line',
-        points: sorted.map(p => ({...p})),
-        extendLeft: document.getElementById('extend-left').checked,
-        extendRight: document.getElementById('extend-right').checked,
-        id: Date.now()
-      });
-      
-      selectedPoints = [];
-      updatePointsList();
-      updateSegmentsList();
-      redraw();
-    }
-
-    function makeCurve() {
-      const selected = points.filter(p => selectedPoints.includes(p.id));
-      if (selected.length !== 3) {
-        alert('Please select exactly 3 points for a curve');
-        return;
-      }
-      
-      const sorted = selected.sort((a, b) => a.x - b.x);
-      
-      // Auto-toggle middle point to open
-      const middlePoint = points.find(p => p.id === sorted[1].id);
-      if (middlePoint) {
-        middlePoint.open = true;
-      }
-      
-      segments.push({
-        type: 'curve',
-        points: sorted.map(p => ({...p})),
-        extendLeft: document.getElementById('extend-left').checked,
-        extendRight: document.getElementById('extend-right').checked,
-        id: Date.now()
-      });
-      
-      selectedPoints = [];
-      updatePointsList();
-      updateSegmentsList();
-      redraw();
-    }
-
-    function clearSegments() {
-      segments = [];
-      updateSegmentsList();
-      redraw();
-    }
-
-    function updateSegmentsList() {
-      const list = document.getElementById('segments-list');
-      if (segments.length === 0) {
-        list.innerHTML = '<p style="color: #999; text-align: center;">No segments yet</p>';
-        return;
-      }
-      
-      list.innerHTML = segments.map((s, i) => `
-        <div class="segment-item">
-          <span>Segment ${i+1}: ${s.type}</span>
-          <span class="delete-btn" onclick="deleteSegment('${s.id}')">×</span>
-        </div>
-      `).join('');
-    }
-
-    function deleteSegment(id) {
-      segments = segments.filter(s => s.id != id);
-      updateSegmentsList();
-      redraw();
-    }
-
-    function redraw() {
-      const canvas = document.getElementById('main-canvas');
-      if (!canvas) return;
-      
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      drawGrid(ctx, canvas);
-      drawSegments(ctx, canvas);
-      drawPoints(ctx, canvas);
-    }
-
-    function drawGrid(ctx, canvas) {
-      const w = canvas.width;
-      const h = canvas.height;
-      
-      // Grid
-      ctx.strokeStyle = '#e0e0e0';
-      ctx.lineWidth = 1;
-      
-      for (let i = 0; i <= 20; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * w / 20, 0);
-        ctx.lineTo(i * w / 20, h);
-        ctx.stroke();
-      }
-      
-      for (let i = 0; i <= 20; i++) {
-        ctx.beginPath();
-        ctx.moveTo(0, i * h / 20);
-        ctx.lineTo(w, i * h / 20);
-        ctx.stroke();
-      }
-      
-      // Axes
-      ctx.strokeStyle = '#666';
-      ctx.lineWidth = 2;
-      
-      ctx.beginPath();
-      ctx.moveTo(w / 2, 0);
-      ctx.lineTo(w / 2, h);
-      ctx.stroke();
-      
-      ctx.beginPath();
-      ctx.moveTo(0, h / 2);
-      ctx.lineTo(w, h / 2);
-      ctx.stroke();
-      
-      // Labels
-      ctx.fillStyle = '#666';
-      ctx.font = '11px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'top';
-      
-      for (let i = -10; i <= 10; i += 5) {
-        if (i !== 0) {
-          ctx.fillText(i, w/2 + i * w/20, h/2 + 5);
-        }
-      }
-    }
-
-    function drawSegments(ctx, canvas) {
-      ctx.strokeStyle = '#0f766e';
-      ctx.lineWidth = 3;
-      
-      segments.forEach(seg => {
-        if (seg.type === 'line') {
-          const p1 = seg.points[0];
-          const p2 = seg.points[1];
-          
-          const x1 = (p1.x + 10) * canvas.width / 20;
-          const y1 = (10 - p1.y) * canvas.height / 20;
-          const x2 = (p2.x + 10) * canvas.width / 20;
-          const y2 = (10 - p2.y) * canvas.height / 20;
-          
-          ctx.beginPath();
-          
-          if (seg.extendLeft && Math.abs(x2 - x1) > 0.01) {
-            const slope = (y2 - y1) / (x2 - x1);
-            const yAtLeft = y1 - slope * x1;
-            ctx.moveTo(0, yAtLeft);
-          } else {
-            ctx.moveTo(x1, y1);
-          }
-          
-          if (seg.extendRight && Math.abs(x2 - x1) > 0.01) {
-            const slope = (y2 - y1) / (x2 - x1);
-            const yAtRight = y2 + slope * (canvas.width - x2);
-            ctx.lineTo(canvas.width, yAtRight);
-          } else {
-            ctx.lineTo(x2, y2);
-          }
-          
-          ctx.stroke();
-          
-        } else if (seg.type === 'curve') {
-          const p1 = seg.points[0];
-          const p2 = seg.points[1];
-          const p3 = seg.points[2];
-          
-          const x1 = (p1.x + 10) * canvas.width / 20;
-          const y1 = (10 - p1.y) * canvas.height / 20;
-          const x2 = (p2.x + 10) * canvas.width / 20;
-          const y2 = (10 - p2.y) * canvas.height / 20;
-          const x3 = (p3.x + 10) * canvas.width / 20;
-          const y3 = (10 - p3.y) * canvas.height / 20;
-          
-          ctx.beginPath();
-          ctx.moveTo(x1, y1);
-          ctx.quadraticCurveTo(x2, y2, x3, y3);
-          ctx.stroke();
-        }
-      });
-    }
-
-    function drawPoints(ctx, canvas) {
-      points.forEach(p => {
-        const x = (p.x + 10) * canvas.width / 20;
-        const y = (10 - p.y) * canvas.height / 20;
-        const selected = selectedPoints.includes(p.id);
-        
-        ctx.strokeStyle = selected ? '#f59e0b' : '#0f766e';
-        ctx.fillStyle = p.open ? 'white' : (selected ? '#f59e0b' : '#0f766e');
-        ctx.lineWidth = 2;
-        
-        ctx.beginPath();
-        ctx.arc(x, y, 6, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.stroke();
-      });
-    }
-
-    function drawExamples() {
-      // Draw all 6 example canvases
-      const examples = ['ex1', 'ex2', 'ex3', 'ex4', 'ex5', 'ex6'];
-      examples.forEach(id => {
-        const canvas = document.getElementById(id);
-        if (canvas) {
-          canvas.width = canvas.offsetWidth;
-          canvas.height = canvas.offsetHeight;
-          drawExampleFunction(canvas, id);
-        }
-      });
-    }
-
+    /* ============================
+       Shared helpers & examples
+    ============================ */
     function drawExampleFunction(canvas, type) {
       const ctx = canvas.getContext('2d');
       const w = canvas.width;
       const h = canvas.height;
-      
+
       // Simple grid
+      ctx.clearRect(0,0,w,h);
       ctx.strokeStyle = '#f0f0f0';
       ctx.lineWidth = 1;
       for (let i = 0; i <= 4; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * w/4, 0);
-        ctx.lineTo(i * w/4, h);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(0, i * h/4);
-        ctx.lineTo(w, i * h/4);
-        ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(i * w/4, 0); ctx.lineTo(i * w/4, h); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, i * h/4); ctx.lineTo(w, i * h/4); ctx.stroke();
       }
-      
       // Axes
-      ctx.strokeStyle = '#ddd';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(w/2, 0);
-      ctx.lineTo(w/2, h);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(0, h/2);
-      ctx.lineTo(w, h/2);
-      ctx.stroke();
-      
+      ctx.strokeStyle = '#ddd'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(w/2, 0); ctx.lineTo(w/2, h); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
+
       // Draw function
       ctx.strokeStyle = '#0f766e';
       ctx.lineWidth = 2;
-      
-      if (type === 'ex1') {
-        // Increasing & Curving Up
+
+      if (type === 'ex1' || type === 'inc_up') {
         ctx.beginPath();
         for (let x = -2; x <= 2; x += 0.1) {
           const y = Math.exp(x) - 1;
           const px = (x + 2) * w / 4;
           const py = h - (y + 2) * h / 8;
-          if (x === -2) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
+          (x === -2 ? ctx.moveTo(px, py) : ctx.lineTo(px, py));
         }
         ctx.stroke();
-      } else if (type === 'ex2') {
-        // Decreasing & Curving Down
+      } else if (type === 'ex2' || type === 'dec_down') {
         ctx.beginPath();
         for (let x = -2; x <= 2; x += 0.1) {
           const y = -Math.sqrt(x + 2);
           const px = (x + 2) * w / 4;
           const py = h/2 - y * h / 4;
-          if (x === -2) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
+          (x === -2 ? ctx.moveTo(px, py) : ctx.lineTo(px, py));
         }
         ctx.stroke();
-      } else if (type === 'ex3') {
-        // Piecewise with Jump
+      } else if (type === 'ex3' || type === 'piecewise_jump') {
         ctx.beginPath();
         ctx.moveTo(w * 0.1, h * 0.6);
         ctx.lineTo(w * 0.45, h * 0.4);
         ctx.stroke();
-        
-        ctx.beginPath();
+
+        ctx.beginPath(); // open circle
         ctx.arc(w * 0.45, h * 0.4, 4, 0, 2 * Math.PI);
-        ctx.fillStyle = 'white';
-        ctx.fill();
-        ctx.stroke();
-        
-        ctx.beginPath();
+        ctx.fillStyle = 'white'; ctx.fill(); ctx.stroke();
+
+        ctx.beginPath(); // filled circle
         ctx.arc(w * 0.55, h * 0.7, 4, 0, 2 * Math.PI);
-        ctx.fillStyle = '#0f766e';
-        ctx.fill();
-        
+        ctx.fillStyle = '#0f766e'; ctx.fill();
+
         ctx.beginPath();
         ctx.moveTo(w * 0.55, h * 0.7);
         ctx.lineTo(w * 0.9, h * 0.5);
         ctx.stroke();
-      } else if (type === 'ex4') {
-        // S-Shaped
+      } else if (type === 'ex4' || type === 's_curve') {
         ctx.beginPath();
         for (let x = -2; x <= 2; x += 0.1) {
           const y = x * x * x;
           const px = (x + 2) * w / 4;
           const py = h/2 - y * h / 16;
-          if (x === -2) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
+          (x === -2 ? ctx.moveTo(px, py) : ctx.lineTo(px, py));
         }
         ctx.stroke();
-      } else if (type === 'ex5') {
-        // U-Shaped
+      } else if (type === 'ex5' || type === 'u_valley') {
         ctx.beginPath();
         for (let x = -2; x <= 2; x += 0.1) {
           const y = x * x;
           const px = (x + 2) * w / 4;
           const py = h - (y + 1) * h / 6;
-          if (x === -2) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
+          (x === -2 ? ctx.moveTo(px, py) : ctx.lineTo(px, py));
         }
         ctx.stroke();
-      } else if (type === 'ex6') {
-        // Approaching Line
+      } else if (type === 'ex6' || type === 'approach_line') {
         ctx.beginPath();
         for (let x = 0; x <= 4; x += 0.1) {
           const y = 2 - 2 * Math.exp(-x);
           const px = x * w / 4;
           const py = h - y * h / 3;
-          if (x === 0) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
+          (x === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py));
         }
         ctx.stroke();
-        
+
         ctx.strokeStyle = '#f59e0b';
         ctx.setLineDash([5, 5]);
         ctx.beginPath();
@@ -1042,46 +362,494 @@
       }
     }
 
-    function checkAnswer() {
-      const feedback = document.getElementById('feedback');
-      
-      // Check if they built anything
-      if (segments.length === 0) {
-        feedback.className = 'feedback show error';
-        feedback.innerHTML = 'Please build a function first!';
+    function drawExamples(){
+      ['ex1','ex2','ex3','ex4','ex5','ex6'].forEach(id=>{
+        const canvas=document.getElementById(id);
+        if(canvas){
+          canvas.width = canvas.offsetWidth;
+          canvas.height = canvas.offsetHeight;
+          drawExampleFunction(canvas, id);
+        }
+      });
+    }
+
+    /* ============================
+       TAB framework
+    ============================ */
+    function setupTabs(){
+      document.querySelectorAll('.tab-btn').forEach(btn=>{
+        btn.addEventListener('click', ()=> showTab(btn.dataset.tab));
+      });
+    }
+    function showTab(tab){
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+      document.getElementById(tab).classList.add('active');
+
+      if (tab === 'intro') {
+        setTimeout(drawExamples, 50);
+      } else if (tab === 'describe') {
+        setTimeout(()=>{ setupDescribeCanvas(); if(!currentAIProblem) newAIProblem(); else drawAIProblem(); }, 50);
+      } else if (tab === 'builder') {
+        setTimeout(()=>{ setupCanvas(); redraw(); }, 50);
+      }
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      setupTabs();
+      setupCanvas();
+      setupDescribeCanvas();
+      drawExamples();
+    });
+
+    /* ============================
+       DESCRIBE TAB (AI draws; user describes)
+    ============================ */
+    // Problem types and ground-truth tags for checking
+    const aiTypes = [
+      { key: 'inc_up',         tags: ['increasing','curving_up'] },
+      { key: 'dec_down',       tags: ['decreasing','curving_down'] },
+      { key: 'piecewise_jump', tags: ['piecewise','jump'] },
+      { key: 's_curve',        tags: ['increasing','s_shape'] },
+      { key: 'u_valley',       tags: ['u_minimum','curving_up'] },
+      { key: 'approach_line',  tags: ['increasing','approaches_line'] },
+    ];
+
+    let currentAIProblem = null;
+
+    function setupDescribeCanvas(){
+      const canvas = document.getElementById('ai-canvas');
+      if(!canvas) return;
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+
+    function newAIProblem(){
+      const pick = aiTypes[Math.floor(Math.random()*aiTypes.length)];
+      currentAIProblem = { key: pick.key, tags: new Set(pick.tags) };
+      drawAIProblem();
+      // Clear user selections & feedback
+      document.querySelectorAll('#behaviour-grid input[type="checkbox"]').forEach(cb => cb.checked = false);
+      const fb = document.getElementById('ai-feedback');
+      fb.className = 'feedback';
+      fb.innerHTML = '';
+    }
+
+    function drawAIProblem(){
+      const canvas = document.getElementById('ai-canvas');
+      if(!canvas || !currentAIProblem) return;
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      drawExampleFunction(canvas, currentAIProblem.key);
+    }
+
+    function checkDescription(){
+      if(!currentAIProblem){
+        newAIProblem();
         return;
       }
-      
-      // For BUILD challenges, check the construction
-      feedback.className = 'feedback show info';
-      feedback.innerHTML = 'Checking your function...';
-      
-      // Simulate checking (in real app, would call AI)
-      setTimeout(() => {
-        feedback.className = 'feedback show success';
-        feedback.innerHTML = `Great work! You built a function with ${segments.length} segments. ${segments.some(s => s.type === 'curve') ? 'Nice use of curves!' : 'Try adding some curves for smoother transitions.'}`;
-      }, 1000);
+      const selected = new Set(
+        Array.from(document.querySelectorAll('#behaviour-grid input[type="checkbox"]:checked'))
+          .map(cb => cb.value)
+      );
+      const truth = currentAIProblem.tags;
+
+      // scoring
+      const correct = Array.from(selected).filter(t => truth.has(t));
+      const missed  = Array.from(truth).filter(t => !selected.has(t));
+      const extras  = Array.from(selected).filter(t => !truth.has(t));
+
+      const fb = document.getElementById('ai-feedback');
+      if (missed.length === 0 && extras.length === 0 && correct.length === truth.size) {
+        fb.className = 'feedback show success';
+        fb.innerHTML = `✅ Perfect! You identified all behaviors.`;
+      } else {
+        fb.className = 'feedback show info';
+        fb.innerHTML = `
+          <div><strong>Result:</strong> ${correct.length}/${truth.size} core behaviors correct.</div>
+          ${correct.length ? `<div>✔️ Correct: ${correct.join(', ')}</div>` : ''}
+          ${missed.length ? `<div>❗Missing: ${missed.join(', ')}</div>` : ''}
+          ${extras.length ? `<div>⚠️ Not needed: ${extras.join(', ')}</div>` : ''}
+        `;
+      }
     }
 
-    function getHint() {
-      const feedback = document.getElementById('feedback');
-      feedback.className = 'feedback show info';
-      feedback.innerHTML = '💡 Remember: Use 2 points for lines, 3 points for curves. The middle point in a curve controls the bending!';
+    /* ============================
+       BUILDER TAB (user builds)
+       — This is your previously improved Function Builder
+    ============================ */
+    const GRAPH_MIN = -10, GRAPH_MAX = 10; // both axes
+    const POINT_RADIUS_PX = 7;
+    const HIT_RADIUS_PX = 10;
+
+    const state = {
+      points: [],               // {id, x, y, open}
+      selected: new Set(),      // Set<string>
+      segments: [],             // {id, type:'line'|'curve', pointIds:[...], extendLeft, extendRight}
+      draggingId: null,
+      dragMoved: false
+    };
+
+    const uid = () => String(Math.random().toString(36).slice(2)+Date.now().toString(36));
+
+    // Coord transforms
+    function graphToScreenX(x, canvas){ return ( (x - GRAPH_MIN) / (GRAPH_MAX - GRAPH_MIN) ) * canvas.width; }
+    function graphToScreenY(y, canvas){ return ( (GRAPH_MAX - y) / (GRAPH_MAX - GRAPH_MIN) ) * canvas.height; }
+    function screenToGraphX(px, canvas){ return GRAPH_MIN + (px / canvas.width) * (GRAPH_MAX - GRAPH_MIN); }
+    function screenToGraphY(py, canvas){ return GRAPH_MAX - (py / canvas.height) * (GRAPH_MAX - GRAPH_MIN); }
+    function clamp(val, min, max){ return Math.max(min, Math.min(max, val)); }
+
+    function setupCanvas(){
+      const canvas = document.getElementById('main-canvas');
+      if(!canvas) return;
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+
+      canvas.addEventListener('click', handleCanvasClick);
+      canvas.addEventListener('mousedown', handleMouseDown);
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
     }
 
-    function newChallenge() {
-      currentChallenge = (currentChallenge + 1) % challenges.length;
-      document.getElementById('challenge-desc').textContent = challenges[currentChallenge];
-      document.getElementById('feedback').classList.remove('show');
-      document.getElementById('user-notes').value = '';
+    function hitTestPoint(canvas, mx, my){
+      for(const p of state.points){
+        const px = graphToScreenX(p.x, canvas);
+        const py = graphToScreenY(p.y, canvas);
+        if(Math.hypot(px-mx, py-my) <= HIT_RADIUS_PX) return p.id;
+      }
+      return null;
     }
 
-    // Handle resize
-    window.addEventListener('resize', () => {
-      setupCanvas();
+    function handleCanvasClick(e){
+      const canvas = document.getElementById('main-canvas');
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const hitId = hitTestPoint(canvas, x, y);
+      if(hitId){
+        if(e.altKey || e.metaKey){ // toggle open/closed
+          const p = state.points.find(pt=>pt.id===hitId);
+          if(p){ p.open = !p.open; updatePointsList(); redraw(); }
+        }else{ // toggle selection
+          if(state.selected.has(hitId)) state.selected.delete(hitId);
+          else state.selected.add(hitId);
+          updatePointsList(); redraw();
+        }
+        return;
+      }
+
+      // No hit -> add point
+      const gx = screenToGraphX(x, canvas);
+      const gy = screenToGraphY(y, canvas);
+      addPoint(gx, gy);
+    }
+
+    function handleMouseDown(e){
+      const canvas = document.getElementById('main-canvas');
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const hitId = hitTestPoint(canvas, x, y);
+      state.draggingId = hitId;
+      state.dragMoved = false;
+    }
+
+    function handleMouseMove(e){
+      if(!state.draggingId) return;
+      const canvas = document.getElementById('main-canvas');
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const gxRaw = screenToGraphX(x, canvas);
+      const gyRaw = screenToGraphY(y, canvas);
+      const snap = e.shiftKey ? 0.5 : 0;
+      const gx = snap ? Math.round(gxRaw / snap) * snap : gxRaw;
+      const gy = snap ? Math.round(gyRaw / snap) * snap : gyRaw;
+
+      const p = state.points.find(pt=>pt.id===state.draggingId);
+      if(p){
+        p.x = clamp(gx, GRAPH_MIN, GRAPH_MAX);
+        p.y = clamp(gy, GRAPH_MIN, GRAPH_MAX);
+        state.dragMoved = true;
+        updatePointsList();
+        redraw();
+      }
+    }
+
+    function handleMouseUp(){
+      state.draggingId = null;
+    }
+
+    // Points CRUD & list
+    function addPoint(x, y){
+      const p = { id: uid(), x, y, open:false };
+      state.points.push(p);
+      updatePointsList();
       redraw();
+    }
+
+    function updatePointsList(){
+      const list = document.getElementById('points-list');
+      if(state.points.length===0){
+        list.innerHTML = '<p style="color:#999; text-align:center;">Click canvas to add points</p>';
+        return;
+      }
+      list.innerHTML = state.points.map(p=>{
+        const selected = state.selected.has(p.id);
+        return `
+          <div class="point-row ${selected ? 'selected':''}" data-id="${p.id}">
+            <span class="point-symbol" data-role="toggle-open" title="Toggle open/closed">${p.open ? '○':'●'}</span>
+            <div class="point-coords">
+              (<input type="number" step="0.1" class="coord-input" data-role="x" value="${p.x.toFixed(2)}">,
+               <input type="number" step="0.1" class="coord-input" data-role="y" value="${p.y.toFixed(2)}">)
+            </div>
+            <span class="delete-btn" data-role="delete">×</span>
+          </div>
+        `;
+      }).join('');
+
+      // delegate events
+      list.querySelectorAll('.point-row').forEach(row=>{
+        const id = row.getAttribute('data-id');
+
+        row.addEventListener('click', (e)=>{
+          const role = e.target.getAttribute('data-role');
+          if(role) return;
+          if(state.selected.has(id)) state.selected.delete(id);
+          else state.selected.add(id);
+          updatePointsList(); redraw();
+        });
+
+        row.querySelector('[data-role="toggle-open"]').addEventListener('click', (e)=>{
+          e.stopPropagation();
+          const p = state.points.find(pt=>pt.id===id);
+          if(p){ p.open = !p.open; updatePointsList(); redraw(); }
+        });
+
+        row.querySelector('[data-role="delete"]').addEventListener('click', (e)=>{
+          e.stopPropagation();
+          deletePoint(id);
+        });
+
+        row.querySelector('[data-role="x"]').addEventListener('change', (e)=>{
+          const v = parseFloat(e.target.value);
+          const p = state.points.find(pt=>pt.id===id);
+          if(p){
+            p.x = clamp(v, GRAPH_MIN, GRAPH_MAX);
+            updatePointsList(); redraw();
+          }
+        });
+
+        row.querySelector('[data-role="y"]').addEventListener('change', (e)=>{
+          const v = parseFloat(e.target.value);
+          const p = state.points.find(pt=>pt.id===id);
+          if(p){
+            p.y = clamp(v, GRAPH_MIN, GRAPH_MAX);
+            updatePointsList(); redraw();
+          }
+        });
+      });
+    }
+
+    function deletePoint(id){
+      state.points = state.points.filter(p=>p.id!==id);
+      state.selected.delete(id);
+      state.segments = state.segments.filter(s=>!s.pointIds.includes(id));
+      updatePointsList();
+      updateSegmentsList();
+      redraw();
+    }
+
+    function clearPoints(){
+      state.points = [];
+      state.selected.clear();
+      state.segments = [];
+      updatePointsList();
+      updateSegmentsList();
+      redraw();
+    }
+
+    // Segments
+    function makeLine(){
+      const ids = Array.from(state.selected);
+      if(ids.length !== 2){ alert('Please select exactly 2 points for a line.'); return; }
+      const pts = ids.map(id=>state.points.find(p=>p.id===id)).filter(Boolean).sort((a,b)=>a.x-b.x);
+      const extendLeft = document.getElementById('extend-left').checked;
+      const extendRight = document.getElementById('extend-right').checked;
+      state.segments.push({ id: uid(), type:'line', pointIds:[pts[0].id, pts[1].id], extendLeft, extendRight });
+      state.selected.clear();
+      updatePointsList();
+      updateSegmentsList();
+      redraw();
+    }
+
+    function makeCurve(){
+      const ids = Array.from(state.selected);
+      if(ids.length !== 3){ alert('Please select exactly 3 points for a curve.'); return; }
+      const pts = ids.map(id=>state.points.find(p=>p.id===id)).filter(Boolean).sort((a,b)=>a.x-b.x);
+      const mid = pts[1]; if(mid) mid.open = true;
+      const extendLeft = document.getElementById('extend-left').checked;
+      const extendRight = document.getElementById('extend-right').checked;
+      state.segments.push({ id: uid(), type:'curve', pointIds:[pts[0].id, pts[1].id, pts[2].id], extendLeft, extendRight });
+      state.selected.clear();
+      updatePointsList();
+      updateSegmentsList();
+      redraw();
+    }
+
+    function clearSegments(){
+      state.segments = [];
+      updateSegmentsList();
+      redraw();
+    }
+
+    function updateSegmentsList(){
+      const list = document.getElementById('segments-list');
+      if(state.segments.length===0){
+        list.innerHTML = '<p style="color:#999; text-align:center;">No segments yet</p>';
+        return;
+      }
+      list.innerHTML = state.segments.map((s,i)=>`
+        <div class="segment-item" data-id="${s.id}">
+          <span>Segment ${i+1}: ${s.type} (${s.pointIds.length} pts)</span>
+          <span class="delete-btn" data-role="delete-seg">×</span>
+        </div>
+      `).join('');
+      list.querySelectorAll('.segment-item').forEach(row=>{
+        const id = row.getAttribute('data-id');
+        row.querySelector('[data-role="delete-seg"]').addEventListener('click', ()=>{
+          state.segments = state.segments.filter(seg=>seg.id!==id);
+          updateSegmentsList(); redraw();
+        });
+      });
+    }
+
+    function redraw(){
+      const canvas = document.getElementById('main-canvas');
+      if(!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      drawGrid(ctx, canvas);
+      drawSegments(ctx, canvas);
+      drawPoints(ctx, canvas);
+    }
+
+    function drawGrid(ctx, canvas){
+      const w=canvas.width, h=canvas.height;
+
+      // light grid
+      ctx.strokeStyle = '#e0e0e0';
+      ctx.lineWidth = 1;
+      for(let i=0;i<=20;i++){
+        ctx.beginPath(); ctx.moveTo(i*w/20,0); ctx.lineTo(i*w/20,h); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0,i*h/20); ctx.lineTo(w,i*h/20); ctx.stroke();
+      }
+      // axes
+      ctx.strokeStyle = '#666'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(w/2,0); ctx.lineTo(w/2,h); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0,h/2); ctx.lineTo(w,h/2); ctx.stroke();
+
+      // labels
+      ctx.fillStyle = '#666';
+      ctx.font = '11px Arial';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      for(let i=-10;i<=10;i+=5){ if(i!==0) ctx.fillText(i, graphToScreenX(i, canvas), h/2 + 5); }
+    }
+
+    function drawSegments(ctx, canvas){
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+
+      for(const seg of state.segments){
+        const pts = seg.pointIds.map(id=>state.points.find(p=>p.id===id)).filter(Boolean);
+        if(seg.type==='line' && pts.length===2){
+          const [p1,p2] = pts;
+          const x1 = graphToScreenX(p1.x, canvas), y1 = graphToScreenY(p1.y, canvas);
+          const x2 = graphToScreenX(p2.x, canvas), y2 = graphToScreenY(p2.y, canvas);
+
+          let sx1 = x1, sy1 = y1, sx2 = x2, sy2 = y2;
+          if(Math.abs(x2-x1) > 0.0001){
+            const m = (y2-y1)/(x2-x1);
+            if(seg.extendLeft){ const yAtLeft = y1 - m*x1; sx1 = 0; sy1 = yAtLeft; }
+            if(seg.extendRight){ const yAtRight = y2 + m*(canvas.width - x2); sx2 = canvas.width; sy2 = yAtRight; }
+          }
+
+          ctx.beginPath(); ctx.moveTo(sx1, sy1); ctx.lineTo(sx2, sy2); ctx.stroke();
+        }
+        else if(seg.type==='curve' && pts.length===3){
+          const [p1,p2,p3] = pts;
+          const x1 = graphToScreenX(p1.x, canvas), y1 = graphToScreenY(p1.y, canvas);
+          const cx = graphToScreenX(p2.x, canvas), cy = graphToScreenY(p2.y, canvas);
+          const x3 = graphToScreenX(p3.x, canvas), y3 = graphToScreenY(p3.y, canvas);
+          ctx.beginPath(); ctx.moveTo(x1, y1); ctx.quadraticCurveTo(cx, cy, x3, y3); ctx.stroke();
+        }
+      }
+    }
+
+    function drawPoints(ctx, canvas){
+      for(const p of state.points){
+        const x = graphToScreenX(p.x, canvas);
+        const y = graphToScreenY(p.y, canvas);
+        const selected = state.selected.has(p.id);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = selected ? '#f59e0b' : '#0f766e';
+        ctx.fillStyle = p.open ? 'white' : (selected ? '#f59e0b' : '#0f766e');
+
+        ctx.beginPath();
+        ctx.arc(x, y, POINT_RADIUS_PX, 0, 2*Math.PI);
+        ctx.fill();
+        ctx.stroke();
+      }
+    }
+
+    // Challenges (builder)
+    function checkAnswer(){
+      const feedback = document.getElementById('feedback');
+      if(state.segments.length===0){
+        feedback.className='feedback show error';
+        feedback.innerHTML='Please build a function first!';
+        return;
+      }
+      feedback.className='feedback show info';
+      feedback.innerHTML='Checking your function...';
+      setTimeout(()=>{
+        feedback.className='feedback show success';
+        const hasCurve = state.segments.some(s=>s.type==='curve');
+        feedback.innerHTML = `Great work! You built ${state.segments.length} segment(s). ${hasCurve ? 'Nice use of curves!' : 'Consider adding a curve for smoother transitions.'}`;
+      }, 500);
+    }
+    function getHint(){
+      const feedback=document.getElementById('feedback');
+      feedback.className='feedback show info';
+      feedback.innerHTML='💡 Use 2 selected points for a line and 3 for a curve. Drag points to fine-tune. Alt/Option-click toggles open/closed.';
+    }
+    let currentChallenge=0;
+    const challenges=[
+      "Build a function that increases and curves upward on the left side, has a jump discontinuity in the middle, then decreases and curves downward on the right side.",
+      "Create a U-shaped function that has its lowest point around x = 0.",
+      "Make a function that is constant (flat) on the left, then suddenly jumps up and continues as a straight line going upward.",
+      "Build an S-shaped function that starts curving down but changes to curving up.",
+      "Create a piecewise function with at least two jumps and three different segments."
+    ];
+    function newChallenge(){
+      currentChallenge=(currentChallenge+1)%challenges.length;
+      document.getElementById('challenge-desc').textContent=challenges[currentChallenge];
+      document.getElementById('feedback').classList.remove('show');
+      document.getElementById('user-notes').value='';
+    }
+
+    // Resize: keep everything crisp
+    window.addEventListener('resize', ()=>{
+      setupCanvas(); redraw();
+      setupDescribeCanvas(); drawAIProblem();
       drawExamples();
     });
   </script>
 </body>
 </html>
+
