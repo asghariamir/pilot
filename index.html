@@ -148,6 +148,8 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
       border: 1px solid var(--border);
       transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
     }
 
     .example-card:hover {
@@ -173,6 +175,25 @@
       display: block;
     }
 
+    .example-info {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      background: var(--interactive);
+      padding: 0.5rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      text-align: center;
+      display: none;
+    }
+
+    .example-card.show-math .example-info.math,
+    .example-card.show-interval .example-info.interval {
+      display: block;
+    }
+
+    /* Card system styles */
     .card-bank {
       background: linear-gradient(135deg, var(--interactive), #f8fffe);
       padding: 1.5rem;
@@ -196,12 +217,13 @@
       justify-content: center;
     }
 
+    /* Word cards for Tab 2 */
     .word-card {
       padding: 0.75rem 1.25rem;
       background: white;
       border: 2px solid var(--primary);
       border-radius: 999px;
-      cursor: move;
+      cursor: pointer;
       transition: all 0.3s ease;
       user-select: none;
       font-weight: 600;
@@ -214,57 +236,338 @@
       background: var(--interactive);
     }
 
+    .word-card.selected {
+      background: var(--primary);
+      color: white;
+    }
+
     .word-card.dragging {
       opacity: 0.5;
     }
 
-    .clickable-card {
-      width: 110px;
-      height: 90px;
+    /* Tab 3 specific styles - IMPROVED */
+    .interval-selector {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .interval-selector h3 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-size: 1.3rem;
+    }
+
+    .interval-builder {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, var(--interactive), #f0fffc);
+      border-radius: 12px;
+      border: 2px solid var(--primary-light);
+    }
+
+    .bracket-toggle {
+      width: 45px;
+      height: 50px;
+      font-size: 1.6rem;
+      border: 2px solid var(--primary);
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 6px;
+      font-weight: 500;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bracket-toggle.closed {
+      background: var(--primary);
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 2px 4px rgba(15, 118, 110, 0.3);
+    }
+
+    .bracket-toggle:hover {
+      transform: scale(1.08);
+      box-shadow: 0 2px 8px rgba(15, 118, 110, 0.2);
+    }
+
+    .interval-input {
+      width: 80px;
+      padding: 0.75rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      background: white;
+    }
+
+    .interval-input:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+    }
+
+    .interval-input:placeholder-shown {
+      font-style: italic;
+      font-weight: normal;
+    }
+
+    .infinity-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      user-select: none;
+      padding: 0.5rem;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .infinity-toggle:hover {
+      background: var(--interactive);
+    }
+
+    .infinity-checkbox {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .infinity-label {
+      font-size: 1.1rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .comma {
+      font-size: 1.4rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .add-interval-btn {
+      padding: 0.75rem 2rem;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(15, 118, 110, 0.2);
+    }
+
+    .add-interval-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(15, 118, 110, 0.3);
+    }
+
+    .add-interval-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .preset-intervals {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding-top: 1.5rem;
+      border-top: 2px dashed var(--border);
+    }
+
+    .preset-label {
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .preset-btn {
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 2px solid var(--primary);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .preset-btn:hover {
+      background: var(--interactive);
+      transform: translateY(-2px);
+      box-shadow: 0 2px 4px rgba(15, 118, 110, 0.2);
+    }
+
+    .point-input-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      justify-content: center;
+      padding: 1rem;
+      background: var(--interactive);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .point-label {
+      font-size: 1.2rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .workspace {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      min-height: 150px;
+    }
+
+    .workspace h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .interval-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .interval-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--interactive);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .interval-item:hover {
+      transform: translateX(5px);
+    }
+
+    .interval-item.selected {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+    }
+
+    .interval-item .interval-text {
+      font-weight: 600;
+      color: var(--primary);
+      min-width: 100px;
+      font-size: 1.05rem;
+    }
+
+    .interval-item canvas {
+      flex: 1;
+      height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: white;
+    }
+
+    .interval-item .remove-btn {
+      padding: 0.25rem 0.5rem;
+      background: var(--error);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .control-cards {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .control-cards h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .control-group {
+      margin-bottom: 1rem;
+    }
+
+    .control-group-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .control-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .control-card {
+      width: 70px;
+      height: 60px;
       background: white;
       border: 2px solid var(--primary);
       border-radius: 8px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      padding: 0.5rem;
+      transition: all 0.2s;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
     }
 
-    .clickable-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+    .control-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
     }
 
-    .clickable-card.dragging {
-      opacity: 0.5;
-    }
-
-    .clickable-card canvas {
-      width: 100%;
-      height: 60px;
-      pointer-events: none;
-    }
-
-    .option-indicator {
-      position: absolute;
-      bottom: 2px;
-      display: flex;
-      gap: 2px;
-    }
-
-    .option-dot {
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: #ddd;
-    }
-
-    .option-dot.active {
+    .control-card.active {
       background: var(--primary);
+      border-color: var(--primary-dark);
+    }
+
+    .control-card.active::after {
+      content: '✓';
+      position: absolute;
+      top: 2px;
+      right: 4px;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .control-card canvas {
+      width: 90%;
+      height: 80%;
+      pointer-events: none;
     }
 
     .sequence-area {
@@ -449,13 +752,6 @@
       padding: 2rem;
     }
 
-    .hint-text {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      text-align: center;
-      margin-top: 0.5rem;
-    }
-
     .ai-disclaimer {
       text-align: center;
       color: var(--text-muted);
@@ -487,9 +783,19 @@
         font-size: 0.9rem;
       }
       
-      .clickable-card {
-        width: 90px;
-        height: 75px;
+      .control-card {
+        width: 60px;
+        height: 50px;
+      }
+      
+      .interval-builder {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .bracket-toggle {
+        width: 40px;
+        height: 45px;
       }
     }
   </style>
@@ -513,41 +819,57 @@
     <div id="intro" class="tab-content active">
       <div class="hero">
         <h1>Function Behavior Cards</h1>
-        <p>Master function analysis by recognizing behaviors visually and describing them mathematically. Practice reading graphs and building functions from behavioral descriptions.</p>
+        <p>Master function analysis by recognizing behaviors visually and describing them mathematically. Click examples to see notation.</p>
       </div>
 
       <div class="examples-grid">
-        <div class="example-card">
+        <div class="example-card" onclick="toggleExampleInfo(this)">
           <h3>Increasing</h3>
           <canvas class="example-canvas" id="ex-inc"></canvas>
+          <div class="example-info math">f'(x) > 0</div>
+          <div class="example-info interval">on (a, b)</div>
         </div>
-        <div class="example-card">
+        <div class="example-card" onclick="toggleExampleInfo(this)">
           <h3>Decreasing</h3>
           <canvas class="example-canvas" id="ex-dec"></canvas>
+          <div class="example-info math">f'(x) < 0</div>
+          <div class="example-info interval">on (a, b)</div>
         </div>
-        <div class="example-card">
+        <div class="example-card" onclick="toggleExampleInfo(this)">
           <h3>Concave Up</h3>
           <canvas class="example-canvas" id="ex-cup"></canvas>
+          <div class="example-info math">f''(x) > 0</div>
+          <div class="example-info interval">on (a, b)</div>
         </div>
-        <div class="example-card">
+        <div class="example-card" onclick="toggleExampleInfo(this)">
           <h3>Concave Down</h3>
           <canvas class="example-canvas" id="ex-cdown"></canvas>
+          <div class="example-info math">f''(x) < 0</div>
+          <div class="example-info interval">on (a, b)</div>
         </div>
-        <div class="example-card">
+        <div class="example-card" onclick="toggleExampleInfo(this)">
           <h3>Jump Discontinuity</h3>
           <canvas class="example-canvas" id="ex-jump"></canvas>
+          <div class="example-info math">lim x→c⁻ ≠ lim x→c⁺</div>
+          <div class="example-info interval">at x = c</div>
         </div>
-        <div class="example-card">
+        <div class="example-card" onclick="toggleExampleInfo(this)">
           <h3>Inflection Point</h3>
           <canvas class="example-canvas" id="ex-inflect"></canvas>
+          <div class="example-info math">f''(x) changes sign</div>
+          <div class="example-info interval">at x = c</div>
         </div>
-        <div class="example-card">
+        <div class="example-card" onclick="toggleExampleInfo(this)">
           <h3>Vertical Asymptote</h3>
           <canvas class="example-canvas" id="ex-vert"></canvas>
+          <div class="example-info math">lim x→c f(x) = ±∞</div>
+          <div class="example-info interval">at x = c</div>
         </div>
-        <div class="example-card">
+        <div class="example-card" onclick="toggleExampleInfo(this)">
           <h3>Horizontal Asymptote</h3>
           <canvas class="example-canvas" id="ex-horiz"></canvas>
+          <div class="example-info math">lim x→±∞ f(x) = L</div>
+          <div class="example-info interval">y = L</div>
         </div>
       </div>
 
@@ -570,7 +892,7 @@
       <div class="card-bank">
         <h3>Behavior Word Cards</h3>
         <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
-          Drag words to describe each behavior change from left to right
+          Click to select/unselect, or drag to sequence
         </p>
         <div class="cards-container" id="read-cards">
           <!-- Word cards will be generated here -->
@@ -580,7 +902,7 @@
       <div class="sequence-area">
         <h3>Your Description</h3>
         <div class="sequence-container" id="read-sequence">
-          <div class="placeholder-text">Drag word cards here to describe the function from left to right</div>
+          <div class="placeholder-text">Drag word cards here or click selected cards to remove</div>
         </div>
         <div class="controls">
           <button class="btn btn-primary" onclick="checkReadAnswer()">Check Answer</button>
@@ -604,33 +926,122 @@
         </div>
       </div>
 
-      <div class="card-bank">
-        <h3>Behavior Image Cards</h3>
-        <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
-          Click cards to cycle options, then drag to build the function
-        </p>
-        <div class="hint-text">Click each card to see different variations!</div>
-        <div class="cards-container" id="build-cards">
-          <!-- Clickable cards will be generated here -->
+      <div class="interval-selector">
+        <h3>Step 1: Define Intervals</h3>
+        
+        <!-- Custom Interval Builder -->
+        <div class="interval-builder">
+          <button class="bracket-toggle" id="left-bracket" onclick="toggleBracket('left')">(</button>
+          
+          <div class="infinity-toggle">
+            <input type="checkbox" id="left-infinity" class="infinity-checkbox" onchange="toggleInfinity('left')">
+            <label for="left-infinity" class="infinity-label">-∞</label>
+          </div>
+          
+          <input type="text" id="left-value" class="interval-input" placeholder="-2" value="-2">
+          
+          <span class="comma">,</span>
+          
+          <input type="text" id="right-value" class="interval-input" placeholder="2" value="2">
+          
+          <div class="infinity-toggle">
+            <input type="checkbox" id="right-infinity" class="infinity-checkbox" onchange="toggleInfinity('right')">
+            <label for="right-infinity" class="infinity-label">+∞</label>
+          </div>
+          
+          <button class="bracket-toggle" id="right-bracket" onclick="toggleBracket('right')">)</button>
+          
+          <button class="add-interval-btn" onclick="addCustomInterval()">Add Interval</button>
+        </div>
+        
+        <!-- Point Input -->
+        <div class="point-input-group">
+          <span class="point-label">x =</span>
+          <input type="text" id="point-value" class="interval-input" placeholder="0" value="0">
+          <button class="add-interval-btn" onclick="addPoint()">Add Point</button>
+        </div>
+        
+        <!-- Preset Intervals -->
+        <div class="preset-intervals">
+          <div class="preset-label">Quick Presets:</div>
+          <button class="preset-btn" onclick="setPresetInterval('ninf-0')">(-∞, 0)</button>
+          <button class="preset-btn" onclick="setPresetInterval('0-inf')">(0, ∞)</button>
+          <button class="preset-btn" onclick="setPresetInterval('full')">(-∞, ∞)</button>
+          <button class="preset-btn" onclick="setPresetInterval('-1-1')">[-1, 1]</button>
+          <button class="preset-btn" onclick="setPresetInterval('point-0')">x = 0</button>
         </div>
       </div>
 
-      <div class="sequence-area">
-        <h3>Your Construction</h3>
-        <div class="sequence-container" id="build-sequence">
-          <div class="placeholder-text">Drag configured image cards here to build your function</div>
+      <div class="workspace">
+        <h3>Step 2: Your Function Intervals</h3>
+        <div class="interval-list" id="interval-list">
+          <div class="placeholder-text">Use the interval builder above to add segments</div>
         </div>
-        <div class="controls">
-          <button class="btn btn-primary" onclick="checkBuildAnswer()">Check with AI</button>
-          <button class="btn btn-secondary" onclick="clearBuildSequence()">Clear</button>
-          <button class="btn btn-secondary" onclick="animateFunction()">Preview</button>
+      </div>
+
+      <div class="control-cards">
+        <h3>Step 3: Control Behaviors (click interval first)</h3>
+        
+        <div class="control-group">
+          <div class="control-group-label">Direction</div>
+          <div class="control-row">
+            <div class="control-card" data-behavior="increasing" onclick="toggleBehavior(this)">
+              <canvas id="ctrl-inc"></canvas>
+            </div>
+            <div class="control-card" data-behavior="decreasing" onclick="toggleBehavior(this)">
+              <canvas id="ctrl-dec"></canvas>
+            </div>
+            <div class="control-card" data-behavior="constant" onclick="toggleBehavior(this)">
+              <canvas id="ctrl-const"></canvas>
+            </div>
+          </div>
         </div>
-        <div class="feedback" id="build-feedback"></div>
+
+        <div class="control-group">
+          <div class="control-group-label">Curvature</div>
+          <div class="control-row">
+            <div class="control-card" data-behavior="concave-up" onclick="toggleBehavior(this)">
+              <canvas id="ctrl-cup"></canvas>
+            </div>
+            <div class="control-card" data-behavior="concave-down" onclick="toggleBehavior(this)">
+              <canvas id="ctrl-cdown"></canvas>
+            </div>
+            <div class="control-card" data-behavior="linear" onclick="toggleBehavior(this)">
+              <canvas id="ctrl-linear"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-group-label">Special Features</div>
+          <div class="control-row">
+            <div class="control-card" data-behavior="inflection" onclick="toggleBehavior(this)">
+              <canvas id="ctrl-inflection"></canvas>
+            </div>
+            <div class="control-card" data-behavior="jump-up" onclick="toggleBehavior(this)">
+              <canvas id="ctrl-jump-up"></canvas>
+            </div>
+            <div class="control-card" data-behavior="jump-down" onclick="toggleBehavior(this)">
+              <canvas id="ctrl-jump-down"></canvas>
+            </div>
+            <div class="control-card" data-behavior="v-asymptote" onclick="toggleBehavior(this)">
+              <canvas id="ctrl-vasym"></canvas>
+            </div>
+            <div class="control-card" data-behavior="h-asymptote" onclick="toggleBehavior(this)">
+              <canvas id="ctrl-hasym"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="graph-display">
         <h3>Your Function Preview</h3>
         <canvas class="graph-canvas" id="build-graph"></canvas>
+        <div class="controls">
+          <button class="btn btn-primary" onclick="checkBuildAnswer()">Check with AI</button>
+          <button class="btn btn-secondary" onclick="clearBuildWorkspace()">Clear All</button>
+        </div>
+        <div class="feedback" id="build-feedback"></div>
       </div>
 
       <p class="ai-disclaimer">
@@ -645,71 +1056,18 @@
       readProblem: null,
       readSequence: [],
       buildChallenge: null,
-      buildSequence: [],
+      buildIntervals: [],
+      selectedInterval: null,
       draggedCard: null,
       hintCount: 0,
-      cardStates: {}
-    };
-
-    // Card types with multiple options for Build tab
-    const clickableCardTypes = [
-      {
-        id: 'increasing',
-        options: [
-          { id: 'inc-linear', draw: drawIncreasingLinear },
-          { id: 'inc-cup', draw: drawIncreasingConcaveUp },
-          { id: 'inc-cdown', draw: drawIncreasingConcaveDown }
-        ]
-      },
-      {
-        id: 'decreasing',
-        options: [
-          { id: 'dec-linear', draw: drawDecreasingLinear },
-          { id: 'dec-cup', draw: drawDecreasingConcaveUp },
-          { id: 'dec-cdown', draw: drawDecreasingConcaveDown }
-        ]
-      },
-      {
-        id: 'constant',
-        options: [
-          { id: 'const', draw: drawConstant }
-        ]
-      },
-      {
-        id: 'inflection',
-        options: [
-          { id: 'inflect-up-down', draw: drawInflectionUpDown },
-          { id: 'inflect-down-up', draw: drawInflectionDownUp }
-        ]
-      },
-      {
-        id: 'jump',
-        options: [
-          { id: 'jump-up-left', draw: drawJumpUpLeft },
-          { id: 'jump-up-right', draw: drawJumpUpRight },
-          { id: 'jump-down-left', draw: drawJumpDownLeft },
-          { id: 'jump-down-right', draw: drawJumpDownRight }
-        ]
-      },
-      {
-        id: 'v-asymptote',
-        options: [
-          { id: 'v-asym-left-up', draw: drawVertAsymLeftUp },
-          { id: 'v-asym-left-down', draw: drawVertAsymLeftDown },
-          { id: 'v-asym-right-up', draw: drawVertAsymRightUp },
-          { id: 'v-asym-right-down', draw: drawVertAsymRightDown }
-        ]
-      },
-      {
-        id: 'h-asymptote',
-        options: [
-          { id: 'h-asym-from-above', draw: drawHorizAsymFromAbove },
-          { id: 'h-asym-from-below', draw: drawHorizAsymFromBelow },
-          { id: 'h-asym-to-above', draw: drawHorizAsymToAbove },
-          { id: 'h-asym-to-below', draw: drawHorizAsymToBelow }
-        ]
+      exampleClickCount: {},
+      intervalBuilder: {
+        leftBracket: 'open',
+        rightBracket: 'open',
+        leftInfinity: false,
+        rightInfinity: false
       }
-    ];
+    };
 
     // Word behavior types for Read tab
     const behaviorTypes = [
@@ -726,8 +1084,8 @@
       { id: 'horizontal-asymptote', label: 'Horizontal Asymptote' }
     ];
 
-    // Drawing functions for clickable card options
-    function drawIncreasingLinear(ctx, w, h) {
+    // Drawing functions for examples and controls
+    function drawIncreasing(ctx, w, h) {
       ctx.strokeStyle = '#0f766e';
       ctx.lineWidth = 3;
       ctx.beginPath();
@@ -736,48 +1094,12 @@
       ctx.stroke();
     }
 
-    function drawIncreasingConcaveUp(ctx, w, h) {
-      ctx.strokeStyle = '#0f766e';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(10, h - 10);
-      ctx.quadraticCurveTo(30, h - 5, w - 10, 10);
-      ctx.stroke();
-    }
-
-    function drawIncreasingConcaveDown(ctx, w, h) {
-      ctx.strokeStyle = '#0f766e';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(10, h - 10);
-      ctx.quadraticCurveTo(w - 30, 5, w - 10, 10);
-      ctx.stroke();
-    }
-
-    function drawDecreasingLinear(ctx, w, h) {
+    function drawDecreasing(ctx, w, h) {
       ctx.strokeStyle = '#0f766e';
       ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.moveTo(10, 10);
       ctx.lineTo(w - 10, h - 10);
-      ctx.stroke();
-    }
-
-    function drawDecreasingConcaveUp(ctx, w, h) {
-      ctx.strokeStyle = '#0f766e';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(10, 10);
-      ctx.quadraticCurveTo(30, h - 5, w - 10, h - 10);
-      ctx.stroke();
-    }
-
-    function drawDecreasingConcaveDown(ctx, w, h) {
-      ctx.strokeStyle = '#0f766e';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(10, 10);
-      ctx.quadraticCurveTo(w - 30, 5, w - 10, h - 10);
       ctx.stroke();
     }
 
@@ -790,25 +1112,39 @@
       ctx.stroke();
     }
 
-    function drawInflectionUpDown(ctx, w, h) {
+    function drawLinear(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h * 0.6);
+      ctx.lineTo(w - 10, h * 0.4);
+      ctx.stroke();
+    }
+
+    function drawConcaveUp(ctx, w, h) {
       ctx.strokeStyle = '#0f766e';
       ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.moveTo(10, h - 10);
-      ctx.bezierCurveTo(w/3, h - 20, w*2/3, 20, w - 10, 10);
+      ctx.quadraticCurveTo(w/2, h - 5, w - 10, 10);
       ctx.stroke();
-      ctx.fillStyle = '#f59e0b';
-      ctx.beginPath();
-      ctx.arc(w/2, h/2, 4, 0, 2 * Math.PI);
-      ctx.fill();
     }
 
-    function drawInflectionDownUp(ctx, w, h) {
+    function drawConcaveDown(ctx, w, h) {
       ctx.strokeStyle = '#0f766e';
       ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.moveTo(10, 10);
-      ctx.bezierCurveTo(w/3, 20, w*2/3, h - 20, w - 10, h - 10);
+      ctx.quadraticCurveTo(w/2, 5, w - 10, h - 10);
+      ctx.stroke();
+    }
+
+    function drawInflection(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h - 10);
+      ctx.bezierCurveTo(w/3, h - 10, w*2/3, 10, w - 10, 10);
       ctx.stroke();
       ctx.fillStyle = '#f59e0b';
       ctx.beginPath();
@@ -816,29 +1152,7 @@
       ctx.fill();
     }
 
-    function drawJumpUpLeft(ctx, w, h) {
-      ctx.strokeStyle = '#0f766e';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(10, h * 0.7);
-      ctx.lineTo(w/2 - 5, h * 0.7);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(w/2 - 5, h * 0.7, 4, 0, 2 * Math.PI);
-      ctx.fillStyle = '#0f766e';
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(w/2 + 5, h * 0.3);
-      ctx.lineTo(w - 10, h * 0.3);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(w/2 + 5, h * 0.3, 4, 0, 2 * Math.PI);
-      ctx.fillStyle = 'white';
-      ctx.fill();
-      ctx.stroke();
-    }
-
-    function drawJumpUpRight(ctx, w, h) {
+    function drawJumpUp(ctx, w, h) {
       ctx.strokeStyle = '#0f766e';
       ctx.lineWidth = 3;
       ctx.beginPath();
@@ -860,7 +1174,7 @@
       ctx.fill();
     }
 
-    function drawJumpDownLeft(ctx, w, h) {
+    function drawJumpDown(ctx, w, h) {
       ctx.strokeStyle = '#0f766e';
       ctx.lineWidth = 3;
       ctx.beginPath();
@@ -882,29 +1196,7 @@
       ctx.stroke();
     }
 
-    function drawJumpDownRight(ctx, w, h) {
-      ctx.strokeStyle = '#0f766e';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(10, h * 0.3);
-      ctx.lineTo(w/2 - 5, h * 0.3);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(w/2 - 5, h * 0.3, 4, 0, 2 * Math.PI);
-      ctx.fillStyle = 'white';
-      ctx.fill();
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(w/2 + 5, h * 0.7);
-      ctx.lineTo(w - 10, h * 0.7);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(w/2 + 5, h * 0.7, 4, 0, 2 * Math.PI);
-      ctx.fillStyle = '#0f766e';
-      ctx.fill();
-    }
-
-    function drawVertAsymLeftUp(ctx, w, h) {
+    function drawVerticalAsymptote(ctx, w, h) {
       ctx.strokeStyle = '#dc2626';
       ctx.lineWidth = 3;
       ctx.setLineDash([6, 4]);
@@ -915,96 +1207,16 @@
       ctx.setLineDash([]);
       ctx.strokeStyle = '#0f766e';
       ctx.beginPath();
-      ctx.moveTo(10, h * 0.7);
+      ctx.moveTo(10, h/2);
       for (let x = 10; x < w * 0.7 - 8; x += 3) {
         const t = (x - 10) / (w * 0.7 - 18);
-        const y = h * 0.7 - h * 0.5 * Math.pow(t, 2);
+        const y = h/2 - h * 0.4 * Math.pow(t, 2);
         ctx.lineTo(x, Math.max(5, y));
       }
       ctx.stroke();
     }
 
-    function drawVertAsymLeftDown(ctx, w, h) {
-      ctx.strokeStyle = '#dc2626';
-      ctx.lineWidth = 3;
-      ctx.setLineDash([6, 4]);
-      ctx.beginPath();
-      ctx.moveTo(w * 0.7, 5);
-      ctx.lineTo(w * 0.7, h - 5);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.strokeStyle = '#0f766e';
-      ctx.beginPath();
-      ctx.moveTo(10, h * 0.3);
-      for (let x = 10; x < w * 0.7 - 8; x += 3) {
-        const t = (x - 10) / (w * 0.7 - 18);
-        const y = h * 0.3 + h * 0.5 * Math.pow(t, 2);
-        ctx.lineTo(x, Math.min(h - 5, y));
-      }
-      ctx.stroke();
-    }
-
-    function drawVertAsymRightUp(ctx, w, h) {
-      ctx.strokeStyle = '#dc2626';
-      ctx.lineWidth = 3;
-      ctx.setLineDash([6, 4]);
-      ctx.beginPath();
-      ctx.moveTo(w * 0.3, 5);
-      ctx.lineTo(w * 0.3, h - 5);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.strokeStyle = '#0f766e';
-      ctx.beginPath();
-      ctx.moveTo(w - 10, h * 0.7);
-      for (let x = w - 10; x > w * 0.3 + 8; x -= 3) {
-        const t = (w - 10 - x) / (w - 10 - w * 0.3 - 8);
-        const y = h * 0.7 - h * 0.5 * Math.pow(t, 2);
-        ctx.lineTo(x, Math.max(5, y));
-      }
-      ctx.stroke();
-    }
-
-    function drawVertAsymRightDown(ctx, w, h) {
-      ctx.strokeStyle = '#dc2626';
-      ctx.lineWidth = 3;
-      ctx.setLineDash([6, 4]);
-      ctx.beginPath();
-      ctx.moveTo(w * 0.3, 5);
-      ctx.lineTo(w * 0.3, h - 5);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.strokeStyle = '#0f766e';
-      ctx.beginPath();
-      ctx.moveTo(w - 10, h * 0.3);
-      for (let x = w - 10; x > w * 0.3 + 8; x -= 3) {
-        const t = (w - 10 - x) / (w - 10 - w * 0.3 - 8);
-        const y = h * 0.3 + h * 0.5 * Math.pow(t, 2);
-        ctx.lineTo(x, Math.min(h - 5, y));
-      }
-      ctx.stroke();
-    }
-
-    function drawHorizAsymFromAbove(ctx, w, h) {
-      ctx.strokeStyle = '#dc2626';
-      ctx.lineWidth = 3;
-      ctx.setLineDash([6, 4]);
-      ctx.beginPath();
-      ctx.moveTo(5, h * 0.7);
-      ctx.lineTo(w - 5, h * 0.7);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.strokeStyle = '#0f766e';
-      ctx.beginPath();
-      ctx.moveTo(10, h * 0.2);
-      for (let x = 10; x < w - 10; x += 3) {
-        const t = (x - 10) / (w - 20);
-        const y = h * 0.2 + (h * 0.7 - h * 0.2 - 5) * (1 - Math.exp(-3*t));
-        ctx.lineTo(x, y);
-      }
-      ctx.stroke();
-    }
-
-    function drawHorizAsymFromBelow(ctx, w, h) {
+    function drawHorizontalAsymptote(ctx, w, h) {
       ctx.strokeStyle = '#dc2626';
       ctx.lineWidth = 3;
       ctx.setLineDash([6, 4]);
@@ -1024,55 +1236,33 @@
       ctx.stroke();
     }
 
-    function drawHorizAsymToAbove(ctx, w, h) {
-      ctx.strokeStyle = '#dc2626';
-      ctx.lineWidth = 3;
-      ctx.setLineDash([6, 4]);
-      ctx.beginPath();
-      ctx.moveTo(5, h * 0.3);
-      ctx.lineTo(w - 5, h * 0.3);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.strokeStyle = '#0f766e';
-      ctx.beginPath();
-      for (let x = w - 10; x > 10; x -= 3) {
-        const t = (w - 10 - x) / (w - 20);
-        const y = h * 0.3 + 5 + (h * 0.5) * (1 - Math.exp(-3*t));
-        ctx.lineTo(x, y);
+    // Toggle example info in Tab 1
+    function toggleExampleInfo(card) {
+      const id = card.querySelector('.example-canvas').id;
+      if (!state.exampleClickCount[id]) state.exampleClickCount[id] = 0;
+      
+      state.exampleClickCount[id]++;
+      
+      card.classList.remove('show-math', 'show-interval');
+      
+      if (state.exampleClickCount[id] % 3 === 1) {
+        card.classList.add('show-math');
+      } else if (state.exampleClickCount[id] % 3 === 2) {
+        card.classList.add('show-interval');
       }
-      ctx.stroke();
-    }
-
-    function drawHorizAsymToBelow(ctx, w, h) {
-      ctx.strokeStyle = '#dc2626';
-      ctx.lineWidth = 3;
-      ctx.setLineDash([6, 4]);
-      ctx.beginPath();
-      ctx.moveTo(5, h * 0.7);
-      ctx.lineTo(w - 5, h * 0.7);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.strokeStyle = '#0f766e';
-      ctx.beginPath();
-      for (let x = w - 10; x > 10; x -= 3) {
-        const t = (w - 10 - x) / (w - 20);
-        const y = h * 0.7 - 5 - (h * 0.5) * (1 - Math.exp(-3*t));
-        ctx.lineTo(x, y);
-      }
-      ctx.stroke();
     }
 
     // Initialize example canvases
     function drawExamples() {
       const examples = [
-        { id: 'ex-inc', func: drawIncreasingLinear },
-        { id: 'ex-dec', func: drawDecreasingLinear },
-        { id: 'ex-cup', func: drawIncreasingConcaveUp },
-        { id: 'ex-cdown', func: drawDecreasingConcaveDown },
-        { id: 'ex-jump', func: drawJumpUpRight },
-        { id: 'ex-inflect', func: drawInflectionUpDown },
-        { id: 'ex-vert', func: drawVertAsymLeftUp },
-        { id: 'ex-horiz', func: drawHorizAsymFromBelow }
+        { id: 'ex-inc', func: drawIncreasing },
+        { id: 'ex-dec', func: drawDecreasing },
+        { id: 'ex-cup', func: drawConcaveUp },
+        { id: 'ex-cdown', func: drawConcaveDown },
+        { id: 'ex-jump', func: drawJumpUp },
+        { id: 'ex-inflect', func: drawInflection },
+        { id: 'ex-vert', func: drawVerticalAsymptote },
+        { id: 'ex-horiz', func: drawHorizontalAsymptote }
       ];
 
       examples.forEach(ex => {
@@ -1087,6 +1277,207 @@
       });
     }
 
+    // Initialize control cards for Tab 3
+    function drawControlCards() {
+      const controls = [
+        { id: 'ctrl-inc', func: drawIncreasing },
+        { id: 'ctrl-dec', func: drawDecreasing },
+        { id: 'ctrl-const', func: drawConstant },
+        { id: 'ctrl-cup', func: drawConcaveUp },
+        { id: 'ctrl-cdown', func: drawConcaveDown },
+        { id: 'ctrl-linear', func: drawLinear },
+        { id: 'ctrl-inflection', func: drawInflection },
+        { id: 'ctrl-jump-up', func: drawJumpUp },
+        { id: 'ctrl-jump-down', func: drawJumpDown },
+        { id: 'ctrl-vasym', func: drawVerticalAsymptote },
+        { id: 'ctrl-hasym', func: drawHorizontalAsymptote }
+      ];
+
+      controls.forEach(ctrl => {
+        const canvas = document.getElementById(ctrl.id);
+        if (canvas) {
+          const ctx = canvas.getContext('2d');
+          canvas.width = 60;
+          canvas.height = 45;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctrl.func(ctx, canvas.width, canvas.height);
+        }
+      });
+    }
+
+    // Toggle bracket open/closed
+    function toggleBracket(side) {
+      const btn = document.getElementById(`${side}-bracket`);
+      if (side === 'left') {
+        state.intervalBuilder.leftBracket = state.intervalBuilder.leftBracket === 'open' ? 'closed' : 'open';
+        btn.textContent = state.intervalBuilder.leftBracket === 'open' ? '(' : '[';
+      } else {
+        state.intervalBuilder.rightBracket = state.intervalBuilder.rightBracket === 'open' ? 'closed' : 'open';
+        btn.textContent = state.intervalBuilder.rightBracket === 'open' ? ')' : ']';
+      }
+      btn.classList.toggle('closed');
+    }
+
+    // Toggle infinity
+    function toggleInfinity(side) {
+      const checkbox = document.getElementById(`${side}-infinity`);
+      const input = document.getElementById(`${side}-value`);
+      
+      if (side === 'left') {
+        state.intervalBuilder.leftInfinity = checkbox.checked;
+        input.disabled = checkbox.checked;
+        input.style.opacity = checkbox.checked ? '0.3' : '1';
+        if (checkbox.checked) {
+          // Open bracket for infinity
+          state.intervalBuilder.leftBracket = 'open';
+          const btn = document.getElementById('left-bracket');
+          btn.textContent = '(';
+          btn.classList.remove('closed');
+        }
+      } else {
+        state.intervalBuilder.rightInfinity = checkbox.checked;
+        input.disabled = checkbox.checked;
+        input.style.opacity = checkbox.checked ? '0.3' : '1';
+        if (checkbox.checked) {
+          // Open bracket for infinity
+          state.intervalBuilder.rightBracket = 'open';
+          const btn = document.getElementById('right-bracket');
+          btn.textContent = ')';
+          btn.classList.remove('closed');
+        }
+      }
+    }
+
+    // Add custom interval
+    function addCustomInterval() {
+      const leftValue = state.intervalBuilder.leftInfinity ? -Infinity : parseFloat(document.getElementById('left-value').value);
+      const rightValue = state.intervalBuilder.rightInfinity ? Infinity : parseFloat(document.getElementById('right-value').value);
+      
+      if (!state.intervalBuilder.leftInfinity && !state.intervalBuilder.rightInfinity) {
+        if (isNaN(leftValue) || isNaN(rightValue)) {
+          alert('Please enter valid numbers');
+          return;
+        }
+        if (leftValue >= rightValue) {
+          alert('Left value must be less than right value');
+          return;
+        }
+      }
+      
+      const leftBracket = state.intervalBuilder.leftBracket === 'open' ? '(' : '[';
+      const rightBracket = state.intervalBuilder.rightBracket === 'open' ? ')' : ']';
+      const leftText = state.intervalBuilder.leftInfinity ? '-∞' : leftValue;
+      const rightText = state.intervalBuilder.rightInfinity ? '∞' : rightValue;
+      
+      const intervalText = `${leftBracket}${leftText}, ${rightText}${rightBracket}`;
+      
+      addIntervalToList(intervalText, leftValue, rightValue, 'interval');
+    }
+
+    // Add point
+    function addPoint() {
+      const value = parseFloat(document.getElementById('point-value').value);
+      if (isNaN(value)) {
+        alert('Please enter a valid number');
+        return;
+      }
+      
+      const intervalText = `x = ${value}`;
+      addIntervalToList(intervalText, value, value, 'point');
+    }
+
+    // Set preset interval
+    function setPresetInterval(preset) {
+      switch(preset) {
+        case 'ninf-0':
+          document.getElementById('left-infinity').checked = true;
+          document.getElementById('right-infinity').checked = false;
+          document.getElementById('right-value').value = '0';
+          toggleInfinity('left');
+          toggleInfinity('right');
+          addCustomInterval();
+          break;
+        case '0-inf':
+          document.getElementById('left-infinity').checked = false;
+          document.getElementById('right-infinity').checked = true;
+          document.getElementById('left-value').value = '0';
+          toggleInfinity('left');
+          toggleInfinity('right');
+          addCustomInterval();
+          break;
+        case 'full':
+          document.getElementById('left-infinity').checked = true;
+          document.getElementById('right-infinity').checked = true;
+          toggleInfinity('left');
+          toggleInfinity('right');
+          addCustomInterval();
+          break;
+        case '-1-1':
+          document.getElementById('left-infinity').checked = false;
+          document.getElementById('right-infinity').checked = false;
+          document.getElementById('left-value').value = '-1';
+          document.getElementById('right-value').value = '1';
+          state.intervalBuilder.leftBracket = 'closed';
+          state.intervalBuilder.rightBracket = 'closed';
+          document.getElementById('left-bracket').textContent = '[';
+          document.getElementById('left-bracket').classList.add('closed');
+          document.getElementById('right-bracket').textContent = ']';
+          document.getElementById('right-bracket').classList.add('closed');
+          toggleInfinity('left');
+          toggleInfinity('right');
+          addCustomInterval();
+          break;
+        case 'point-0':
+          document.getElementById('point-value').value = '0';
+          addPoint();
+          break;
+      }
+    }
+
+    // Add interval to list
+    function addIntervalToList(intervalText, start, end, type) {
+      const listContainer = document.getElementById('interval-list');
+      
+      // Remove placeholder if exists
+      const placeholder = listContainer.querySelector('.placeholder-text');
+      if (placeholder) placeholder.remove();
+      
+      const intervalId = 'interval-' + Date.now();
+      const intervalItem = document.createElement('div');
+      intervalItem.className = 'interval-item';
+      intervalItem.id = intervalId;
+      intervalItem.dataset.start = start;
+      intervalItem.dataset.end = end;
+      intervalItem.dataset.type = type;
+      intervalItem.onclick = () => selectInterval(intervalId);
+      
+      intervalItem.innerHTML = `
+        <span class="interval-text">${intervalText}</span>
+        <canvas></canvas>
+        <button class="remove-btn" onclick="removeInterval('${intervalId}'); event.stopPropagation();">×</button>
+      `;
+      
+      listContainer.appendChild(intervalItem);
+      
+      // Add to state
+      state.buildIntervals.push({
+        id: intervalId,
+        type: type,
+        start: start,
+        end: end,
+        text: intervalText,
+        behaviors: []
+      });
+      
+      // Draw generic curve
+      setTimeout(() => {
+        const canvas = intervalItem.querySelector('canvas');
+        drawIntervalCurve(canvas, intervalId);
+      }, 10);
+      
+      updateBuildGraph();
+    }
+
     // Create word card for Tab 2
     function createWordCard(type) {
       const card = document.createElement('div');
@@ -1095,57 +1486,24 @@
       card.draggable = true;
       card.textContent = type.label;
       
-      card.addEventListener('dragstart', handleDragStart);
-      card.addEventListener('dragend', handleDragEnd);
-      
-      return card;
-    }
-
-    // Create clickable image card for Tab 3
-    function createClickableCard(cardType) {
-      const card = document.createElement('div');
-      card.className = 'clickable-card';
-      card.dataset.cardId = cardType.id;
-      card.dataset.optionIndex = '0';
-      card.draggable = true;
-      
-      const canvas = document.createElement('canvas');
-      card.appendChild(canvas);
-      
-      const indicators = document.createElement('div');
-      indicators.className = 'option-indicator';
-      for (let i = 0; i < cardType.options.length; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'option-dot' + (i === 0 ? ' active' : '');
-        indicators.appendChild(dot);
-      }
-      card.appendChild(indicators);
-      
-      state.cardStates[cardType.id] = 0;
-      
-      setTimeout(() => {
-        const ctx = canvas.getContext('2d');
-        canvas.width = 90;
-        canvas.height = 60;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        cardType.options[0].draw(ctx, canvas.width, canvas.height);
-      }, 10);
-      
-      card.addEventListener('click', (e) => {
-        if (e.target === card || e.target === canvas) {
-          const currentIndex = parseInt(card.dataset.optionIndex);
-          const nextIndex = (currentIndex + 1) % cardType.options.length;
-          card.dataset.optionIndex = nextIndex.toString();
-          state.cardStates[cardType.id] = nextIndex;
+      card.addEventListener('click', () => {
+        if (card.parentElement.classList.contains('sequence-container')) {
+          // Remove from sequence
+          const idx = state.readSequence.indexOf(type.id);
+          if (idx > -1) state.readSequence.splice(idx, 1);
+          card.remove();
           
-          const dots = card.querySelectorAll('.option-dot');
-          dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === nextIndex);
-          });
-          
-          const ctx = canvas.getContext('2d');
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          cardType.options[nextIndex].draw(ctx, canvas.width, canvas.height);
+          // Restore placeholder if empty
+          const container = document.getElementById('read-sequence');
+          if (container.children.length === 0) {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'placeholder-text';
+            placeholder.textContent = 'Drag word cards here or click selected cards to remove';
+            container.appendChild(placeholder);
+          }
+        } else {
+          // Toggle selection in bank
+          card.classList.toggle('selected');
         }
       });
       
@@ -1158,33 +1516,11 @@
     // Drag and drop handlers
     function handleDragStart(e) {
       const card = e.target;
-      let type, cardId, optionIndex;
-      
-      if (card.classList.contains('clickable-card')) {
-        cardId = card.dataset.cardId;
-        optionIndex = card.dataset.optionIndex;
-        
-        if (cardId) {
-          const cardType = clickableCardTypes.find(ct => ct.id === cardId);
-          if (cardType) {
-            type = cardType.options[parseInt(optionIndex)].id;
-          }
-        } else {
-          type = card.dataset.type;
-        }
-      } else {
-        type = card.dataset.type;
-      }
-      
       state.draggedCard = {
-        type: type,
+        type: card.dataset.type,
         element: card,
-        fromSequence: card.parentElement.classList.contains('sequence-container'),
-        isClickable: card.classList.contains('clickable-card'),
-        cardId: cardId,
-        optionIndex: optionIndex
+        fromSequence: card.parentElement.classList.contains('sequence-container')
       };
-      
       card.classList.add('dragging');
       e.dataTransfer.effectAllowed = 'move';
     }
@@ -1214,12 +1550,12 @@
       }
     }
 
-    function handleDrop(e, sequenceType) {
+    function handleDrop(e) {
       if (e.stopPropagation) {
         e.stopPropagation();
       }
       
-      const container = document.getElementById(`${sequenceType}-sequence`);
+      const container = document.getElementById('read-sequence');
       container.classList.remove('drag-over');
       
       if (!state.draggedCard) return false;
@@ -1230,98 +1566,24 @@
       }
       
       if (state.draggedCard.fromSequence) {
-        const originalContainer = state.draggedCard.element.parentElement;
-        const originalSequenceType = originalContainer.id.includes('read') ? 'read' : 'build';
-        
-        const cards = Array.from(originalContainer.children).filter(c => 
-          c.classList.contains('word-card') || c.classList.contains('clickable-card')
-        );
-        const cardIndex = cards.indexOf(state.draggedCard.element);
-        
-        if (originalSequenceType === 'read' && cardIndex > -1) {
-          state.readSequence.splice(cardIndex, 1);
-        } else if (originalSequenceType === 'build' && cardIndex > -1) {
-          state.buildSequence.splice(cardIndex, 1);
-        }
-        
+        // Remove from original position
+        const idx = state.readSequence.indexOf(state.draggedCard.type);
+        if (idx > -1) state.readSequence.splice(idx, 1);
         state.draggedCard.element.remove();
-        
-        if (originalContainer.children.length === 0) {
-          const newPlaceholder = document.createElement('div');
-          newPlaceholder.className = 'placeholder-text';
-          newPlaceholder.textContent = originalSequenceType === 'read' 
-            ? 'Drag word cards here to describe the function from left to right'
-            : 'Drag configured image cards here to build your function';
-          originalContainer.appendChild(newPlaceholder);
-        }
       }
       
-      if (sequenceType === 'read') {
-        const typeObj = behaviorTypes.find(t => t.id === state.draggedCard.type);
-        if (typeObj) {
-          const newCard = createWordCard(typeObj);
-          container.appendChild(newCard);
-          state.readSequence.push(state.draggedCard.type);
-        }
-      } else {
-        if (state.draggedCard.isClickable) {
-          let option;
-          
-          if (state.draggedCard.cardId) {
-            const cardType = clickableCardTypes.find(ct => ct.id === state.draggedCard.cardId);
-            if (cardType) {
-              const optionIndex = parseInt(state.draggedCard.optionIndex);
-              option = cardType.options[optionIndex];
-            }
-          } else {
-            const optionId = state.draggedCard.type;
-            for (const ct of clickableCardTypes) {
-              const found = ct.options.find(o => o.id === optionId);
-              if (found) {
-                option = found;
-                break;
-              }
-            }
-          }
-          
-          if (option) {
-            const card = document.createElement('div');
-            card.className = 'clickable-card';
-            card.dataset.type = option.id;
-            card.draggable = true;
-            
-            const canvas = document.createElement('canvas');
-            card.appendChild(canvas);
-            
-            setTimeout(() => {
-              const ctx = canvas.getContext('2d');
-              canvas.width = 90;
-              canvas.height = 60;
-              ctx.clearRect(0, 0, canvas.width, canvas.height);
-              option.draw(ctx, canvas.width, canvas.height);
-            }, 10);
-            
-            card.addEventListener('dragstart', handleDragStart);
-            card.addEventListener('dragend', handleDragEnd);
-            
-            // Add double-click to remove
-            card.addEventListener('dblclick', () => {
-              if (card.parentElement.classList.contains('sequence-container')) {
-                removeCardFromSequence(card, 'build');
-              }
-            });
-            
-            container.appendChild(card);
-            state.buildSequence.push(option.id);
-            updateBuildGraph();
-          }
-        }
+      // Add to sequence
+      const typeObj = behaviorTypes.find(t => t.id === state.draggedCard.type);
+      if (typeObj) {
+        const newCard = createWordCard(typeObj);
+        container.appendChild(newCard);
+        state.readSequence.push(state.draggedCard.type);
       }
       
       return false;
     }
 
-    // Initialize Read tab with word cards
+    // Initialize Read tab
     function initializeReadTab() {
       const container = document.getElementById('read-cards');
       container.innerHTML = '';
@@ -1333,34 +1595,312 @@
       
       const sequence = document.getElementById('read-sequence');
       sequence.addEventListener('dragover', handleDragOver);
-      sequence.addEventListener('drop', (e) => handleDrop(e, 'read'));
+      sequence.addEventListener('drop', handleDrop);
       sequence.addEventListener('dragenter', handleDragEnter);
       sequence.addEventListener('dragleave', handleDragLeave);
       
       generateNewReadProblem();
     }
 
-    // Initialize Build tab with clickable cards
-    function initializeBuildTab() {
-      const container = document.getElementById('build-cards');
-      container.innerHTML = '';
-      
-      clickableCardTypes.forEach(cardType => {
-        const card = createClickableCard(cardType);
-        container.appendChild(card);
+    // Select interval for behavior modification
+    function selectInterval(intervalId) {
+      // Clear previous selection
+      document.querySelectorAll('.interval-item').forEach(item => {
+        item.classList.remove('selected');
       });
       
-      const sequence = document.getElementById('build-sequence');
-      sequence.addEventListener('dragover', handleDragOver);
-      sequence.addEventListener('drop', (e) => handleDrop(e, 'build'));
-      sequence.addEventListener('dragenter', handleDragEnter);
-      sequence.addEventListener('dragleave', handleDragLeave);
+      // Set new selection
+      document.getElementById(intervalId).classList.add('selected');
+      state.selectedInterval = intervalId;
       
-      generateNewBuildChallenge();
-      initializeBuildGraph();
+      // Update control cards to show active behaviors
+      const interval = state.buildIntervals.find(i => i.id === intervalId);
+      document.querySelectorAll('.control-card').forEach(card => {
+        card.classList.remove('active');
+        if (interval && interval.behaviors.includes(card.dataset.behavior)) {
+          card.classList.add('active');
+        }
+      });
     }
 
-    // Read problems with proper intervals
+    // Remove interval
+    function removeInterval(intervalId) {
+      const idx = state.buildIntervals.findIndex(i => i.id === intervalId);
+      if (idx > -1) state.buildIntervals.splice(idx, 1);
+      
+      document.getElementById(intervalId).remove();
+      
+      if (state.selectedInterval === intervalId) {
+        state.selectedInterval = null;
+      }
+      
+      // Restore placeholder if empty
+      const container = document.getElementById('interval-list');
+      if (container.children.length === 0) {
+        container.innerHTML = '<div class="placeholder-text">Use the interval builder above to add segments</div>';
+      }
+      
+      updateBuildGraph();
+    }
+
+    // Toggle behavior on selected interval
+    function toggleBehavior(card) {
+      if (!state.selectedInterval) {
+        alert('Please select an interval first');
+        return;
+      }
+      
+      const interval = state.buildIntervals.find(i => i.id === state.selectedInterval);
+      if (!interval) return;
+      
+      const behavior = card.dataset.behavior;
+      const idx = interval.behaviors.indexOf(behavior);
+      
+      if (idx > -1) {
+        // Remove behavior
+        interval.behaviors.splice(idx, 1);
+        card.classList.remove('active');
+      } else {
+        // Add behavior, but check for conflicts
+        if (behavior === 'increasing' || behavior === 'decreasing' || behavior === 'constant') {
+          // Remove other direction behaviors
+          interval.behaviors = interval.behaviors.filter(b => 
+            b !== 'increasing' && b !== 'decreasing' && b !== 'constant'
+          );
+          document.querySelectorAll('.control-card[data-behavior="increasing"], .control-card[data-behavior="decreasing"], .control-card[data-behavior="constant"]')
+            .forEach(c => c.classList.remove('active'));
+        }
+        
+        if (behavior === 'concave-up' || behavior === 'concave-down' || behavior === 'linear') {
+          // Remove other curvature behaviors
+          interval.behaviors = interval.behaviors.filter(b => 
+            b !== 'concave-up' && b !== 'concave-down' && b !== 'linear'
+          );
+          document.querySelectorAll('.control-card[data-behavior="concave-up"], .control-card[data-behavior="concave-down"], .control-card[data-behavior="linear"]')
+            .forEach(c => c.classList.remove('active'));
+        }
+        
+        interval.behaviors.push(behavior);
+        card.classList.add('active');
+      }
+      
+      // Redraw interval curve
+      const intervalElement = document.getElementById(state.selectedInterval);
+      const canvas = intervalElement.querySelector('canvas');
+      drawIntervalCurve(canvas, state.selectedInterval);
+      
+      updateBuildGraph();
+    }
+
+    // Draw interval curve based on behaviors
+    function drawIntervalCurve(canvas, intervalId) {
+      const interval = state.buildIntervals.find(i => i.id === intervalId);
+      if (!interval) return;
+      
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth || 200;
+      canvas.height = 40;
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      const w = canvas.width;
+      const h = canvas.height;
+      
+      // Default generic curve
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      
+      // Apply behaviors
+      const isIncreasing = interval.behaviors.includes('increasing');
+      const isDecreasing = interval.behaviors.includes('decreasing');
+      const isConstant = interval.behaviors.includes('constant');
+      const isConcaveUp = interval.behaviors.includes('concave-up');
+      const isConcaveDown = interval.behaviors.includes('concave-down');
+      const isLinear = interval.behaviors.includes('linear');
+      
+      if (interval.type === 'point') {
+        // Draw point or special feature
+        if (interval.behaviors.includes('jump-up')) {
+          drawJumpUp(ctx, w, h);
+        } else if (interval.behaviors.includes('jump-down')) {
+          drawJumpDown(ctx, w, h);
+        } else if (interval.behaviors.includes('inflection')) {
+          drawInflection(ctx, w, h);
+        } else {
+          // Just a point
+          ctx.beginPath();
+          ctx.arc(w/2, h/2, 4, 0, 2 * Math.PI);
+          ctx.fillStyle = '#0f766e';
+          ctx.fill();
+        }
+      } else {
+        // Draw curve segment
+        if (isConstant) {
+          ctx.moveTo(10, h/2);
+          ctx.lineTo(w - 10, h/2);
+        } else if (isIncreasing) {
+          if (isConcaveUp) {
+            ctx.moveTo(10, h - 10);
+            ctx.quadraticCurveTo(w/2, h - 5, w - 10, 10);
+          } else if (isConcaveDown) {
+            ctx.moveTo(10, h - 10);
+            ctx.quadraticCurveTo(w/2, 5, w - 10, 10);
+          } else {
+            ctx.moveTo(10, h - 10);
+            ctx.lineTo(w - 10, 10);
+          }
+        } else if (isDecreasing) {
+          if (isConcaveUp) {
+            ctx.moveTo(10, 10);
+            ctx.quadraticCurveTo(w/2, h - 5, w - 10, h - 10);
+          } else if (isConcaveDown) {
+            ctx.moveTo(10, 10);
+            ctx.quadraticCurveTo(w/2, 5, w - 10, h - 10);
+          } else {
+            ctx.moveTo(10, 10);
+            ctx.lineTo(w - 10, h - 10);
+          }
+        } else {
+          // Generic curve (no direction specified)
+          if (isConcaveUp) {
+            ctx.moveTo(10, h/2);
+            ctx.quadraticCurveTo(w/2, h - 5, w - 10, h/2);
+          } else if (isConcaveDown) {
+            ctx.moveTo(10, h/2);
+            ctx.quadraticCurveTo(w/2, 5, w - 10, h/2);
+          } else {
+            // Default wavy line
+            ctx.moveTo(10, h/2);
+            ctx.bezierCurveTo(w/3, h/3, w*2/3, h*2/3, w - 10, h/2);
+          }
+        }
+        ctx.stroke();
+        
+        // Draw asymptotes if specified
+        if (interval.behaviors.includes('v-asymptote')) {
+          ctx.strokeStyle = '#dc2626';
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.moveTo(w - 20, 5);
+          ctx.lineTo(w - 20, h - 5);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+        
+        if (interval.behaviors.includes('h-asymptote')) {
+          ctx.strokeStyle = '#dc2626';
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.moveTo(10, 10);
+          ctx.lineTo(w - 10, 10);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      }
+    }
+
+    // Update build graph preview
+    function updateBuildGraph() {
+      const canvas = document.getElementById('build-graph');
+      if (!canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth || 800;
+      canvas.height = 350;
+      
+      const w = canvas.width;
+      const h = canvas.height;
+      
+      ctx.clearRect(0, 0, w, h);
+      drawGrid(ctx, w, h);
+      
+      if (state.buildIntervals.length === 0) return;
+      
+      // Sort intervals by start value
+      const sorted = [...state.buildIntervals].sort((a, b) => {
+        if (a.start === -Infinity) return -1;
+        if (b.start === -Infinity) return 1;
+        return a.start - b.start;
+      });
+      
+      ctx.save();
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      
+      // Draw each interval
+      sorted.forEach(interval => {
+        // Map interval to canvas coordinates
+        // This is simplified - you'd need proper scaling
+        const startX = interval.start === -Infinity ? 50 : w/2 + interval.start * 100;
+        const endX = interval.end === Infinity ? w - 50 : w/2 + interval.end * 100;
+        
+        if (interval.type === 'point') {
+          // Draw point features
+          const x = w/2 + interval.start * 100;
+          
+          if (interval.behaviors.includes('inflection')) {
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath();
+            ctx.arc(x, h/2, 6, 0, 2 * Math.PI);
+            ctx.fill();
+          } else if (interval.behaviors.includes('jump-up') || interval.behaviors.includes('jump-down')) {
+            // Draw jump discontinuity
+            // Simplified - would need to connect with adjacent segments
+          }
+        } else {
+          // Draw curve segment
+          ctx.beginPath();
+          
+          const isIncreasing = interval.behaviors.includes('increasing');
+          const isDecreasing = interval.behaviors.includes('decreasing');
+          const isConstant = interval.behaviors.includes('constant');
+          const isConcaveUp = interval.behaviors.includes('concave-up');
+          const isConcaveDown = interval.behaviors.includes('concave-down');
+          
+          let startY = h/2;
+          let endY = h/2;
+          
+          if (isIncreasing) {
+            startY = h * 0.7;
+            endY = h * 0.3;
+          } else if (isDecreasing) {
+            startY = h * 0.3;
+            endY = h * 0.7;
+          }
+          
+          if (isConstant) {
+            ctx.moveTo(startX, h/2);
+            ctx.lineTo(endX, h/2);
+          } else if (isConcaveUp || isConcaveDown) {
+            ctx.moveTo(startX, startY);
+            const midX = (startX + endX) / 2;
+            const midY = isConcaveUp ? startY + 20 : startY - 20;
+            ctx.quadraticCurveTo(midX, midY, endX, endY);
+          } else {
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+          }
+          
+          ctx.stroke();
+        }
+      });
+      
+      ctx.restore();
+    }
+
+    // Clear build workspace
+    function clearBuildWorkspace() {
+      state.buildIntervals = [];
+      state.selectedInterval = null;
+      document.getElementById('interval-list').innerHTML = '<div class="placeholder-text">Use the interval builder above to add segments</div>';
+      document.querySelectorAll('.control-card').forEach(card => {
+        card.classList.remove('active');
+      });
+      updateBuildGraph();
+    }
+
+    // Read problems
     const readProblems = [
       { 
         sequence: ['increasing', 'concave-up'], 
@@ -1376,21 +1916,6 @@
         sequence: ['constant', 'jump-up', 'increasing'], 
         intervals: [['(-∞', '0)'], ['x=0'], ['(0', '∞)']],
         description: 'Constant then jump up, then increasing' 
-      },
-      { 
-        sequence: ['increasing', 'concave-down', 'inflection', 'increasing', 'concave-up'], 
-        intervals: [['(-∞', '0)'], ['(-∞', '0)'], ['x=0'], ['(0', '∞)'], ['(0', '∞)']],
-        description: 'S-curve with inflection at origin' 
-      },
-      {
-        sequence: ['decreasing', 'vertical-asymptote'],
-        intervals: [['(-∞', '2)'], ['x=2']],
-        description: 'Decreasing approaching vertical asymptote at x=2'
-      },
-      {
-        sequence: ['increasing', 'horizontal-asymptote'],
-        intervals: [['(-∞', '∞)'], ['y=3']],
-        description: 'Increasing approaching horizontal asymptote y=3'
       }
     ];
 
@@ -1417,6 +1942,7 @@
       ctx.clearRect(0, 0, w, h);
       drawGrid(ctx, w, h);
       
+      // Draw based on problem
       ctx.save();
       ctx.strokeStyle = '#0f766e';
       ctx.lineWidth = 3;
@@ -1432,7 +1958,7 @@
           ctx.lineTo(x, Math.max(50, y));
         }
         ctx.stroke();
-      } else if (problem.description.includes('inflection at x=0')) {
+      } else if (problem.description.includes('inflection')) {
         ctx.beginPath();
         for (let x = 50; x < w - 50; x += 5) {
           const t = (x - w/2) / 150;
@@ -1445,7 +1971,7 @@
         ctx.beginPath();
         ctx.arc(w/2, h/2, 6, 0, 2 * Math.PI);
         ctx.fill();
-      } else if (problem.description.includes('jump up')) {
+      } else if (problem.description.includes('jump')) {
         ctx.beginPath();
         ctx.moveTo(50, h * 0.6);
         ctx.lineTo(w/2 - 10, h * 0.6);
@@ -1462,57 +1988,6 @@
         ctx.beginPath();
         ctx.moveTo(w/2 + 10, h * 0.4);
         ctx.lineTo(w - 50, h * 0.2);
-        ctx.stroke();
-      } else if (problem.description.includes('S-curve')) {
-        ctx.beginPath();
-        for (let x = 50; x < w - 50; x += 5) {
-          const t = (x - w/2) / 150;
-          const y = h/2 - 80 * (t + 0.3 * Math.sin(2*t));
-          if (x === 50) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-        ctx.fillStyle = '#f59e0b';
-        ctx.beginPath();
-        ctx.arc(w/2, h/2, 6, 0, 2 * Math.PI);
-        ctx.fill();
-      } else if (problem.description.includes('vertical asymptote')) {
-        const asymX = w * 0.6;
-        ctx.strokeStyle = '#dc2626';
-        ctx.lineWidth = 3;
-        ctx.setLineDash([6, 4]);
-        ctx.beginPath();
-        ctx.moveTo(asymX, 30);
-        ctx.lineTo(asymX, h - 30);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.strokeStyle = '#0f766e';
-        ctx.beginPath();
-        ctx.moveTo(50, h * 0.3);
-        for (let x = 50; x < asymX - 10; x += 5) {
-          const t = (x - 50) / (asymX - 60);
-          const y = h * 0.3 + 150 * Math.pow(t, 3);
-          ctx.lineTo(x, Math.min(h - 30, y));
-        }
-        ctx.stroke();
-      } else if (problem.description.includes('horizontal asymptote')) {
-        const asymY = h * 0.3;
-        ctx.strokeStyle = '#dc2626';
-        ctx.lineWidth = 3;
-        ctx.setLineDash([6, 4]);
-        ctx.beginPath();
-        ctx.moveTo(50, asymY);
-        ctx.lineTo(w - 50, asymY);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.strokeStyle = '#0f766e';
-        ctx.beginPath();
-        ctx.moveTo(50, h * 0.7);
-        for (let x = 50; x < w - 50; x += 5) {
-          const t = (x - 50) / (w - 100);
-          const y = h * 0.7 - (h * 0.7 - asymY - 10) * (1 - Math.exp(-3*t));
-          ctx.lineTo(x, y);
-        }
         ctx.stroke();
       }
       
@@ -1550,21 +2025,13 @@
       ctx.stroke();
     }
 
-    // Clear sequences
+    // Clear read sequence
     function clearReadSequence() {
       const container = document.getElementById('read-sequence');
-      container.innerHTML = '<div class="placeholder-text">Drag word cards here to describe the function from left to right</div>';
+      container.innerHTML = '<div class="placeholder-text">Drag word cards here or click selected cards to remove</div>';
       state.readSequence = [];
       document.getElementById('read-feedback').classList.remove('show');
       document.getElementById('sentence-display').innerHTML = '';
-    }
-
-    function clearBuildSequence() {
-      const container = document.getElementById('build-sequence');
-      container.innerHTML = '<div class="placeholder-text">Drag configured image cards here to build your function</div>';
-      state.buildSequence = [];
-      document.getElementById('build-feedback').classList.remove('show');
-      updateBuildGraph();
     }
 
     // Get hint for Read tab
@@ -1574,7 +2041,7 @@
       
       if (state.hintCount === 1) {
         feedback.className = 'feedback info show';
-        feedback.textContent = `Hint: Look for ${state.readProblem.sequence.length} behaviors/changes in the graph.`;
+        feedback.textContent = `Hint: Look for ${state.readProblem.sequence.length} behaviors in the graph.`;
       } else if (state.hintCount === 2) {
         feedback.className = 'feedback info show';
         feedback.textContent = `Hint: The first behavior is "${state.readProblem.sequence[0].replace(/-/g, ' ')}".`;
@@ -1630,7 +2097,7 @@
       }
     }
 
-    // Generate sentence from sequence with intervals
+    // Generate sentence from sequence
     function generateSentence(problem) {
       let sentence = "The function ";
       const behaviors = problem.sequence;
@@ -1660,39 +2127,22 @@
       return sentence;
     }
 
-    // Build challenges using mathematical language
+    // Build challenges
     const buildChallenges = [
       {
-        description: "A function that is increasing and concave up",
-        expectedBehaviors: ['inc-cup']
+        description: "A function that is increasing and concave up"
       },
       {
-        description: "A function that is decreasing concave up, then increasing concave up",
-        expectedBehaviors: ['dec-cup', 'inc-cup']
+        description: "A function that is decreasing concave up, then increasing concave up"
       },
       {
-        description: "A function that is constant, has a jump up discontinuity, then is increasing",
-        expectedBehaviors: ['const', 'jump-up-right', 'inc-linear']
+        description: "A function that is constant, has a jump up discontinuity, then is increasing"
       },
       {
-        description: "A function that is increasing concave up, has an inflection point, then is increasing concave down",
-        expectedBehaviors: ['inc-cup', 'inflect-up-down', 'inc-cdown']
+        description: "A function that is increasing concave up, has an inflection point, then is increasing concave down"
       },
       {
-        description: "A function that is increasing and approaches a horizontal asymptote",
-        expectedBehaviors: ['inc-linear', 'h-asym-from-below']
-      },
-      {
-        description: "A function that is increasing and approaches a vertical asymptote",
-        expectedBehaviors: ['inc-linear', 'v-asym-left-up']
-      },
-      {
-        description: "A function that is constant, has a jump down discontinuity, then is decreasing",
-        expectedBehaviors: ['const', 'jump-down-right', 'dec-linear']
-      },
-      {
-        description: "A function that is decreasing concave down, has an inflection point, then is increasing concave up",
-        expectedBehaviors: ['dec-cdown', 'inflect-down-up', 'inc-cup']
+        description: "A function that is decreasing concave down, has an inflection point, then is increasing concave up"
       }
     ];
 
@@ -1700,89 +2150,14 @@
     function generateNewBuildChallenge() {
       state.buildChallenge = buildChallenges[Math.floor(Math.random() * buildChallenges.length)];
       document.getElementById('build-challenge').textContent = state.buildChallenge.description;
-      clearBuildSequence();
+      clearBuildWorkspace();
     }
 
-    // Initialize and update Build graph
-    function initializeBuildGraph() {
-      const canvas = document.getElementById('build-graph');
-      if (!canvas) return;
-      
-      canvas.width = canvas.offsetWidth || 800;
-      canvas.height = 350;
-      
-      const ctx = canvas.getContext('2d');
-      drawGrid(ctx, canvas.width, canvas.height);
-    }
-
-    function updateBuildGraph() {
-      const canvas = document.getElementById('build-graph');
-      if (!canvas) return;
-      
-      const ctx = canvas.getContext('2d');
-      const w = canvas.width;
-      const h = canvas.height;
-      
-      ctx.clearRect(0, 0, w, h);
-      drawGrid(ctx, w, h);
-      
-      if (state.buildSequence.length === 0) return;
-      
-      ctx.save();
-      ctx.strokeStyle = '#0f766e';
-      ctx.lineWidth = 3;
-      
-      let x = 80;
-      let currentY = h * 0.5;
-      const segmentWidth = (w - 160) / Math.max(state.buildSequence.length, 1);
-      
-      state.buildSequence.forEach((behaviorId, i) => {
-        const startX = x;
-        const endX = x + segmentWidth;
-        
-        ctx.beginPath();
-        ctx.moveTo(startX, currentY);
-        
-        if (behaviorId.includes('inc')) {
-          currentY -= 40;
-          if (behaviorId.includes('cup')) {
-            ctx.quadraticCurveTo((startX + endX)/2, currentY + 20, endX, currentY);
-          } else if (behaviorId.includes('cdown')) {
-            ctx.quadraticCurveTo((startX + endX)/2, currentY - 20, endX, currentY);
-          } else {
-            ctx.lineTo(endX, currentY);
-          }
-        } else if (behaviorId.includes('dec')) {
-          currentY += 40;
-          if (behaviorId.includes('cup')) {
-            ctx.quadraticCurveTo((startX + endX)/2, currentY + 20, endX, currentY);
-          } else if (behaviorId.includes('cdown')) {
-            ctx.quadraticCurveTo((startX + endX)/2, currentY - 20, endX, currentY);
-          } else {
-            ctx.lineTo(endX, currentY);
-          }
-        } else if (behaviorId === 'const') {
-          ctx.lineTo(endX, currentY);
-        }
-        
-        ctx.stroke();
-        x = endX;
-      });
-      
-      ctx.restore();
-    }
-
-    // Animate function construction
-    function animateFunction() {
-      const canvas = document.getElementById('build-graph');
-      if (canvas) {
-        canvas.style.opacity = '0';
-        updateBuildGraph();
-        setTimeout(() => {
-          canvas.style.transition = 'opacity 1s ease';
-          canvas.style.opacity = '1';
-        }, 100);
-      }
+    // Initialize Build tab
+    function initializeBuildTab() {
+      generateNewBuildChallenge();
+      drawControlCards();
+      updateBuildGraph();
     }
 
     // AI Integration
@@ -1812,22 +2187,32 @@
     async function checkBuildAnswer() {
       const feedback = document.getElementById('build-feedback');
       
-      if (state.buildSequence.length === 0) {
+      if (state.buildIntervals.length === 0) {
         feedback.className = 'feedback error show';
-        feedback.textContent = 'Please add image cards first.';
+        feedback.textContent = 'Please add intervals and behaviors first.';
         return;
       }
       
+      // Build description of what student created
+      const description = state.buildIntervals.map(interval => {
+        const behaviors = interval.behaviors.join(' and ');
+        return `${interval.text}: ${behaviors || 'generic curve'}`;
+      }).join(', ');
+      
       const prompt = `Challenge: "${state.buildChallenge.description}"
-Student built: ${state.buildSequence.join(' → ')}
+Student built: ${description}
 
-Evaluate if their visual construction matches the description. Don't give away the answer.
-Respond with ONE of:
+Check if this matches the challenge mathematically. Consider:
+- A generic curve with no behaviors specified might already satisfy some requirements
+- "Increasing and concave up" can be one interval with both properties
+- The intervals should cover the appropriate domain
+
+Respond with:
 - "Correct!" if it matches
-- "Not quite. Check your [first/middle/last] card." if wrong
-- "Close! Adjust the [specific aspect]" if partially correct
+- "Missing: [specific behavior or interval]" if incomplete
+- "Incorrect: [specific issue]" if wrong
 
-Keep response under 15 words. Don't reveal the solution.`;
+Keep response under 20 words.`;
 
       feedback.className = 'feedback info show';
       feedback.textContent = 'Checking...';
@@ -1837,7 +2222,7 @@ Keep response under 15 words. Don't reveal the solution.`;
       if (aiResponse) {
         if (aiResponse.toLowerCase().includes('correct')) {
           feedback.className = 'feedback success show';
-        } else if (aiResponse.toLowerCase().includes('close')) {
+        } else if (aiResponse.toLowerCase().includes('missing')) {
           feedback.className = 'feedback info show';
         } else {
           feedback.className = 'feedback error show';
@@ -1845,7 +2230,7 @@ Keep response under 15 words. Don't reveal the solution.`;
         feedback.textContent = aiResponse;
       } else {
         feedback.className = 'feedback info show';
-        feedback.textContent = 'AI unavailable. Review your sequence.';
+        feedback.textContent = 'AI unavailable. Check if your construction matches the description.';
       }
     }
 
