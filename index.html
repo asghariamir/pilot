@@ -1304,6 +1304,13 @@
             card.addEventListener('dragstart', handleDragStart);
             card.addEventListener('dragend', handleDragEnd);
             
+            // Add double-click to remove
+            card.addEventListener('dblclick', () => {
+              if (card.parentElement.classList.contains('sequence-container')) {
+                removeCardFromSequence(card, 'build');
+              }
+            });
+            
             container.appendChild(card);
             state.buildSequence.push(option.id);
             updateBuildGraph();
@@ -1882,4 +1889,3 @@ Keep response under 15 words. Don't reveal the solution.`;
   </script>
 </body>
 </html>
-      
