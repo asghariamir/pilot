@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Function Behavior Cards | Mathswell</title>
+  <link rel="icon" href="/logo-mathswell-square-mirror.ico" type="image/x-icon">
+  <link rel="icon" href="/logo-mathswell-square-mirror.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --primary: #0f766e;
+      --primary-light: #10b981;
+      --primary-dark: #0a5a52;
+      --background: #f7faf9;
+      --interactive: #e6fffb;
+      --text-primary: #212121;
+      --text-muted: #4b5563;
+      --accent-amber: #f59e0b;
+      --accent-red: #dc2626;
+      --accent-blue: #2563eb;
+      --surface: #ffffff;
+      --border: #e0e7e4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #dc2626;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, var(--background) 0%, #f0f9f8 100%);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .mathswell-nav {
+      display: flex;
+      justify-content: center;
+      margin: 1.5rem 0;
+      padding: 0.5rem;
+    }
+
+    .mw-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-weight: 700;
+      color: var(--primary);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(15, 118, 110, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .mw-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      background: white;
+      border-radius: 12px;
+      padding: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      justify-content: center;
+    }
+
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      flex: 1;
+      max-width: 200px;
+    }
+
+    .tab-btn:hover {
+      background: var(--interactive);
+      color: var(--primary);
+    }
+
+    .tab-btn.active {
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      box-shadow: 0 2px 8px rgba(15, 118, 110, 0.15);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #fff, var(--interactive));
+      padding: 2.5rem;
+      border-radius: 16px;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      text-align: center;
+    }
+
+    .hero h1 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .example-card {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .example-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      border-color: var(--primary-light);
+    }
+
+    .example-card h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    .example-canvas {
+      width: 100%;
+      height: 120px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .example-info {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      background: var(--interactive);
+      padding: 0.5rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      text-align: center;
+      display: none;
+    }
+
+    .example-card.show-math .example-info.math {
+      display: block;
+    }
+
+    /* Read Tab Styles - Updated rectangular cards */
+    .card-bank {
+      background: linear-gradient(135deg, var(--interactive), #f8fffe);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-bank h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 0.75rem;
+      min-height: 80px;
+    }
+
+    .word-card {
+      padding: 1rem;
+      background: white;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      user-select: none;
+      font-weight: 600;
+      color: var(--primary);
+      text-align: center;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .word-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+      background: var(--interactive);
+    }
+
+    .word-card.selected {
+      background: var(--primary);
+      color: white;
+    }
+
+    .word-card.dragging {
+      opacity: 0.5;
+    }
+
+    .sequence-area {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      margin-bottom: 2rem;
+      min-height: 200px;
+    }
+
+    .sequence-area h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .sequence-container {
+      display: flex;
+      gap: 0.75rem;
+      padding: 1.5rem;
+      background: var(--interactive);
+      border-radius: 8px;
+      min-height: 100px;
+      align-items: center;
+      flex-wrap: wrap;
+      border: 2px dashed var(--primary);
+      justify-content: center;
+    }
+
+    .sequence-container.drag-over {
+      background: #d1f4f0;
+      border-color: var(--primary-light);
+    }
+
+    .sequence-container .word-card {
+      min-width: 120px;
+      padding: 0.75rem;
+      min-height: 50px;
+    }
+
+    /* Build Tab Styles */
+    .interval-selector {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .interval-selector h3 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-size: 1.3rem;
+    }
+
+    .interval-builder {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, var(--interactive), #f0fffc);
+      border-radius: 12px;
+      border: 2px solid var(--primary-light);
+    }
+
+    .bracket-toggle {
+      width: 45px;
+      height: 50px;
+      font-size: 1.6rem;
+      border: 2px solid var(--primary);
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 6px;
+      font-weight: 500;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bracket-toggle.closed {
+      background: var(--primary);
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 2px 4px rgba(15, 118, 110, 0.3);
+    }
+
+    .bracket-toggle:hover {
+      transform: scale(1.08);
+      box-shadow: 0 2px 8px rgba(15, 118, 110, 0.2);
+    }
+
+    .interval-input {
+      width: 80px;
+      padding: 0.75rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      background: white;
+    }
+
+    .interval-input:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+    }
+
+    .infinity-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      user-select: none;
+      padding: 0.5rem;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .infinity-toggle:hover {
+      background: var(--interactive);
+    }
+
+    .infinity-checkbox {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .infinity-label {
+      font-size: 1.1rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .comma {
+      font-size: 1.4rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .add-interval-btn {
+      padding: 0.75rem 2rem;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(15, 118, 110, 0.2);
+    }
+
+    .add-interval-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(15, 118, 110, 0.3);
+    }
+
+    .preset-intervals {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding-top: 1.5rem;
+      border-top: 2px dashed var(--border);
+    }
+
+    .preset-label {
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .preset-btn {
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 2px solid var(--primary);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .preset-btn:hover {
+      background: var(--interactive);
+      transform: translateY(-2px);
+      box-shadow: 0 2px 4px rgba(15, 118, 110, 0.2);
+    }
+
+    .visual-behaviors {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .visual-behaviors h3 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .visual-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+      transition: opacity 0.3s ease;
+    }
+    
+    .visual-grid.disabled .visual-card {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .visual-card {
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .visual-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+    }
+
+    .visual-card.active {
+      background: var(--interactive);
+      border: 3px solid var(--primary);
+      box-shadow: 0 0 12px rgba(15, 118, 110, 0.3);
+    }
+
+    .visual-card canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    .segments-display {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .segments-display h3 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .segments-list {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      min-height: 100px;
+      padding: 1rem;
+      background: var(--interactive);
+      border-radius: 8px;
+      border: 2px dashed var(--primary);
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .segment-item.dragging {
+        opacity: 0.4;
+    }
+    .segment-item.drag-over {
+        border-style: solid;
+        border-color: var(--accent-blue);
+    }
+
+
+    .segment-item {
+      background: white;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      padding: 1rem;
+      cursor: grab;
+      transition: all 0.2s;
+      position: relative;
+      min-width: 150px;
+    }
+
+    .segment-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(15, 118, 110, 0.2);
+    }
+
+    .segment-item.selected {
+      background: var(--primary-light);
+      border-color: var(--primary-dark);
+      transform: scale(1.05);
+    }
+
+    .segment-item canvas {
+      width: 100%;
+      height: 60px;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .segment-label {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .remove-segment {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 24px;
+      height: 24px;
+      background: var(--error);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .connections-panel {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .connections-panel h3 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .connections-panel h4 {
+        color: var(--primary-dark);
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .connection-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .connection-card {
+      background: white;
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      padding: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      aspect-ratio: 1.2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+    
+    .connection-card-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--primary-dark);
+        text-align: center;
+    }
+
+    .connection-card:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+      background: var(--interactive);
+    }
+
+    .connection-card:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .connection-card canvas {
+      width: 100%;
+      height: 50px;
+    }
+
+    .asymptote-controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      padding: 1rem;
+      background: var(--interactive);
+      border-radius: 8px;
+      margin-top: 1.5rem;
+      justify-content: center;
+    }
+
+    .asymptote-list {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      justify-content: center;
+    }
+
+    .asymptote-tag {
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 2px solid var(--primary);
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .asymptote-tag button {
+      background: var(--error);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .graph-display {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      margin-bottom: 2rem;
+    }
+
+    .graph-display h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .graph-container {
+        width: 100%;
+        height: 400px;
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        background: white;
+        position: relative;
+    }
+    
+    .graph-svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+    }
+    
+    .ai-thinking-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: var(--primary);
+        font-weight: 600;
+        border-radius: 8px;
+        z-index: 10;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(15, 118, 110, 0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--interactive);
+    }
+
+    .feedback {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      display: none;
+      border-left: 4px solid;
+      text-align: center;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .feedback.success {
+      background: #d4edda;
+      color: #155724;
+      border-left-color: var(--success);
+    }
+
+    .feedback.error {
+      background: #f8d7da;
+      color: #721c24;
+      border-left-color: var(--error);
+    }
+
+    .feedback.info {
+      background: #cce5ff;
+      color: #004085;
+      border-left-color: var(--accent-blue);
+    }
+
+    .sentence-display {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      text-align: center;
+      color: var(--primary-dark);
+      animation: celebrate 0.5s ease;
+    }
+
+    @keyframes celebrate {
+      0% { transform: scale(0.95); opacity: 0; }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .challenge-box {
+      background: linear-gradient(135deg, #fffbeb, #fef3c7);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 2px solid var(--accent-amber);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .challenge-box h4 {
+      color: #92400e;
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+
+    .challenge-text {
+      color: #451a03;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .placeholder-text {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .cta-buttons {
+      text-align: center;
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (max-width: 768px) {
+      .tabs {
+        flex-direction: column;
+      }
+      
+      .tab-btn {
+        max-width: 100%;
+      }
+      
+      .cards-container {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+      
+      .interval-builder {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .visual-grid {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="mathswell-nav">
+    <a href="/" class="mw-link">
+      <img src="/logo-mathswell-square-mirror.svg" alt="Mathswell" width="28" height="28">
+      <span>MATHSWELL</span>
+    </a>
+  </div>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="intro">Introduction</button>
+      <button class="tab-btn" data-tab="read">Read the Graph</button>
+      <button class="tab-btn" data-tab="build">Build from Text</button>
+    </div>
+
+    <div id="intro" class="tab-content active">
+      <div class="hero">
+        <h1>Function Behavior Cards</h1>
+        <p>Master function analysis by recognizing behaviors visually and describing them mathematically. Click examples to see notation.</p>
+      </div>
+
+      <div class="examples-grid">
+        <div class="example-card" onclick="toggleExampleInfo(this)">
+          <h3>Increasing</h3>
+          <canvas class="example-canvas" id="ex-inc"></canvas>
+          <div class="example-info math">f'(x) > 0</div>
+        </div>
+        <div class="example-card" onclick="toggleExampleInfo(this)">
+          <h3>Decreasing</h3>
+          <canvas class="example-canvas" id="ex-dec"></canvas>
+          <div class="example-info math">f'(x) < 0</div>
+        </div>
+        <div class="example-card" onclick="toggleExampleInfo(this)">
+          <h3>Concave Up</h3>
+          <canvas class="example-canvas" id="ex-cup"></canvas>
+          <div class="example-info math">f''(x) > 0</div>
+        </div>
+        <div class="example-card" onclick="toggleExampleInfo(this)">
+          <h3>Concave Down</h3>
+          <canvas class="example-canvas" id="ex-cdown"></canvas>
+          <div class="example-info math">f''(x) < 0</div>
+        </div>
+        <div class="example-card" onclick="toggleExampleInfo(this)">
+          <h3>Corner</h3>
+          <canvas class="example-canvas" id="ex-corner"></canvas>
+          <div class="example-info math">f'(c⁻) ≠ f'(c⁺)</div>
+        </div>
+        <div class="example-card" onclick="toggleExampleInfo(this)">
+          <h3>Inflection Point</h3>
+          <canvas class="example-canvas" id="ex-inflect"></canvas>
+          <div class="example-info math">f''(x) changes sign</div>
+        </div>
+        <div class="example-card" onclick="toggleExampleInfo(this)">
+          <h3>Jump Discontinuity</h3>
+          <canvas class="example-canvas" id="ex-jump"></canvas>
+          <div class="example-info math">lim x→c⁻ ≠ lim x→c⁺</div>
+        </div>
+      </div>
+
+      <div class="cta-buttons">
+        <button class="btn btn-primary" onclick="switchToTab('read')">Try Reading Graphs →</button>
+        <button class="btn btn-primary" onclick="switchToTab('build')">Build Functions →</button>
+      </div>
+    </div>
+
+    <div id="read" class="tab-content">
+      <div class="graph-display">
+        <h3>Analyze This Function</h3>
+        <canvas class="graph-canvas" id="read-graph"></canvas>
+        <div class="controls">
+          <button class="btn btn-secondary" onclick="generateNewReadProblem()">New Function</button>
+        </div>
+      </div>
+
+      <div class="card-bank">
+        <h3>Behavior Word Cards</h3>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+          Click to select/unselect, or drag to describe the function
+        </p>
+        <div class="cards-container" id="read-cards">
+          </div>
+      </div>
+
+      <div class="sequence-area">
+        <h3>Your Description</h3>
+        <div class="sequence-container" id="read-sequence">
+          <div class="placeholder-text">Drag word cards here or click selected cards to remove</div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-primary" onclick="checkReadAnswer()">Check Answer</button>
+          <button class="btn btn-secondary" onclick="clearReadSequence()">Clear</button>
+          <button class="btn btn-secondary" onclick="getHint()">Hint</button>
+        </div>
+        <div class="feedback" id="read-feedback"></div>
+        <div id="sentence-display"></div>
+      </div>
+    </div>
+
+    <div id="build" class="tab-content">
+      <div class="challenge-box">
+        <h4>Build This Function:</h4>
+        <div class="challenge-text" id="build-challenge">
+          A function that is increasing and concave up
+        </div>
+        <div class="controls">
+          <button class="btn btn-secondary" onclick="generateNewBuildChallenge()">New Challenge</button>
+        </div>
+      </div>
+
+      <div class="interval-selector">
+        <h3>Step 1: Define Intervals</h3>
+        
+        <div class="interval-builder">
+          <button class="bracket-toggle" id="left-bracket" onclick="toggleBracket('left')">(</button>
+          
+          <div class="infinity-toggle">
+            <input type="checkbox" id="left-infinity" class="infinity-checkbox" onchange="toggleInfinity('left')">
+            <label for="left-infinity" class="infinity-label">-∞</label>
+          </div>
+          
+          <input type="text" id="left-value" class="interval-input" placeholder="-2" value="-2">
+          
+          <span class="comma">,</span>
+          
+          <input type="text" id="right-value" class="interval-input" placeholder="2" value="2">
+          
+          <div class="infinity-toggle">
+            <input type="checkbox" id="right-infinity" class="infinity-checkbox" onchange="toggleInfinity('right')">
+            <label for="right-infinity" class="infinity-label">+∞</label>
+          </div>
+          
+          <button class="bracket-toggle" id="right-bracket" onclick="toggleBracket('right')">)</button>
+          
+          <button class="add-interval-btn" onclick="addCustomInterval()">Add Interval</button>
+        </div>
+        
+        <div class="preset-intervals">
+          <div class="preset-label">Quick Presets:</div>
+          <button class="preset-btn" onclick="setPresetInterval('ninf-0')">(-∞, 0)</button>
+          <button class="preset-btn" onclick="setPresetInterval('0-inf')">(0, ∞)</button>
+          <button class="preset-btn" onclick="setPresetInterval('full')">(-∞, ∞)</button>
+          <button class="preset-btn" onclick="setPresetInterval('-1-1')">[-1, 1]</button>
+        </div>
+      </div>
+
+      <div class="segments-display">
+        <h3>Your Segments (Drag to reorder)</h3>
+        <div class="segments-list" id="segments-list">
+          <div class="placeholder-text">No segments yet. Add intervals above.</div>
+        </div>
+      </div>
+      
+      <div class="visual-behaviors">
+        <h3>Step 2: Assign Behaviors (Select a segment first)</h3>
+        
+        <div class="visual-grid disabled" id="behavior-cards">
+          </div>
+      </div>
+
+      <div class="connections-panel">
+        <h3>Step 3: Connect Segments & Define Endpoints</h3>
+        
+        <h4>Piecewise Connections (Select 2 adjacent segments)</h4>
+        <div class="connection-cards" id="connection-cards">
+          </div>
+
+        <h4>Asymptote Behavior (Select 1 segment first)</h4>
+        <div class="asymptote-controls">
+          <select id="asymptote-type" style="padding: 0.5rem; border: 2px solid var(--border); border-radius: 6px;">
+            <option value="vertical">Vertical (x =)</option>
+            <option value="horizontal">Horizontal (y =)</option>
+          </select>
+          <input type="number" id="asymptote-value" placeholder="0" value="0" style="width: 100px; padding: 0.5rem; border: 2px solid var(--border); border-radius: 6px;">
+          <button class="btn btn-secondary" onclick="addAsymptote()">Add Asymptote Line</button>
+        </div>
+        <div class="asymptote-list" id="asymptote-list"></div>
+        <div class="connection-cards" id="asymptote-connection-cards">
+             <button class="btn btn-secondary" onclick="applyAsymptote('vertical')">Apply Vertical Asymptote</button>
+             <button class="btn btn-secondary" onclick="applyAsymptote('horizontal')">Apply Horizontal Asymptote</button>
+        </div>
+      </div>
+
+      <div class="graph-display">
+        <h3>Your Function</h3>
+        <div class="graph-container">
+            <svg id="build-graph-svg" class="graph-svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 800 400"></svg>
+            <div id="ai-thinking-overlay" class="ai-thinking-overlay" style="display: none;">🤖 AI is drawing...</div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-primary" onclick="generateGraphWithAI()">Generate Graph with AI</button>
+          <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+        </div>
+        <div class="feedback" id="build-feedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global state
+    const state = {
+      readProblem: null,
+      readSequence: [],
+      buildChallenge: null,
+      segments: [],
+      selectedSegment: null,
+      selectedSegments: [],
+      connections: [],
+      asymptotes: [],
+      draggedCard: null,
+      hintCount: 0,
+      exampleClickCount: {},
+      intervalBuilder: {
+        leftBracket: 'open',
+        rightBracket: 'open',
+        leftInfinity: false,
+        rightInfinity: false
+      }
+    };
+    
+    // Word behavior types for Read tab
+    const behaviorTypes = [
+      { id: 'increasing', label: 'Increasing' },
+      { id: 'decreasing', label: 'Decreasing' },
+      { id: 'constant', label: 'Constant' },
+      { id: 'concave-up', label: 'Concave Up' },
+      { id: 'concave-down', label: 'Concave Down' },
+      { id: 'linear', label: 'Linear' },
+      { id: 'inflection', label: 'Inflection Point' },
+      { id: 'corner', label: 'Corner' },
+      { id: 'jump-up', label: 'Jump Up' },
+      { id: 'jump-down', label: 'Jump Down' },
+      { id: 'vertical-asymptote', label: 'Vertical Asymptote' },
+      { id: 'horizontal-asymptote', label: 'Horizontal Asymptote' }
+    ];
+
+    // Visual behavior types for Build tab (simplified)
+    const visualBehaviors = [
+      { id: 'increasing', type: 'direction' },
+      { id: 'decreasing', type: 'direction' },
+      { id: 'constant', type: 'direction' },
+      { id: 'concave-up', type: 'curvature' },
+      { id: 'concave-down', type: 'curvature' }
+    ];
+
+    // Connection types for Build tab
+    const connectionTypes = [
+      { id: 'inflection', label: 'Inflection' },
+      { id: 'jump', label: 'Jump' },
+      { id: 'corner', label: 'Corner' },
+      { id: 'smooth', label: 'Smooth' }
+    ];
+
+    // Drawing functions
+    function drawIncreasing(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h - 10);
+      ctx.lineTo(w - 10, 10);
+      ctx.stroke();
+    }
+
+    function drawDecreasing(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, 10);
+      ctx.lineTo(w - 10, h - 10);
+      ctx.stroke();
+    }
+
+    function drawConstant(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h/2);
+      ctx.lineTo(w - 10, h/2);
+      ctx.stroke();
+    }
+
+    function drawConcaveUp(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h * 0.8);
+      ctx.quadraticCurveTo(w/2, h * 0.2, w - 10, h * 0.8);
+      ctx.stroke();
+    }
+
+    function drawConcaveDown(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h * 0.2);
+      ctx.quadraticCurveTo(w/2, h * 0.8, w - 10, h * 0.2);
+      ctx.stroke();
+    }
+
+    function drawCorner(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h - 10);
+      ctx.lineTo(w/2, 10);
+      ctx.lineTo(w - 10, h - 10);
+      ctx.stroke();
+      ctx.fillStyle = '#f59e0b';
+      ctx.beginPath();
+      ctx.arc(w/2, 10, 4, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    function drawInflection(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h - 10);
+      ctx.bezierCurveTo(w/3, h - 10, w*2/3, 10, w - 10, 10);
+      ctx.stroke();
+      ctx.fillStyle = '#f59e0b';
+      ctx.beginPath();
+      ctx.arc(w/2, h/2, 4, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    function drawJumpUp(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h * 0.7);
+      ctx.lineTo(w/2 - 5, h * 0.7);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w/2 - 5, h * 0.7, 4, 0, 2 * Math.PI);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(w/2 + 5, h * 0.3);
+      ctx.lineTo(w - 10, h * 0.3);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w/2 + 5, h * 0.3, 4, 0, 2 * Math.PI);
+      ctx.fillStyle = '#0f766e';
+      ctx.fill();
+    }
+
+    function drawSmooth(ctx, w, h) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(10, h * 0.7);
+      ctx.bezierCurveTo(w/3, h * 0.7, w*2/3, h * 0.3, w - 10, h * 0.3);
+      ctx.stroke();
+    }
+
+    // Initialize examples
+    function drawExamples() {
+      const examples = [
+        { id: 'ex-inc', func: drawIncreasing },
+        { id: 'ex-dec', func: drawDecreasing },
+        { id: 'ex-cup', func: drawConcaveUp },
+        { id: 'ex-cdown', func: drawConcaveDown },
+        { id: 'ex-corner', func: drawCorner },
+        { id: 'ex-inflect', func: drawInflection },
+        { id: 'ex-jump', func: drawJumpUp }
+      ];
+
+      examples.forEach(ex => {
+        const canvas = document.getElementById(ex.id);
+        if (canvas) {
+          const ctx = canvas.getContext('2d');
+          const w = canvas.offsetWidth;
+          if (w > 0) {
+              canvas.width = w;
+              canvas.height = canvas.offsetHeight;
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              ex.func(ctx, canvas.width, canvas.height);
+          }
+        }
+      });
+    }
+
+    // Initialize visual behavior cards for Build tab
+    function initializeVisualBehaviors() {
+      const container = document.getElementById('behavior-cards');
+      container.innerHTML = '';
+      
+      visualBehaviors.forEach(behavior => {
+        const card = document.createElement('div');
+        card.className = 'visual-card';
+        card.dataset.id = behavior.id;
+        card.dataset.type = behavior.type;
+        card.onclick = () => selectVisualBehavior(behavior.id, behavior.type);
+        
+        const canvas = document.createElement('canvas');
+        card.appendChild(canvas);
+        container.appendChild(card);
+        
+        setTimeout(() => {
+          const ctx = canvas.getContext('2d');
+          canvas.width = 80;
+          canvas.height = 80;
+          
+          switch(behavior.id) {
+            case 'increasing': drawIncreasing(ctx, 80, 80); break;
+            case 'decreasing': drawDecreasing(ctx, 80, 80); break;
+            case 'constant': drawConstant(ctx, 80, 80); break;
+            case 'concave-up': drawConcaveUp(ctx, 80, 80); break;
+            case 'concave-down': drawConcaveDown(ctx, 80, 80); break;
+          }
+        }, 10);
+      });
+    }
+
+    // Initialize connection cards for Build tab
+    function initializeConnectionCards() {
+      const container = document.getElementById('connection-cards');
+      container.innerHTML = '';
+      
+      connectionTypes.forEach(conn => {
+        const card = document.createElement('button');
+        card.className = 'connection-card';
+        card.onclick = () => applyConnection(conn.id);
+        const canvas = document.createElement('canvas');
+        const label = document.createElement('span');
+        label.className = 'connection-card-label';
+        label.textContent = conn.label;
+        card.append(canvas, label);
+        container.appendChild(card);
+        
+        setTimeout(() => {
+          const ctx = canvas.getContext('2d');
+          canvas.width = 80;
+          canvas.height = 50;
+          
+          switch(conn.id) {
+            case 'inflection': drawInflection(ctx, 80, 50); break;
+            case 'jump': drawJumpUp(ctx, 80, 50); break;
+            case 'corner': drawCorner(ctx, 80, 50); break;
+            case 'smooth': drawSmooth(ctx, 80, 50); break;
+          }
+        }, 10);
+      });
+    }
+
+    // Toggle example info
+    function toggleExampleInfo(card) {
+      card.classList.toggle('show-math');
+    }
+
+    // READ TAB FUNCTIONS
+    function createWordCard(type) {
+      const card = document.createElement('div');
+      card.className = 'word-card';
+      card.dataset.type = type.id;
+      card.draggable = true;
+      card.textContent = type.label;
+      card.addEventListener('click', () => {
+        if (card.parentElement.classList.contains('sequence-container')) {
+          const idx = state.readSequence.indexOf(type.id);
+          if (idx > -1) state.readSequence.splice(idx, 1);
+          card.remove();
+          const container = document.getElementById('read-sequence');
+          if (container.children.length === 0) {
+            container.innerHTML = '<div class="placeholder-text">Drag word cards here or click selected cards to remove</div>';
+          }
+        } else {
+          card.classList.toggle('selected');
+        }
+      });
+      card.addEventListener('dragstart', handleDragStart);
+      card.addEventListener('dragend', handleDragEnd);
+      return card;
+    }
+
+    function handleDragStart(e) {
+      const card = e.target;
+      state.draggedCard = { type: card.dataset.type, element: card, fromSequence: card.parentElement.classList.contains('sequence-container') };
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragEnd(e) {
+      e.target.classList.remove('dragging');
+      state.draggedCard = null;
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      return false;
+    }
+
+    function handleDragEnter(e) {
+      if (e.target.classList.contains('sequence-container')) e.target.classList.add('drag-over');
+    }
+
+    function handleDragLeave(e) {
+      if (e.target.classList.contains('sequence-container')) e.target.classList.remove('drag-over');
+    }
+
+    function handleDrop(e) {
+      e.stopPropagation();
+      const container = document.getElementById('read-sequence');
+      container.classList.remove('drag-over');
+      if (!state.draggedCard) return false;
+      const placeholder = container.querySelector('.placeholder-text');
+      if (placeholder) placeholder.remove();
+      if (state.draggedCard.fromSequence) {
+        const idx = state.readSequence.indexOf(state.draggedCard.type);
+        if (idx > -1) state.readSequence.splice(idx, 1);
+        state.draggedCard.element.remove();
+      }
+      const typeObj = behaviorTypes.find(t => t.id === state.draggedCard.type);
+      if (typeObj) {
+        const newCard = createWordCard(typeObj);
+        container.appendChild(newCard);
+        state.readSequence.push(state.draggedCard.type);
+      }
+      return false;
+    }
+
+    function initializeReadTab() {
+      const container = document.getElementById('read-cards');
+      container.innerHTML = '';
+      behaviorTypes.forEach(type => container.appendChild(createWordCard(type)));
+      const sequence = document.getElementById('read-sequence');
+      sequence.addEventListener('dragover', handleDragOver);
+      sequence.addEventListener('drop', handleDrop);
+      sequence.addEventListener('dragenter', handleDragEnter);
+      sequence.addEventListener('dragleave', handleDragLeave);
+      generateNewReadProblem();
+    }
+
+    const readProblems = [
+      { sequence: ['increasing', 'concave-up'], intervals: [['(-∞', '∞)'], ['(-∞', '∞)']], description: 'Increasing and concave up everywhere' },
+      { sequence: ['decreasing', 'concave-down', 'inflection', 'decreasing', 'concave-up'], intervals: [['(-∞', '0)'], ['(-∞', '0)'], ['x=0'], ['(0', '∞)'], ['(0', '∞)']], description: 'Decreasing with inflection at x=0' },
+      { sequence: ['constant', 'jump-up', 'increasing'], intervals: [['(-∞', '0)'], ['x=0'], ['(0', '∞)']], description: 'Constant then jump up, then increasing' }
+    ];
+
+    function generateNewReadProblem() {
+      state.readProblem = readProblems[Math.floor(Math.random() * readProblems.length)];
+      state.hintCount = 0;
+      drawReadGraph();
+      clearReadSequence();
+    }
+
+    function drawReadGraph() {
+      const canvas = document.getElementById('read-graph');
+      if (!canvas) return;
+      const w = canvas.offsetWidth;
+      if (w <= 0) { // If canvas not visible, retry
+          requestAnimationFrame(drawReadGraph);
+          return;
+      }
+      canvas.width = w;
+      canvas.height = 400;
+      const ctx = canvas.getContext('2d');
+      const h = canvas.height;
+      
+      ctx.clearRect(0, 0, w, h);
+      drawGrid(ctx, w, h);
+      ctx.save();
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      const problem = state.readProblem;
+      if (problem.description.includes('everywhere')) {
+        ctx.beginPath();
+        ctx.moveTo(50, h - 50);
+        for (let x = 50; x < w - 50; x += 5) ctx.lineTo(x, Math.max(50, h - 50 - 200 * Math.pow((x - 50) / (w - 100), 2)));
+        ctx.stroke();
+      } else if (problem.description.includes('inflection')) {
+        ctx.beginPath();
+        for (let x = 50; x < w - 50; x += 5) {
+          const y = h/2 - 100 * Math.tanh((x - w/2) / 150);
+          if (x === 50) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath(); ctx.arc(w/2, h/2, 6, 0, 2 * Math.PI); ctx.fill();
+      } else if (problem.description.includes('jump')) {
+        ctx.beginPath(); ctx.moveTo(50, h * 0.6); ctx.lineTo(w/2 - 10, h * 0.6); ctx.stroke();
+        ctx.beginPath(); ctx.arc(w/2 - 10, h * 0.6, 5, 0, 2 * Math.PI); ctx.fillStyle = 'white'; ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.arc(w/2 + 10, h * 0.4, 5, 0, 2 * Math.PI); ctx.fillStyle = '#0f766e'; ctx.fill();
+        ctx.beginPath(); ctx.moveTo(w/2 + 10, h * 0.4); ctx.lineTo(w - 50, h * 0.2); ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function clearReadSequence() {
+      document.getElementById('read-sequence').innerHTML = '<div class="placeholder-text">Drag word cards here or click selected cards to remove</div>';
+      state.readSequence = [];
+      document.getElementById('read-feedback').classList.remove('show');
+      document.getElementById('sentence-display').innerHTML = '';
+    }
+
+    function getHint() {
+      const feedback = document.getElementById('read-feedback');
+      state.hintCount++;
+      feedback.className = 'feedback info show';
+      if (state.hintCount === 1) feedback.textContent = `Hint: Look for ${state.readProblem.sequence.length} behaviors in the graph.`;
+      else if (state.hintCount === 2) feedback.textContent = `Hint: The first behavior is "${state.readProblem.sequence[0].replace(/-/g, ' ')}".`;
+      else feedback.textContent = `Answer: ${state.readProblem.sequence.map(s => behaviorTypes.find(t => t.id === s)?.label || s).join(' → ')}`;
+    }
+
+    function checkReadAnswer() {
+      const feedback = document.getElementById('read-feedback');
+      const sentenceDisplay = document.getElementById('sentence-display');
+      if (state.readSequence.length === 0) {
+        feedback.className = 'feedback error show';
+        feedback.textContent = 'Please add behavior cards first.';
+        return;
+      }
+      const correct = JSON.stringify(state.readSequence) === JSON.stringify(state.readProblem.sequence);
+      if (correct) {
+        feedback.className = 'feedback success show';
+        feedback.textContent = 'Excellent! You correctly identified all behaviors!';
+        sentenceDisplay.className = 'sentence-display';
+        sentenceDisplay.innerHTML = `<strong>Complete Description:</strong><br>${generateSentence(state.readProblem)}`;
+        document.querySelectorAll('#read-sequence .word-card').forEach((card, i) => setTimeout(() => {
+          card.style.transform = 'scale(1.1)';
+          card.style.background = 'linear-gradient(135deg, #10b981, #0f766e)';
+          card.style.color = 'white';
+        }, i * 100));
+      } else {
+        feedback.className = 'feedback error show';
+        const missing = state.readProblem.sequence.length - state.readSequence.length;
+        if (missing > 0) feedback.textContent = `You're missing ${missing} behavior(s).`;
+        else if (missing < 0) feedback.textContent = `Too many behaviors. You have ${-missing} extra card(s).`;
+        else feedback.textContent = 'Not quite right. Check the order.';
+        sentenceDisplay.innerHTML = '';
+      }
+    }
+
+    function generateSentence(problem) {
+      let sentence = "The function ";
+      problem.sequence.forEach((behavior, i) => {
+        if (i > 0) sentence += ", ";
+        const intervalStr = problem.intervals[i] ? problem.intervals[i].join(', ') : "";
+        const label = (behaviorTypes.find(t => t.id === behavior)?.label || behavior).toLowerCase();
+        if (behavior === 'inflection') sentence += `has an inflection point at ${intervalStr}`;
+        else if (behavior.includes('jump')) sentence += `has a ${label} discontinuity at ${intervalStr}`;
+        else if (behavior.includes('asymptote')) sentence += `approaches a ${label} at ${intervalStr}`;
+        else sentence += `is ${label} on ${intervalStr}`;
+      });
+      return sentence + ".";
+    }
+
+    // BUILD TAB FUNCTIONS
+    function toggleBracket(side) {
+      const btn = document.getElementById(`${side}-bracket`);
+      if (side === 'left') {
+        state.intervalBuilder.leftBracket = state.intervalBuilder.leftBracket === 'open' ? 'closed' : 'open';
+        btn.textContent = state.intervalBuilder.leftBracket === 'open' ? '(' : '[';
+      } else {
+        state.intervalBuilder.rightBracket = state.intervalBuilder.rightBracket === 'open' ? 'closed' : 'open';
+        btn.textContent = state.intervalBuilder.rightBracket === 'open' ? ')' : ']';
+      }
+      btn.classList.toggle('closed');
+    }
+
+    function toggleInfinity(side) {
+      const checkbox = document.getElementById(`${side}-infinity`);
+      const input = document.getElementById(`${side}-value`);
+      const isChecked = checkbox.checked;
+      input.disabled = isChecked;
+      input.style.opacity = isChecked ? '0.3' : '1';
+      state.intervalBuilder[`${side}Infinity`] = isChecked;
+      if (isChecked) {
+        state.intervalBuilder[`${side}Bracket`] = 'open';
+        const btn = document.getElementById(`${side}-bracket`);
+        btn.textContent = side === 'left' ? '(' : ')';
+        btn.classList.remove('closed');
+      }
+    }
+
+    function addCustomInterval() {
+      const leftValue = state.intervalBuilder.leftInfinity ? -Infinity : parseFloat(document.getElementById('left-value').value);
+      const rightValue = state.intervalBuilder.rightInfinity ? Infinity : parseFloat(document.getElementById('right-value').value);
+      if (!state.intervalBuilder.leftInfinity && !state.intervalBuilder.rightInfinity) {
+        if (isNaN(leftValue) || isNaN(rightValue)) { alert('Please enter valid numbers'); return; }
+        if (leftValue >= rightValue) { alert('Left value must be less than right value'); return; }
+      }
+      const leftBracket = state.intervalBuilder.leftBracket === 'open' ? '(' : '[';
+      const rightBracket = state.intervalBuilder.rightBracket === 'open' ? ')' : ']';
+      const leftText = state.intervalBuilder.leftInfinity ? '-∞' : leftValue;
+      const rightText = state.intervalBuilder.rightInfinity ? '∞' : rightValue;
+      const segment = { id: 'seg-' + Date.now(), interval: `${leftBracket}${leftText}, ${rightText}${rightBracket}`, start: leftValue, end: rightValue, direction: null, curvature: null, startBehavior: null, endBehavior: null };
+      state.segments.push(segment);
+      renderSegments();
+      drawInitialGraph();
+    }
+
+    function setPresetInterval(preset) {
+      const leftInf = document.getElementById('left-infinity'), rightInf = document.getElementById('right-infinity');
+      const leftVal = document.getElementById('left-value'), rightVal = document.getElementById('right-value');
+      leftInf.checked = preset === 'ninf-0' || preset === 'full';
+      rightInf.checked = preset === '0-inf' || preset === 'full';
+      leftVal.value = preset === '0-inf' ? '0' : '-1';
+      rightVal.value = preset === 'ninf-0' ? '0' : '1';
+      toggleInfinity('left'); toggleInfinity('right');
+      if(preset === '-1-1') {
+        state.intervalBuilder.leftBracket = 'closed'; state.intervalBuilder.rightBracket = 'closed';
+        document.getElementById('left-bracket').textContent = '['; document.getElementById('left-bracket').classList.add('closed');
+        document.getElementById('right-bracket').textContent = ']'; document.getElementById('right-bracket').classList.add('closed');
+      }
+      addCustomInterval();
+    }
+
+    function selectVisualBehavior(behaviorId, type) {
+      if (!state.selectedSegment) { alert('Please select a segment first'); return; }
+      const segment = state.segments.find(s => s.id === state.selectedSegment);
+      if (!segment) return;
+
+      if (type === 'direction') {
+        segment.direction = segment.direction === behaviorId ? null : behaviorId;
+      } else if (type === 'curvature') {
+        segment.curvature = segment.curvature === behaviorId ? null : behaviorId;
+      }
+      
+      updateActiveVisualCards(segment);
+      renderSegments();
+    }
+
+    function updateActiveVisualCards(segment) {
+        document.querySelectorAll('.visual-card').forEach(card => {
+            const cardId = card.dataset.id;
+            const cardType = card.dataset.type;
+            let isActive = false;
+            if (segment) {
+                if (cardType === 'direction') isActive = segment.direction === cardId;
+                else if (cardType === 'curvature') isActive = segment.curvature === cardId;
+            }
+            card.classList.toggle('active', isActive);
+        });
+    }
+
+    function selectSegment(id) {
+        const item = document.getElementById(id);
+        const isCurrentlySelected = item.classList.contains('selected');
+        
+        if(isCurrentlySelected){
+            item.classList.remove('selected');
+            state.selectedSegments = state.selectedSegments.filter(s => s !== id);
+        } else {
+            item.classList.add('selected');
+            state.selectedSegments.push(id);
+        }
+
+        if (state.selectedSegments.length === 1) {
+            state.selectedSegment = state.selectedSegments[0];
+        } else {
+            state.selectedSegment = null;
+        }
+        
+        document.getElementById('behavior-cards').classList.toggle('disabled', !state.selectedSegment);
+        updateActiveVisualCards(state.segments.find(s => s.id === state.selectedSegment));
+    }
+
+
+    function removeSegment(id) {
+      state.segments = state.segments.filter(s => s.id !== id);
+      state.selectedSegments = state.selectedSegments.filter(s => s !== id);
+      if (state.selectedSegment === id) {
+        state.selectedSegment = null;
+        document.getElementById('behavior-cards').classList.add('disabled');
+      }
+      renderSegments();
+      drawInitialGraph();
+    }
+
+    // Drag and drop for segments
+    let draggedSegmentId = null;
+
+    function handleSegmentDragStart(e) {
+        draggedSegmentId = e.target.id;
+        e.target.classList.add('dragging');
+    }
+
+    function handleSegmentDragOver(e) {
+        e.preventDefault();
+        const container = document.getElementById('segments-list');
+        const afterElement = getDragAfterElement(container, e.clientY);
+        const dragging = document.querySelector('.dragging');
+        if (dragging) {
+            if (afterElement == null) {
+                container.appendChild(dragging);
+            } else {
+                container.insertBefore(dragging, afterElement);
+            }
+        }
+    }
+    
+    function getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('.segment-item:not(.dragging)')];
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    function handleSegmentDrop(e) {
+        e.preventDefault();
+        const newOrderedIds = [...document.querySelectorAll('#segments-list .segment-item')].map(item => item.id);
+        state.segments.sort((a, b) => newOrderedIds.indexOf(a.id) - newOrderedIds.indexOf(b.id));
+        const dragging = document.querySelector('.dragging');
+        if (dragging) dragging.classList.remove('dragging');
+    }
+
+    function renderSegments() {
+      const container = document.getElementById('segments-list');
+      container.innerHTML = '';
+      if (state.segments.length === 0) {
+        container.innerHTML = '<div class="placeholder-text">No segments yet. Add intervals above.</div>';
+        return;
+      }
+      state.segments.forEach(segment => {
+        const item = document.createElement('div');
+        item.className = 'segment-item';
+        item.draggable = true;
+        item.addEventListener('dragstart', handleSegmentDragStart);
+        if (state.selectedSegments.includes(segment.id)) item.classList.add('selected');
+        item.id = segment.id;
+        item.onclick = () => selectSegment(segment.id);
+        const canvas = document.createElement('canvas');
+        const label = document.createElement('div');
+        label.className = 'segment-label'; label.textContent = segment.interval;
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-segment'; removeBtn.textContent = '×';
+        removeBtn.onclick = (e) => { e.stopPropagation(); removeSegment(segment.id); };
+        item.append(canvas, label, removeBtn);
+        container.appendChild(item);
+        setTimeout(() => drawSegmentPreview(canvas, segment), 10);
+      });
+      container.addEventListener('dragover', handleSegmentDragOver);
+      container.addEventListener('drop', handleSegmentDrop);
+    }
+
+    function drawSegmentPreview(canvas, segment) {
+      const ctx = canvas.getContext('2d'), w = 150, h = 60;
+      canvas.width = w; canvas.height = h;
+      ctx.strokeStyle = '#0f766e'; ctx.lineWidth = 2; ctx.beginPath();
+      let startY = h / 2, endY = h / 2;
+      let yChange = segment.direction === 'increasing' ? -20 : (segment.direction === 'decreasing' ? 20 : 0);
+      startY -= yChange / 2; endY += yChange / 2;
+      ctx.moveTo(10, startY);
+      if (segment.curvature) {
+          const midX = w/2;
+          const midY = (startY + endY) / 2 + (segment.curvature === 'concave-up' ? -15 : 15);
+          ctx.quadraticCurveTo(midX, midY, w - 10, endY);
+      } else {
+          ctx.lineTo(w - 10, endY);
+      }
+      ctx.stroke();
+    }
+
+    function applyConnection(connectionType) {
+      if (state.selectedSegments.length !== 2) { alert('Please select exactly 2 segments'); return; }
+      const seg1 = state.segments.find(s => s.id === state.selectedSegments[0]);
+      const seg2 = state.segments.find(s => s.id === state.selectedSegments[1]);
+      const leftSeg = seg1.start < seg2.start ? seg1 : seg2;
+      const rightSeg = seg1.start < seg2.start ? seg2 : seg1;
+      const adjacent = Math.abs(leftSeg.end - rightSeg.start) < 0.1;
+      if (!adjacent) { alert('Segments must be adjacent to be connected.'); return; }
+      if (connectionType === 'inflection' && (!leftSeg.curvature || leftSeg.curvature === rightSeg.curvature)) {
+        alert('For an inflection point, segments must have opposite concavity.'); return;
+      }
+      state.connections.push({ type: connectionType, from: leftSeg.id, to: rightSeg.id, at: leftSeg.end });
+      clearSelection();
+      alert(`Connection '${connectionType}' registered. Click 'Generate Graph' to see the result.`);
+    }
+    
+    function applyAsymptote(type) {
+        if (state.selectedSegments.length !== 1) { alert('Please select exactly one segment to apply asymptote behavior.'); return; }
+        const segment = state.segments.find(s => s.id === state.selectedSegments[0]);
+        
+        let applied = false;
+        if (type === 'vertical') {
+            if (segment.end !== Infinity && segment.endBehavior?.type !== 'va') {
+                segment.endBehavior = { type: 'va' }; applied = true;
+            } else if (segment.start !== -Infinity && segment.startBehavior?.type !== 'va') {
+                segment.startBehavior = { type: 'va' }; applied = true;
+            }
+        } else { // horizontal
+            if (segment.end === Infinity && segment.endBehavior?.type !== 'ha') {
+                segment.endBehavior = { type: 'ha' }; applied = true;
+            } else if (segment.start === -Infinity && segment.startBehavior?.type !== 'ha') {
+                segment.startBehavior = { type: 'ha' }; applied = true;
+            }
+        }
+
+        if(applied) {
+            alert(`Asymptote behavior applied to segment. The AI will infer the direction. Click "Generate Graph with AI" to see the result.`);
+        } else {
+            alert('Could not apply asymptote behavior. Check that the segment endpoint is finite for vertical asymptotes or infinite for horizontal asymptotes, or that you haven\'t already applied it.');
+        }
+    }
+
+    function clearSelection() {
+      state.selectedSegments = [];
+      document.querySelectorAll('.segment-item.selected').forEach(item => item.classList.remove('selected'));
+    }
+
+    function addAsymptote() {
+      const type = document.getElementById('asymptote-type').value;
+      const value = parseFloat(document.getElementById('asymptote-value').value);
+      if (isNaN(value)) { alert('Please enter a valid number'); return; }
+      state.asymptotes.push({ type, value, id: 'asym-' + Date.now() });
+      renderAsymptotes();
+      drawInitialGraph();
+    }
+
+    function removeAsymptote(id) {
+      state.asymptotes = state.asymptotes.filter(a => a.id !== id);
+      renderAsymptotes();
+      drawInitialGraph();
+    }
+
+    function renderAsymptotes() {
+      const container = document.getElementById('asymptote-list');
+      container.innerHTML = '';
+      state.asymptotes.forEach(asym => {
+        const tag = document.createElement('div');
+        tag.className = 'asymptote-tag';
+        tag.innerHTML = `<span>${asym.type === 'vertical' ? 'x' : 'y'} = ${asym.value}</span><button onclick="removeAsymptote('${asym.id}')">×</button>`;
+        container.appendChild(tag);
+      });
+    }
+
+    function drawInitialGraph() {
+        const svg = document.getElementById('build-graph-svg');
+        let content = `<defs><pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M 50 0 L 0 0 0 50" fill="none" stroke="#e8e8e8" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#grid)" />`;
+        content += '<line x1="0" y1="200" x2="800" y2="200" stroke="#666" stroke-width="2" /><line x1="400" y1="0" x2="400" y2="400" stroke="#666" stroke-width="2" />';
+        
+        state.asymptotes.forEach(asym => {
+            if (asym.type === 'vertical') {
+                const x = 400 + asym.value * 50;
+                content += `<line x1="${x}" y1="0" x2="${x}" y2="400" stroke="var(--accent-red)" stroke-width="2" stroke-dasharray="6, 4" />`;
+            } else {
+                const y = 200 - asym.value * 50;
+                content += `<line x1="0" y1="${y}" x2="800" y2="${y}" stroke="var(--accent-red)" stroke-width="2" stroke-dasharray="6, 4" />`;
+            }
+        });
+        svg.innerHTML = content;
+    }
+
+    function clearAll() {
+      state.segments = []; state.connections = []; state.asymptotes = [];
+      state.selectedSegment = null; state.selectedSegments = [];
+      renderSegments(); renderAsymptotes(); drawInitialGraph();
+      document.querySelectorAll('.visual-card.active').forEach(card => card.classList.remove('active'));
+      document.getElementById('behavior-cards').classList.add('disabled');
+    }
+
+    const buildChallenges = [
+      "A function that is increasing and concave up",
+      "A function that is decreasing, then has a corner, then is increasing",
+      "A function that is constant, has a jump up discontinuity, then is increasing",
+      "A function with a vertical asymptote at x = 0"
+    ];
+
+    function generateNewBuildChallenge() {
+      state.buildChallenge = buildChallenges[Math.floor(Math.random() * buildChallenges.length)];
+      document.getElementById('build-challenge').textContent = state.buildChallenge;
+      clearAll();
+    }
+    
+    function generateAIGraphPrompt() {
+        let prompt = `Generate SVG code for a function graph. The SVG viewport is "0 0 800 400". The mathematical origin (0,0) is at SVG coordinate (400, 200). The x-axis scale is 50 pixels per unit. The y-axis scale is also 50 pixels per unit. Respond ONLY with the SVG <path> elements for the function pieces inside a JSON object like {"paths": ["<path d='...'/>", "<path d='...'/>"]}. Do not include the SVG wrapper, axes, or grid. Construct the function from left to right according to the following ordered pieces:\n`;
+        
+        state.segments.forEach((seg, i) => {
+            prompt += `- Piece ${i+1}: On the interval ${seg.interval}, the function is ${[seg.direction, seg.curvature].filter(Boolean).join(' and ') || 'a smooth curve'}.\n`;
+            if (seg.startBehavior) {
+                const type = seg.startBehavior.type === 'va' ? 'vertical' : 'horizontal';
+                prompt += `  - At the start of this piece (x=${seg.start}), it approaches a ${type} asymptote. Infer the direction (towards positive or negative infinity) based on the function's other properties.\n`;
+            }
+            if (seg.endBehavior) {
+                const type = seg.endBehavior.type === 'va' ? 'vertical' : 'horizontal';
+                prompt += `  - At the end of this piece (x=${seg.end}), it approaches a ${type} asymptote. Infer the direction (towards positive or negative infinity) based on the function's other properties.\n`;
+            }
+        });
+
+        if (state.connections.length > 0) {
+            prompt += "The pieces are connected as follows:\n";
+            state.connections.forEach(conn => {
+                const fromSeg = state.segments.find(s => s.id === conn.from);
+                const toSeg = state.segments.find(s => s.id === conn.to);
+                prompt += `- At x=${conn.at}, the piece on ${fromSeg.interval} connects to the piece on ${toSeg.interval} with a '${conn.type}' connection.\n`;
+            });
+        }
+        
+        prompt += "Generate smooth, mathematically plausible curves. Ensure connected pieces meet at the correct points unless a jump is specified. Make sure asymptotic behavior correctly approaches the asymptote line without touching it, getting steeper as it gets closer."
+        return prompt;
+    }
+
+    async function generateGraphWithAI() {
+        const prompt = generateAIGraphPrompt();
+        console.log("AI Prompt:", prompt);
+
+        document.getElementById('ai-thinking-overlay').style.display = 'flex';
+        
+        try {
+            const response = await fetch('/api/gemini', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }] })
+            });
+
+            if (!response.ok) throw new Error(`API error: ${response.status}`);
+            
+            const data = await response.json();
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            
+            if (!text) throw new Error('Empty response from AI');
+
+            const jsonString = text.replace(/```json/g, '').replace(/```/g, '').trim();
+            const aiData = JSON.parse(jsonString);
+
+            if (aiData.paths && Array.isArray(aiData.paths)) {
+                drawInitialGraph(); // Redraw grid and asymptotes
+                const svg = document.getElementById('build-graph-svg');
+                const pathGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                pathGroup.innerHTML = aiData.paths.join('');
+                pathGroup.querySelectorAll('path').forEach(p => {
+                    p.setAttribute('stroke', 'var(--primary)');
+                    p.setAttribute('stroke-width', '3');
+                    p.setAttribute('fill', 'none');
+                });
+                svg.appendChild(pathGroup);
+            } else {
+                throw new Error("Invalid format from AI");
+            }
+
+        } catch (error) {
+            console.error("AI graph generation failed:", error);
+            alert("Sorry, the AI graph generator failed. Please check your function definition or try again.");
+        } finally {
+            document.getElementById('ai-thinking-overlay').style.display = 'none';
+        }
+    }
+
+
+    // Tab switching
+    function switchToTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabName));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.toggle('active', content.id === tabName));
+      if (tabName === 'intro') {
+        requestAnimationFrame(drawExamples);
+      } else if (tabName === 'read') {
+        requestAnimationFrame(initializeReadTab);
+      } else if (tabName === 'build') {
+        requestAnimationFrame(() => {
+          initializeVisualBehaviors(); 
+          initializeConnectionCards(); 
+          drawInitialGraph();
+        });
+      }
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => switchToTab(btn.dataset.tab)));
+      drawExamples();
+      generateNewBuildChallenge();
+    });
+  </script>
+</body>
+</html>
